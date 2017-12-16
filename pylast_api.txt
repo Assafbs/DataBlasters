@@ -1,0 +1,2965 @@
+C:\Python27\python.exe "C:\Program Files\JetBrains\PyCharm 2017.2.3\helpers\pydev\pydevconsole.py" 56877 56878
+import sys; print('Python %s on %s' % (sys.version, sys.platform))
+sys.path.extend(['C:\\Users\\David\\source\\repos\\DataBlasters2', 'C:/Users/David/source/repos/DataBlasters2'])
+PyDev console: starting.
+Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:19:22) [MSC v.1500 32 bit (Intel)] on win32
+import pylast
+help(pylast)
+Help on package pylast:
+NAME
+    pylast
+FILE
+    c:\python27\lib\site-packages\pylast\__init__.py
+DESCRIPTION
+    # -*- coding: utf-8 -*-
+    #
+    # pylast -
+    #     A Python interface to Last.fm and Libre.fm
+    #
+    # Copyright 2008-2010 Amr Hassan
+    # Copyright 2013-2017 hugovk
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     https://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    #
+    # https://github.com/pylast/pylast
+PACKAGE CONTENTS
+CLASSES
+    __builtin__.object
+        SessionKeyGenerator
+    __builtin__.tuple(__builtin__.object)
+        Image
+        ImageSizes
+        LibraryItem
+        LovedTrack
+        PlayedTrack
+        SimilarItem
+        TopItem
+    exceptions.Exception(exceptions.BaseException)
+        MalformedResponseError
+        NetworkError
+        WSError
+    _BaseObject(__builtin__.object)
+        Artist(_BaseObject, _Taggable)
+        Country
+        Library
+        Tag(_BaseObject, _Chartable)
+        User(_BaseObject, _Chartable)
+            AuthenticatedUser
+    _Chartable(__builtin__.object)
+        Tag(_BaseObject, _Chartable)
+        User(_BaseObject, _Chartable)
+            AuthenticatedUser
+    _Network(__builtin__.object)
+        LastFMNetwork
+        LibreFMNetwork
+    _Opus(_BaseObject, _Taggable)
+        Album
+        Track
+    _Search(_BaseObject)
+        AlbumSearch
+        ArtistSearch
+        TrackSearch
+    _Taggable(__builtin__.object)
+        Artist(_BaseObject, _Taggable)
+
+    class Album(_Opus)
+     |  An album.
+     |
+     |  Method resolution order:
+     |      Album
+     |      _Opus
+     |      _BaseObject
+     |      _Taggable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, artist, title, network, username=None)
+     |
+     |  get_cover_image(self, size=3)
+     |      Returns a uri to the cover image
+     |      size can be one of:
+     |          COVER_EXTRA_LARGE
+     |          COVER_LARGE
+     |          COVER_MEDIUM
+     |          COVER_SMALL
+     |
+     |  get_tracks(self)
+     |      Returns the list of Tracks on this album.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the URL of the album or track page on the network.
+     |      # Parameters:
+     |      * domain_name str: The network's language domain. Possible values:
+     |          o DOMAIN_ENGLISH
+     |          o DOMAIN_GERMAN
+     |          o DOMAIN_SPANISH
+     |          o DOMAIN_FRENCH
+     |          o DOMAIN_ITALIAN
+     |          o DOMAIN_POLISH
+     |          o DOMAIN_PORTUGUESE
+     |          o DOMAIN_SWEDISH
+     |          o DOMAIN_TURKISH
+     |          o DOMAIN_RUSSIAN
+     |          o DOMAIN_JAPANESE
+     |          o DOMAIN_CHINESE
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Opus:
+     |
+     |  __eq__(self, other)
+     |
+     |  __ne__(self, other)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_artist(self)
+     |      Returns the associated Artist object.
+     |
+     |  get_listener_count(self)
+     |      Returns the number of listeners on the network
+     |
+     |  get_mbid(self)
+     |      Returns the MusicBrainz ID of the album or track.
+     |
+     |  get_name(self, properly_capitalized=False)
+     |      Returns the album or track title (alias to get_title()).
+     |
+     |  get_playcount(self)
+     |      Returns the number of plays on the network
+     |
+     |  get_title(self, properly_capitalized=False)
+     |      Returns the artist or track title.
+     |
+     |  get_userplaycount(self)
+     |      Returns the number of plays by a given username
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _Opus:
+     |
+     |  artist = None
+     |
+     |  title = None
+     |
+     |  username = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Taggable:
+     |
+     |  add_tag(self, tag)
+     |      Adds one tag.
+     |      * tag: a tag name or a Tag object.
+     |
+     |  add_tags(self, tags)
+     |      Adds one or several tags.
+     |      * tags: A sequence of tag names or Tag objects.
+     |
+     |  clear_tags(self)
+     |      Clears all the user-set tags.
+     |
+     |  get_tags(self)
+     |      Returns a list of the tags set by the user to this object.
+     |
+     |  get_top_tags(self, limit=None)
+     |      Returns a list of the most frequently used Tags on this object.
+     |
+     |  remove_tag(self, tag)
+     |      Remove a user's tag from this object.
+     |
+     |  remove_tags(self, tags)
+     |      Removes one or several tags from this object.
+     |      * tags: a sequence of tag names or Tag objects.
+     |
+     |  set_tags(self, tags)
+     |      Sets this object's tags to only those tags.
+     |      * tags: a sequence of tag names or Tag objects.
+
+    class AlbumSearch(_Search)
+     |  Search for an album by name.
+     |
+     |  Method resolution order:
+     |      AlbumSearch
+     |      _Search
+     |      _BaseObject
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, album_name, network)
+     |
+     |  get_next_page(self)
+     |      Returns the next page of results as a sequence of Album objects.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Search:
+     |
+     |  get_total_result_count(self)
+     |      Returns the total count of all the results.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  __hash__(self)
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+
+    class Artist(_BaseObject, _Taggable)
+     |  An artist.
+     |
+     |  Method resolution order:
+     |      Artist
+     |      _BaseObject
+     |      _Taggable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __eq__(self, other)
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, name, network, username=None)
+     |      Create an artist object.
+     |      # Parameters:
+     |          * name str: The artist's name.
+     |
+     |  __ne__(self, other)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  __unicode__(self)
+     |
+     |  get_bio(self, section, language=None)
+     |      Returns a section of the bio.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_bio_content(self, language=None)
+     |      Returns the content of the artist's biography.
+     |
+     |  get_bio_published_date(self)
+     |      Returns the date on which the artist's biography was published.
+     |
+     |  get_bio_summary(self, language=None)
+     |      Returns the summary of the artist's biography.
+     |
+     |  get_correction(self)
+     |      Returns the corrected artist name.
+     |
+     |  get_cover_image(self, size=4)
+     |      Returns a uri to the cover image
+     |      size can be one of:
+     |          COVER_MEGA
+     |          COVER_EXTRA_LARGE
+     |          COVER_LARGE
+     |          COVER_MEDIUM
+     |          COVER_SMALL
+     |
+     |  get_listener_count(self)
+     |      Returns the number of listeners on the network.
+     |
+     |  get_mbid(self)
+     |      Returns the MusicBrainz ID of this artist.
+     |
+     |  get_name(self, properly_capitalized=False)
+     |      Returns the name of the artist.
+     |      If properly_capitalized was asserted then the name would be downloaded
+     |      overwriting the given one.
+     |
+     |  get_playcount(self)
+     |      Returns the number of plays on the network.
+     |
+     |  get_similar(self, limit=None)
+     |      Returns the similar artists on the network.
+     |
+     |  get_top_albums(self, limit=None, cacheable=True)
+     |      Returns a list of the top albums.
+     |
+     |  get_top_tracks(self, limit=None, cacheable=True)
+     |      Returns a list of the most played Tracks by this artist.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the url of the artist page on the network.
+     |      # Parameters:
+     |      * domain_name: The network's language domain. Possible values:
+     |        o DOMAIN_ENGLISH
+     |        o DOMAIN_GERMAN
+     |        o DOMAIN_SPANISH
+     |        o DOMAIN_FRENCH
+     |        o DOMAIN_ITALIAN
+     |        o DOMAIN_POLISH
+     |        o DOMAIN_PORTUGUESE
+     |        o DOMAIN_SWEDISH
+     |        o DOMAIN_TURKISH
+     |        o DOMAIN_RUSSIAN
+     |        o DOMAIN_JAPANESE
+     |        o DOMAIN_CHINESE
+     |
+     |  get_userplaycount(self)
+     |      Returns the number of plays by a given username
+     |
+     |  is_streamable(self)
+     |      Returns True if the artist is streamable.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  name = None
+     |
+     |  username = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Taggable:
+     |
+     |  add_tag(self, tag)
+     |      Adds one tag.
+     |      * tag: a tag name or a Tag object.
+     |
+     |  add_tags(self, tags)
+     |      Adds one or several tags.
+     |      * tags: A sequence of tag names or Tag objects.
+     |
+     |  clear_tags(self)
+     |      Clears all the user-set tags.
+     |
+     |  get_tags(self)
+     |      Returns a list of the tags set by the user to this object.
+     |
+     |  get_top_tags(self, limit=None)
+     |      Returns a list of the most frequently used Tags on this object.
+     |
+     |  remove_tag(self, tag)
+     |      Remove a user's tag from this object.
+     |
+     |  remove_tags(self, tags)
+     |      Removes one or several tags from this object.
+     |      * tags: a sequence of tag names or Tag objects.
+     |
+     |  set_tags(self, tags)
+     |      Sets this object's tags to only those tags.
+     |      * tags: a sequence of tag names or Tag objects.
+
+    class ArtistSearch(_Search)
+     |  Search for an artist by artist name.
+     |
+     |  Method resolution order:
+     |      ArtistSearch
+     |      _Search
+     |      _BaseObject
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, artist_name, network)
+     |
+     |  get_next_page(self)
+     |      Returns the next page of results as a sequence of Artist objects.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Search:
+     |
+     |  get_total_result_count(self)
+     |      Returns the total count of all the results.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  __hash__(self)
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+
+    class AuthenticatedUser(User)
+     |  Method resolution order:
+     |      AuthenticatedUser
+     |      User
+     |      _BaseObject
+     |      _Chartable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, network)
+     |
+     |  get_name(self)
+     |      Returns the name of the authenticated user.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from User:
+     |
+     |  __eq__(self, another)
+     |
+     |  __hash__(self)
+     |
+     |  __ne__(self, another)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_artist_tracks(self, artist, cacheable=False)
+     |      Get a list of tracks by a given artist scrobbled by this user,
+     |      including scrobble time.
+     |
+     |  get_country(self)
+     |      Returns the name of the country of the user.
+     |
+     |  get_friends(self, limit=50, cacheable=False)
+     |      Returns a list of the user's friends.
+     |
+     |  get_image(self)
+     |      Returns the user's avatar.
+     |
+     |  get_library(self)
+     |      Returns the associated Library object.
+     |
+     |  get_loved_tracks(self, limit=50, cacheable=True)
+     |      Returns this user's loved track as a sequence of LovedTrack objects in
+     |      reverse order of their timestamp, all the way back to the first track.
+     |
+     |      If limit==None, it will try to pull all the available data.
+     |
+     |      This method uses caching. Enable caching only if you're pulling a
+     |      large amount of data.
+     |
+     |  get_now_playing(self)
+     |      Returns the currently playing track, or None if nothing is playing.
+     |
+     |  get_playcount(self)
+     |      Returns the user's playcount so far.
+     |
+     |  get_recent_tracks(self, limit=10, cacheable=True, time_from=None, time_to=None)
+     |      Returns this user's played track as a sequence of PlayedTrack objects
+     |      in reverse order of playtime, all the way back to the first track.
+     |
+     |      Parameters:
+     |      limit : If None, it will try to pull all the available data.
+     |      from (Optional) : Beginning timestamp of a range - only display
+     |      scrobbles after this time, in UNIX timestamp format (integer
+     |      number of seconds since 00:00:00, January 1st 1970 UTC). This
+     |      must be in the UTC time zone.
+     |      to (Optional) : End timestamp of a range - only display scrobbles
+     |      before this time, in UNIX timestamp format (integer number of
+     |      seconds since 00:00:00, January 1st 1970 UTC). This must be in
+     |      the UTC time zone.
+     |
+     |      This method uses caching. Enable caching only if you're pulling a
+     |      large amount of data.
+     |
+     |  get_registered(self)
+     |      Returns the user's registration date.
+     |
+     |  get_tagged_albums(self, tag, limit=None, cacheable=True)
+     |      Returns the albums tagged by a user.
+     |
+     |  get_tagged_artists(self, tag, limit=None)
+     |      Returns the artists tagged by a user.
+     |
+     |  get_tagged_tracks(self, tag, limit=None, cacheable=True)
+     |      Returns the tracks tagged by a user.
+     |
+     |  get_top_albums(self, period='overall', limit=None, cacheable=True)
+     |      Returns the top albums played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_top_artists(self, period='overall', limit=None)
+     |      Returns the top artists played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_top_tags(self, limit=None, cacheable=True)
+     |      Returns a sequence of the top tags used by this user with their counts
+     |      as TopItem objects.
+     |      * limit: The limit of how many tags to return.
+     |      * cacheable: Whether to cache results.
+     |
+     |  get_top_tracks(self, period='overall', limit=None, cacheable=True)
+     |      Returns the top tracks played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_unixtime_registered(self)
+     |      Returns the user's registration date as a UNIX timestamp.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the url of the user page on the network.
+     |      * domain_name: The network's language domain. Possible values:
+     |        o DOMAIN_ENGLISH
+     |        o DOMAIN_GERMAN
+     |        o DOMAIN_SPANISH
+     |        o DOMAIN_FRENCH
+     |        o DOMAIN_ITALIAN
+     |        o DOMAIN_POLISH
+     |        o DOMAIN_PORTUGUESE
+     |        o DOMAIN_SWEDISH
+     |        o DOMAIN_TURKISH
+     |        o DOMAIN_RUSSIAN
+     |        o DOMAIN_JAPANESE
+     |        o DOMAIN_CHINESE
+     |
+     |  is_subscriber(self)
+     |      Returns whether the user is a subscriber or not. True or False.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from User:
+     |
+     |  name = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Chartable:
+     |
+     |  get_weekly_album_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly album charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+     |
+     |  get_weekly_artist_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly artist charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for Tag or User.
+     |
+     |  get_weekly_chart_dates(self)
+     |      Returns a list of From and To tuples for the available charts.
+     |
+     |  get_weekly_charts(self, chart_kind, from_date=None, to_date=None)
+     |      Returns the weekly charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      chart_kind should be one of "album", "artist" or "track"
+     |
+     |  get_weekly_track_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly track charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+
+    class Country(_BaseObject)
+     |  A country at Last.fm.
+     |
+     |  Method resolution order:
+     |      Country
+     |      _BaseObject
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __eq__(self, other)
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, name, network)
+     |
+     |  __ne__(self, other)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_name(self)
+     |      Returns the country name.
+     |
+     |  get_top_artists(self, limit=None, cacheable=True)
+     |      Returns a sequence of the most played artists.
+     |
+     |  get_top_tracks(self, limit=None, cacheable=True)
+     |      Returns a sequence of the most played tracks
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the url of the country page on the network.
+     |      * domain_name: The network's language domain. Possible values:
+     |        o DOMAIN_ENGLISH
+     |        o DOMAIN_GERMAN
+     |        o DOMAIN_SPANISH
+     |        o DOMAIN_FRENCH
+     |        o DOMAIN_ITALIAN
+     |        o DOMAIN_POLISH
+     |        o DOMAIN_PORTUGUESE
+     |        o DOMAIN_SWEDISH
+     |        o DOMAIN_TURKISH
+     |        o DOMAIN_RUSSIAN
+     |        o DOMAIN_JAPANESE
+     |        o DOMAIN_CHINESE
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  name = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+
+    class Image(__builtin__.tuple)
+     |  Image(title, url, dateadded, format, owner, sizes, votes)
+     |
+     |  Method resolution order:
+     |      Image
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new Image object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new Image object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, title, url, dateadded, format, owner, sizes, votes)
+     |      Create new instance of Image(title, url, dateadded, format, owner, sizes, votes)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  dateadded
+     |      Alias for field number 2
+     |
+     |  format
+     |      Alias for field number 3
+     |
+     |  owner
+     |      Alias for field number 4
+     |
+     |  sizes
+     |      Alias for field number 5
+     |
+     |  title
+     |      Alias for field number 0
+     |
+     |  url
+     |      Alias for field number 1
+     |
+     |  votes
+     |      Alias for field number 6
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('title', 'url', 'dateadded', 'format', 'owner', 'sizes', 'v...
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class ImageSizes(__builtin__.tuple)
+     |  ImageSizes(original, large, largesquare, medium, small, extralarge)
+     |
+     |  Method resolution order:
+     |      ImageSizes
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new ImageSizes object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new ImageSizes object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, original, large, largesquare, medium, small, extralarge)
+     |      Create new instance of ImageSizes(original, large, largesquare, medium, small, extralarge)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  extralarge
+     |      Alias for field number 5
+     |
+     |  large
+     |      Alias for field number 1
+     |
+     |  largesquare
+     |      Alias for field number 2
+     |
+     |  medium
+     |      Alias for field number 3
+     |
+     |  original
+     |      Alias for field number 0
+     |
+     |  small
+     |      Alias for field number 4
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('original', 'large', 'largesquare', 'medium', 'small', 'ext...
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class LastFMNetwork(_Network)
+     |  A Last.fm network object
+     |
+     |  api_key: a provided API_KEY
+     |  api_secret: a provided API_SECRET
+     |  session_key: a generated session_key or None
+     |  username: a username of a valid user
+     |  password_hash: the output of pylast.md5(password) where password is the
+     |      user's password
+     |
+     |  if username and password_hash were provided and not session_key,
+     |  session_key will be generated automatically when needed.
+     |
+     |  Either a valid session_key or a combination of username and password_hash
+     |  must be present for scrobbling.
+     |
+     |  Most read-only webservices only require an api_key and an api_secret, see
+     |  about obtaining them from:
+     |  https://www.last.fm/api/account
+     |
+     |  Method resolution order:
+     |      LastFMNetwork
+     |      _Network
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, api_key='', api_secret='', session_key='', username='', password_hash='', token='')
+     |
+     |  __repr__(self)
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Network:
+     |
+     |  __str__(self)
+     |
+     |  disable_caching(self)
+     |      Disables all caching features.
+     |
+     |  disable_proxy(self)
+     |      Disable using the web proxy
+     |
+     |  disable_rate_limit(self)
+     |      Disables rate limiting for this network
+     |
+     |  enable_caching(self, file_path=None)
+     |      Enables caching request-wide for all cacheable calls.
+     |
+     |      * file_path: A file path for the backend storage file. If
+     |      None set, a temp file would probably be created, according the backend.
+     |
+     |  enable_proxy(self, host, port)
+     |      Enable a default web proxy
+     |
+     |  enable_rate_limit(self)
+     |      Enables rate limiting for this network
+     |
+     |  get_album(self, artist, title)
+     |      Return an Album object
+     |
+     |  get_album_by_mbid(self, mbid)
+     |      Looks up an album by its MusicBrainz ID
+     |
+     |  get_artist(self, artist_name)
+     |      Return an Artist object
+     |
+     |  get_artist_by_mbid(self, mbid)
+     |      Looks up an artist by its MusicBrainz ID
+     |
+     |  get_authenticated_user(self)
+     |      Returns the authenticated user
+     |
+     |  get_country(self, country_name)
+     |      Returns a country object
+     |
+     |  get_geo_top_artists(self, country, limit=None, cacheable=True)
+     |      Get the most popular artists on Last.fm by country.
+     |      Parameters:
+     |      country (Required) : A country name, as defined by the ISO 3166-1
+     |          country names standard.
+     |      limit (Optional) : The number of results to fetch per page.
+     |          Defaults to 50.
+     |
+     |  get_geo_top_tracks(self, country, location=None, limit=None, cacheable=True)
+     |      Get the most popular tracks on Last.fm last week by country.
+     |      Parameters:
+     |      country (Required) : A country name, as defined by the ISO 3166-1
+     |          country names standard
+     |      location (Optional) : A metro name, to fetch the charts for
+     |          (must be within the country specified)
+     |      limit (Optional) : The number of results to fetch per page.
+     |          Defaults to 50.
+     |
+     |  get_tag(self, name)
+     |      Returns a tag object
+     |
+     |  get_top_artists(self, limit=None, cacheable=True)
+     |      Returns the most played artists as a sequence of TopItem objects.
+     |
+     |  get_top_tags(self, limit=None, cacheable=True)
+     |      Returns the most used tags as a sequence of TopItem objects.
+     |
+     |  get_top_tracks(self, limit=None, cacheable=True)
+     |      Returns the most played tracks as a sequence of TopItem objects.
+     |
+     |  get_track(self, artist, title)
+     |      Return a Track object
+     |
+     |  get_track_by_mbid(self, mbid)
+     |      Looks up a track by its MusicBrainz ID
+     |
+     |  get_user(self, username)
+     |      Returns a user object
+     |
+     |  is_caching_enabled(self)
+     |      Returns True if caching is enabled.
+     |
+     |  is_proxy_enabled(self)
+     |      Returns True if a web proxy is enabled.
+     |
+     |  is_rate_limited(self)
+     |      Return True if web service calls are rate limited
+     |
+     |  scrobble(self, artist, title, timestamp, album=None, album_artist=None, track_number=None, duration=None, stream_id=None, context=None, mbid=None)
+     |      Used to add a track-play to a user's profile.
+     |
+     |      Parameters:
+     |          artist (Required) : The artist name.
+     |          title (Required) : The track name.
+     |          timestamp (Required) : The time the track started playing, in UNIX
+     |              timestamp format (integer number of seconds since 00:00:00,
+     |              January 1st 1970 UTC). This must be in the UTC time zone.
+     |          album (Optional) : The album name.
+     |          album_artist (Optional) : The album artist - if this differs from
+     |              the track artist.
+     |          context (Optional) : Sub-client version (not public, only enabled
+     |              for certain API keys)
+     |          stream_id (Optional) : The stream id for this track received from
+     |              the radio.getPlaylist service.
+     |          track_number (Optional) : The track number of the track on the
+     |              album.
+     |          mbid (Optional) : The MusicBrainz Track ID.
+     |          duration (Optional) : The length of the track in seconds.
+     |
+     |  scrobble_many(self, tracks)
+     |      Used to scrobble a batch of tracks at once. The parameter tracks is a
+     |      sequence of dicts per track containing the keyword arguments as if
+     |      passed to the scrobble() method.
+     |
+     |  search_for_album(self, album_name)
+     |      Searches for an album by its name. Returns a AlbumSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  search_for_artist(self, artist_name)
+     |      Searches of an artist by its name. Returns a ArtistSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  search_for_track(self, artist_name, track_name)
+     |      Searches of a track by its name and its artist. Set artist to an
+     |      empty string if not available.
+     |      Returns a TrackSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  update_now_playing(self, artist, title, album=None, album_artist=None, duration=None, track_number=None, mbid=None, context=None)
+     |      Used to notify Last.fm that a user has started listening to a track.
+     |
+     |          Parameters:
+     |              artist (Required) : The artist name
+     |              title (Required) : The track title
+     |              album (Optional) : The album name.
+     |              album_artist (Optional) : The album artist - if this differs
+     |                  from the track artist.
+     |              duration (Optional) : The length of the track in seconds.
+     |              track_number (Optional) : The track number of the track on the
+     |                  album.
+     |              mbid (Optional) : The MusicBrainz Track ID.
+     |              context (Optional) : Sub-client version
+     |                  (not public, only enabled for certain API keys)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _Network:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+    class Library(_BaseObject)
+     |  A user's Last.fm library.
+     |
+     |  Method resolution order:
+     |      Library
+     |      _BaseObject
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, user, network)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_artists(self, limit=50, cacheable=True)
+     |      Returns a sequence of Album objects
+     |      if limit==None it will return all (may take a while)
+     |
+     |  get_user(self)
+     |      Returns the user who owns this library.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  user = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+
+    class LibraryItem(__builtin__.tuple)
+     |  LibraryItem(item, playcount, tagcount)
+     |
+     |  Method resolution order:
+     |      LibraryItem
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new LibraryItem object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new LibraryItem object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, item, playcount, tagcount)
+     |      Create new instance of LibraryItem(item, playcount, tagcount)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  item
+     |      Alias for field number 0
+     |
+     |  playcount
+     |      Alias for field number 1
+     |
+     |  tagcount
+     |      Alias for field number 2
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('item', 'playcount', 'tagcount')
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class LibreFMNetwork(_Network)
+     |  A preconfigured _Network object for Libre.fm
+     |
+     |  api_key: a provided API_KEY
+     |  api_secret: a provided API_SECRET
+     |  session_key: a generated session_key or None
+     |  username: a username of a valid user
+     |  password_hash: the output of pylast.md5(password) where password is the
+     |      user's password
+     |
+     |  if username and password_hash were provided and not session_key,
+     |  session_key will be generated automatically when needed.
+     |
+     |  Method resolution order:
+     |      LibreFMNetwork
+     |      _Network
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, api_key='', api_secret='', session_key='', username='', password_hash='')
+     |
+     |  __repr__(self)
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Network:
+     |
+     |  __str__(self)
+     |
+     |  disable_caching(self)
+     |      Disables all caching features.
+     |
+     |  disable_proxy(self)
+     |      Disable using the web proxy
+     |
+     |  disable_rate_limit(self)
+     |      Disables rate limiting for this network
+     |
+     |  enable_caching(self, file_path=None)
+     |      Enables caching request-wide for all cacheable calls.
+     |
+     |      * file_path: A file path for the backend storage file. If
+     |      None set, a temp file would probably be created, according the backend.
+     |
+     |  enable_proxy(self, host, port)
+     |      Enable a default web proxy
+     |
+     |  enable_rate_limit(self)
+     |      Enables rate limiting for this network
+     |
+     |  get_album(self, artist, title)
+     |      Return an Album object
+     |
+     |  get_album_by_mbid(self, mbid)
+     |      Looks up an album by its MusicBrainz ID
+     |
+     |  get_artist(self, artist_name)
+     |      Return an Artist object
+     |
+     |  get_artist_by_mbid(self, mbid)
+     |      Looks up an artist by its MusicBrainz ID
+     |
+     |  get_authenticated_user(self)
+     |      Returns the authenticated user
+     |
+     |  get_country(self, country_name)
+     |      Returns a country object
+     |
+     |  get_geo_top_artists(self, country, limit=None, cacheable=True)
+     |      Get the most popular artists on Last.fm by country.
+     |      Parameters:
+     |      country (Required) : A country name, as defined by the ISO 3166-1
+     |          country names standard.
+     |      limit (Optional) : The number of results to fetch per page.
+     |          Defaults to 50.
+     |
+     |  get_geo_top_tracks(self, country, location=None, limit=None, cacheable=True)
+     |      Get the most popular tracks on Last.fm last week by country.
+     |      Parameters:
+     |      country (Required) : A country name, as defined by the ISO 3166-1
+     |          country names standard
+     |      location (Optional) : A metro name, to fetch the charts for
+     |          (must be within the country specified)
+     |      limit (Optional) : The number of results to fetch per page.
+     |          Defaults to 50.
+     |
+     |  get_tag(self, name)
+     |      Returns a tag object
+     |
+     |  get_top_artists(self, limit=None, cacheable=True)
+     |      Returns the most played artists as a sequence of TopItem objects.
+     |
+     |  get_top_tags(self, limit=None, cacheable=True)
+     |      Returns the most used tags as a sequence of TopItem objects.
+     |
+     |  get_top_tracks(self, limit=None, cacheable=True)
+     |      Returns the most played tracks as a sequence of TopItem objects.
+     |
+     |  get_track(self, artist, title)
+     |      Return a Track object
+     |
+     |  get_track_by_mbid(self, mbid)
+     |      Looks up a track by its MusicBrainz ID
+     |
+     |  get_user(self, username)
+     |      Returns a user object
+     |
+     |  is_caching_enabled(self)
+     |      Returns True if caching is enabled.
+     |
+     |  is_proxy_enabled(self)
+     |      Returns True if a web proxy is enabled.
+     |
+     |  is_rate_limited(self)
+     |      Return True if web service calls are rate limited
+     |
+     |  scrobble(self, artist, title, timestamp, album=None, album_artist=None, track_number=None, duration=None, stream_id=None, context=None, mbid=None)
+     |      Used to add a track-play to a user's profile.
+     |
+     |      Parameters:
+     |          artist (Required) : The artist name.
+     |          title (Required) : The track name.
+     |          timestamp (Required) : The time the track started playing, in UNIX
+     |              timestamp format (integer number of seconds since 00:00:00,
+     |              January 1st 1970 UTC). This must be in the UTC time zone.
+     |          album (Optional) : The album name.
+     |          album_artist (Optional) : The album artist - if this differs from
+     |              the track artist.
+     |          context (Optional) : Sub-client version (not public, only enabled
+     |              for certain API keys)
+     |          stream_id (Optional) : The stream id for this track received from
+     |              the radio.getPlaylist service.
+     |          track_number (Optional) : The track number of the track on the
+     |              album.
+     |          mbid (Optional) : The MusicBrainz Track ID.
+     |          duration (Optional) : The length of the track in seconds.
+     |
+     |  scrobble_many(self, tracks)
+     |      Used to scrobble a batch of tracks at once. The parameter tracks is a
+     |      sequence of dicts per track containing the keyword arguments as if
+     |      passed to the scrobble() method.
+     |
+     |  search_for_album(self, album_name)
+     |      Searches for an album by its name. Returns a AlbumSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  search_for_artist(self, artist_name)
+     |      Searches of an artist by its name. Returns a ArtistSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  search_for_track(self, artist_name, track_name)
+     |      Searches of a track by its name and its artist. Set artist to an
+     |      empty string if not available.
+     |      Returns a TrackSearch object.
+     |      Use get_next_page() to retrieve sequences of results.
+     |
+     |  update_now_playing(self, artist, title, album=None, album_artist=None, duration=None, track_number=None, mbid=None, context=None)
+     |      Used to notify Last.fm that a user has started listening to a track.
+     |
+     |          Parameters:
+     |              artist (Required) : The artist name
+     |              title (Required) : The track title
+     |              album (Optional) : The album name.
+     |              album_artist (Optional) : The album artist - if this differs
+     |                  from the track artist.
+     |              duration (Optional) : The length of the track in seconds.
+     |              track_number (Optional) : The track number of the track on the
+     |                  album.
+     |              mbid (Optional) : The MusicBrainz Track ID.
+     |              context (Optional) : Sub-client version
+     |                  (not public, only enabled for certain API keys)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _Network:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+    class LovedTrack(__builtin__.tuple)
+     |  LovedTrack(track, date, timestamp)
+     |
+     |  Method resolution order:
+     |      LovedTrack
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new LovedTrack object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new LovedTrack object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, track, date, timestamp)
+     |      Create new instance of LovedTrack(track, date, timestamp)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  date
+     |      Alias for field number 1
+     |
+     |  timestamp
+     |      Alias for field number 2
+     |
+     |  track
+     |      Alias for field number 0
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('track', 'date', 'timestamp')
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class MalformedResponseError(exceptions.Exception)
+     |  Exception conveying a malformed response from the music network.
+     |
+     |  Method resolution order:
+     |      MalformedResponseError
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, network, underlying_error)
+     |
+     |  __str__(self)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __reduce__(...)
+     |
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |
+     |  __setstate__(...)
+     |
+     |  __unicode__(...)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |
+     |  __dict__
+     |
+     |  args
+     |
+     |  message
+
+    class NetworkError(exceptions.Exception)
+     |  Exception conveying a problem in sending a request to Last.fm
+     |
+     |  Method resolution order:
+     |      NetworkError
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, network, underlying_error)
+     |
+     |  __str__(self)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __reduce__(...)
+     |
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |
+     |  __setstate__(...)
+     |
+     |  __unicode__(...)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |
+     |  __dict__
+     |
+     |  args
+     |
+     |  message
+
+    class PlayedTrack(__builtin__.tuple)
+     |  PlayedTrack(track, album, playback_date, timestamp)
+     |
+     |  Method resolution order:
+     |      PlayedTrack
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new PlayedTrack object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new PlayedTrack object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, track, album, playback_date, timestamp)
+     |      Create new instance of PlayedTrack(track, album, playback_date, timestamp)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  album
+     |      Alias for field number 1
+     |
+     |  playback_date
+     |      Alias for field number 2
+     |
+     |  timestamp
+     |      Alias for field number 3
+     |
+     |  track
+     |      Alias for field number 0
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('track', 'album', 'playback_date', 'timestamp')
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class SessionKeyGenerator(__builtin__.object)
+     |  Methods of generating a session key:
+     |  1) Web Authentication:
+     |      a. network = get_*_network(API_KEY, API_SECRET)
+     |      b. sg = SessionKeyGenerator(network)
+     |      c. url = sg.get_web_auth_url()
+     |      d. Ask the user to open the url and authorize you, and wait for it.
+     |      e. session_key = sg.get_web_auth_session_key(url)
+     |  2) Username and Password Authentication:
+     |      a. network = get_*_network(API_KEY, API_SECRET)
+     |      b. username = raw_input("Please enter your username: ")
+     |      c. password_hash = pylast.md5(raw_input("Please enter your password: ")
+     |      d. session_key = SessionKeyGenerator(network).get_session_key(username,
+     |          password_hash)
+     |
+     |  A session key's lifetime is infinite, unless the user revokes the rights
+     |  of the given API Key.
+     |
+     |  If you create a Network object with just a API_KEY and API_SECRET and a
+     |  username and a password_hash, a SESSION_KEY will be automatically generated
+     |  for that network and stored in it so you don't have to do this manually,
+     |  unless you want to.
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, network)
+     |
+     |  get_session_key(self, username, password_hash)
+     |      Retrieve a session key with a username and a md5 hash of the user's
+     |      password.
+     |
+     |  get_web_auth_session_key(self, url, token='')
+     |      Retrieves the session key of a web authorization process by its url.
+     |
+     |  get_web_auth_url(self)
+     |      The user must open this page, and you first, then
+     |      call get_web_auth_session_key(url) after that.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+    class SimilarItem(__builtin__.tuple)
+     |  SimilarItem(item, match)
+     |
+     |  Method resolution order:
+     |      SimilarItem
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new SimilarItem object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new SimilarItem object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, item, match)
+     |      Create new instance of SimilarItem(item, match)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  item
+     |      Alias for field number 0
+     |
+     |  match
+     |      Alias for field number 1
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('item', 'match')
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class Tag(_BaseObject, _Chartable)
+     |  A Last.fm object tag.
+     |
+     |  Method resolution order:
+     |      Tag
+     |      _BaseObject
+     |      _Chartable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __eq__(self, other)
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, name, network)
+     |
+     |  __ne__(self, other)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_name(self, properly_capitalized=False)
+     |      Returns the name of the tag.
+     |
+     |  get_top_albums(self, limit=None, cacheable=True)
+     |      Returns a list of the top albums.
+     |
+     |  get_top_artists(self, limit=None, cacheable=True)
+     |      Returns a sequence of the most played artists.
+     |
+     |  get_top_tracks(self, limit=None, cacheable=True)
+     |      Returns a list of the most played Tracks for this tag.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the url of the tag page on the network.
+     |      * domain_name: The network's language domain. Possible values:
+     |        o DOMAIN_ENGLISH
+     |        o DOMAIN_GERMAN
+     |        o DOMAIN_SPANISH
+     |        o DOMAIN_FRENCH
+     |        o DOMAIN_ITALIAN
+     |        o DOMAIN_POLISH
+     |        o DOMAIN_PORTUGUESE
+     |        o DOMAIN_SWEDISH
+     |        o DOMAIN_TURKISH
+     |        o DOMAIN_RUSSIAN
+     |        o DOMAIN_JAPANESE
+     |        o DOMAIN_CHINESE
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  name = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Chartable:
+     |
+     |  get_weekly_album_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly album charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+     |
+     |  get_weekly_artist_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly artist charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for Tag or User.
+     |
+     |  get_weekly_chart_dates(self)
+     |      Returns a list of From and To tuples for the available charts.
+     |
+     |  get_weekly_charts(self, chart_kind, from_date=None, to_date=None)
+     |      Returns the weekly charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      chart_kind should be one of "album", "artist" or "track"
+     |
+     |  get_weekly_track_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly track charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+
+    class TopItem(__builtin__.tuple)
+     |  TopItem(item, weight)
+     |
+     |  Method resolution order:
+     |      TopItem
+     |      __builtin__.tuple
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __getnewargs__(self)
+     |      Return self as a plain tuple.  Used by copy and pickle.
+     |
+     |  __getstate__(self)
+     |      Exclude the OrderedDict from pickling
+     |
+     |  __repr__(self)
+     |      Return a nicely formatted representation string
+     |
+     |  _asdict(self)
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  _replace(_self, **kwds)
+     |      Return a new TopItem object replacing specified fields with new values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |
+     |  _make(cls, iterable, new=<built-in method __new__ of type object>, len=<built-in function len>) from __builtin__.type
+     |      Make a new TopItem object from a sequence or iterable
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(_cls, item, weight)
+     |      Create new instance of TopItem(item, weight)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      Return a new OrderedDict which maps field names to their values
+     |
+     |  item
+     |      Alias for field number 0
+     |
+     |  weight
+     |      Alias for field number 1
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  _fields = ('item', 'weight')
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from __builtin__.tuple:
+     |
+     |  __add__(...)
+     |      x.__add__(y) <==> x+y
+     |
+     |  __contains__(...)
+     |      x.__contains__(y) <==> y in x
+     |
+     |  __eq__(...)
+     |      x.__eq__(y) <==> x==y
+     |
+     |  __ge__(...)
+     |      x.__ge__(y) <==> x>=y
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __gt__(...)
+     |      x.__gt__(y) <==> x>y
+     |
+     |  __hash__(...)
+     |      x.__hash__() <==> hash(x)
+     |
+     |  __iter__(...)
+     |      x.__iter__() <==> iter(x)
+     |
+     |  __le__(...)
+     |      x.__le__(y) <==> x<=y
+     |
+     |  __len__(...)
+     |      x.__len__() <==> len(x)
+     |
+     |  __lt__(...)
+     |      x.__lt__(y) <==> x<y
+     |
+     |  __mul__(...)
+     |      x.__mul__(n) <==> x*n
+     |
+     |  __ne__(...)
+     |      x.__ne__(y) <==> x!=y
+     |
+     |  __rmul__(...)
+     |      x.__rmul__(n) <==> n*x
+     |
+     |  count(...)
+     |      T.count(value) -> integer -- return number of occurrences of value
+     |
+     |  index(...)
+     |      T.index(value, [start, [stop]]) -> integer -- return first index of value.
+     |      Raises ValueError if the value is not present.
+
+    class Track(_Opus)
+     |  A Last.fm track.
+     |
+     |  Method resolution order:
+     |      Track
+     |      _Opus
+     |      _BaseObject
+     |      _Taggable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, artist, title, network, username=None)
+     |
+     |  get_album(self)
+     |      Returns the album object of this track.
+     |
+     |  get_correction(self)
+     |      Returns the corrected track name.
+     |
+     |  get_duration(self)
+     |      Returns the track duration.
+     |
+     |  get_similar(self)
+     |      Returns similar tracks for this track on the network,
+     |      based on listening data.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the URL of the album or track page on the network.
+     |      # Parameters:
+     |      * domain_name str: The network's language domain. Possible values:
+     |          o DOMAIN_ENGLISH
+     |          o DOMAIN_GERMAN
+     |          o DOMAIN_SPANISH
+     |          o DOMAIN_FRENCH
+     |          o DOMAIN_ITALIAN
+     |          o DOMAIN_POLISH
+     |          o DOMAIN_PORTUGUESE
+     |          o DOMAIN_SWEDISH
+     |          o DOMAIN_TURKISH
+     |          o DOMAIN_RUSSIAN
+     |          o DOMAIN_JAPANESE
+     |          o DOMAIN_CHINESE
+     |
+     |  get_userloved(self)
+     |      Whether the user loved this track
+     |
+     |  is_fulltrack_available(self)
+     |      Returns True if the full track is available for streaming.
+     |
+     |  is_streamable(self)
+     |      Returns True if the track is available at Last.fm.
+     |
+     |  love(self)
+     |      Adds the track to the user's loved tracks.
+     |
+     |  unlove(self)
+     |      Remove the track to the user's loved tracks.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Opus:
+     |
+     |  __eq__(self, other)
+     |
+     |  __ne__(self, other)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_artist(self)
+     |      Returns the associated Artist object.
+     |
+     |  get_listener_count(self)
+     |      Returns the number of listeners on the network
+     |
+     |  get_mbid(self)
+     |      Returns the MusicBrainz ID of the album or track.
+     |
+     |  get_name(self, properly_capitalized=False)
+     |      Returns the album or track title (alias to get_title()).
+     |
+     |  get_playcount(self)
+     |      Returns the number of plays on the network
+     |
+     |  get_title(self, properly_capitalized=False)
+     |      Returns the artist or track title.
+     |
+     |  get_userplaycount(self)
+     |      Returns the number of plays by a given username
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _Opus:
+     |
+     |  artist = None
+     |
+     |  title = None
+     |
+     |  username = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Taggable:
+     |
+     |  add_tag(self, tag)
+     |      Adds one tag.
+     |      * tag: a tag name or a Tag object.
+     |
+     |  add_tags(self, tags)
+     |      Adds one or several tags.
+     |      * tags: A sequence of tag names or Tag objects.
+     |
+     |  clear_tags(self)
+     |      Clears all the user-set tags.
+     |
+     |  get_tags(self)
+     |      Returns a list of the tags set by the user to this object.
+     |
+     |  get_top_tags(self, limit=None)
+     |      Returns a list of the most frequently used Tags on this object.
+     |
+     |  remove_tag(self, tag)
+     |      Remove a user's tag from this object.
+     |
+     |  remove_tags(self, tags)
+     |      Removes one or several tags from this object.
+     |      * tags: a sequence of tag names or Tag objects.
+     |
+     |  set_tags(self, tags)
+     |      Sets this object's tags to only those tags.
+     |      * tags: a sequence of tag names or Tag objects.
+
+    class TrackSearch(_Search)
+     |  Search for a track by track title. If you don't want to narrow the results
+     |  down by specifying the artist name, set it to empty string.
+     |
+     |  Method resolution order:
+     |      TrackSearch
+     |      _Search
+     |      _BaseObject
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, artist_name, track_title, network)
+     |
+     |  get_next_page(self)
+     |      Returns the next page of results as a sequence of Track objects.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Search:
+     |
+     |  get_total_result_count(self)
+     |      Returns the total count of all the results.
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  __hash__(self)
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+
+    class User(_BaseObject, _Chartable)
+     |  A Last.fm user.
+     |
+     |  Method resolution order:
+     |      User
+     |      _BaseObject
+     |      _Chartable
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __eq__(self, another)
+     |
+     |  __hash__(self)
+     |
+     |  __init__(self, user_name, network)
+     |
+     |  __ne__(self, another)
+     |
+     |  __repr__(self)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_artist_tracks(self, artist, cacheable=False)
+     |      Get a list of tracks by a given artist scrobbled by this user,
+     |      including scrobble time.
+     |
+     |  get_country(self)
+     |      Returns the name of the country of the user.
+     |
+     |  get_friends(self, limit=50, cacheable=False)
+     |      Returns a list of the user's friends.
+     |
+     |  get_image(self)
+     |      Returns the user's avatar.
+     |
+     |  get_library(self)
+     |      Returns the associated Library object.
+     |
+     |  get_loved_tracks(self, limit=50, cacheable=True)
+     |      Returns this user's loved track as a sequence of LovedTrack objects in
+     |      reverse order of their timestamp, all the way back to the first track.
+     |
+     |      If limit==None, it will try to pull all the available data.
+     |
+     |      This method uses caching. Enable caching only if you're pulling a
+     |      large amount of data.
+     |
+     |  get_name(self, properly_capitalized=False)
+     |      Returns the user name.
+     |
+     |  get_now_playing(self)
+     |      Returns the currently playing track, or None if nothing is playing.
+     |
+     |  get_playcount(self)
+     |      Returns the user's playcount so far.
+     |
+     |  get_recent_tracks(self, limit=10, cacheable=True, time_from=None, time_to=None)
+     |      Returns this user's played track as a sequence of PlayedTrack objects
+     |      in reverse order of playtime, all the way back to the first track.
+     |
+     |      Parameters:
+     |      limit : If None, it will try to pull all the available data.
+     |      from (Optional) : Beginning timestamp of a range - only display
+     |      scrobbles after this time, in UNIX timestamp format (integer
+     |      number of seconds since 00:00:00, January 1st 1970 UTC). This
+     |      must be in the UTC time zone.
+     |      to (Optional) : End timestamp of a range - only display scrobbles
+     |      before this time, in UNIX timestamp format (integer number of
+     |      seconds since 00:00:00, January 1st 1970 UTC). This must be in
+     |      the UTC time zone.
+     |
+     |      This method uses caching. Enable caching only if you're pulling a
+     |      large amount of data.
+     |
+     |  get_registered(self)
+     |      Returns the user's registration date.
+     |
+     |  get_tagged_albums(self, tag, limit=None, cacheable=True)
+     |      Returns the albums tagged by a user.
+     |
+     |  get_tagged_artists(self, tag, limit=None)
+     |      Returns the artists tagged by a user.
+     |
+     |  get_tagged_tracks(self, tag, limit=None, cacheable=True)
+     |      Returns the tracks tagged by a user.
+     |
+     |  get_top_albums(self, period='overall', limit=None, cacheable=True)
+     |      Returns the top albums played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_top_artists(self, period='overall', limit=None)
+     |      Returns the top artists played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_top_tags(self, limit=None, cacheable=True)
+     |      Returns a sequence of the top tags used by this user with their counts
+     |      as TopItem objects.
+     |      * limit: The limit of how many tags to return.
+     |      * cacheable: Whether to cache results.
+     |
+     |  get_top_tracks(self, period='overall', limit=None, cacheable=True)
+     |      Returns the top tracks played by a user.
+     |      * period: The period of time. Possible values:
+     |        o PERIOD_OVERALL
+     |        o PERIOD_7DAYS
+     |        o PERIOD_1MONTH
+     |        o PERIOD_3MONTHS
+     |        o PERIOD_6MONTHS
+     |        o PERIOD_12MONTHS
+     |
+     |  get_unixtime_registered(self)
+     |      Returns the user's registration date as a UNIX timestamp.
+     |
+     |  get_url(self, domain_name=0)
+     |      Returns the url of the user page on the network.
+     |      * domain_name: The network's language domain. Possible values:
+     |        o DOMAIN_ENGLISH
+     |        o DOMAIN_GERMAN
+     |        o DOMAIN_SPANISH
+     |        o DOMAIN_FRENCH
+     |        o DOMAIN_ITALIAN
+     |        o DOMAIN_POLISH
+     |        o DOMAIN_PORTUGUESE
+     |        o DOMAIN_SWEDISH
+     |        o DOMAIN_TURKISH
+     |        o DOMAIN_RUSSIAN
+     |        o DOMAIN_JAPANESE
+     |        o DOMAIN_CHINESE
+     |
+     |  is_subscriber(self)
+     |      Returns whether the user is a subscriber or not. True or False.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  name = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _BaseObject:
+     |
+     |  get_wiki(self, section)
+     |      Returns a section of the wiki.
+     |      Only for Album/Track.
+     |      section can be "content", "summary" or
+     |          "published" (for published date)
+     |
+     |  get_wiki_content(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_published_date(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  get_wiki_summary(self)
+     |      Returns the summary of the wiki.
+     |      Only for Album/Track.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from _BaseObject:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from _BaseObject:
+     |
+     |  network = None
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from _Chartable:
+     |
+     |  get_weekly_album_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly album charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+     |
+     |  get_weekly_artist_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly artist charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for Tag or User.
+     |
+     |  get_weekly_chart_dates(self)
+     |      Returns a list of From and To tuples for the available charts.
+     |
+     |  get_weekly_charts(self, chart_kind, from_date=None, to_date=None)
+     |      Returns the weekly charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      chart_kind should be one of "album", "artist" or "track"
+     |
+     |  get_weekly_track_charts(self, from_date=None, to_date=None)
+     |      Returns the weekly track charts for the week starting from the
+     |      from_date value to the to_date value.
+     |      Only for User.
+
+    class WSError(exceptions.Exception)
+     |  Exception related to the Network web service
+     |
+     |  Method resolution order:
+     |      WSError
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, network, status, details)
+     |
+     |  __str__ = r(*args)
+     |
+     |  get_id(self)
+     |      Returns the exception ID, from one of the following:
+     |      STATUS_INVALID_SERVICE = 2
+     |      STATUS_INVALID_METHOD = 3
+     |      STATUS_AUTH_FAILED = 4
+     |      STATUS_INVALID_FORMAT = 5
+     |      STATUS_INVALID_PARAMS = 6
+     |      STATUS_INVALID_RESOURCE = 7
+     |      STATUS_TOKEN_ERROR = 8
+     |      STATUS_INVALID_SK = 9
+     |      STATUS_INVALID_API_KEY = 10
+     |      STATUS_OFFLINE = 11
+     |      STATUS_SUBSCRIBERS_ONLY = 12
+     |      STATUS_TOKEN_UNAUTHORIZED = 14
+     |      STATUS_TOKEN_EXPIRED = 15
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |
+     |      Use of negative indices is not supported.
+     |
+     |  __reduce__(...)
+     |
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |
+     |  __setstate__(...)
+     |
+     |  __unicode__(...)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |
+     |  __dict__
+     |
+     |  args
+     |
+     |  message
+FUNCTIONS
+    cleanup_nodes(doc)
+        Remove text nodes containing only whitespace
+
+    md5(text)
+        Returns the md5 hash of a string.
+DATA
+    COVER_EXTRA_LARGE = 3
+    COVER_LARGE = 2
+    COVER_MEDIUM = 1
+    COVER_MEGA = 4
+    COVER_SMALL = 0
+    DOMAIN_CHINESE = 11
+    DOMAIN_ENGLISH = 0
+    DOMAIN_FRENCH = 3
+    DOMAIN_GERMAN = 1
+    DOMAIN_ITALIAN = 4
+    DOMAIN_JAPANESE = 10
+    DOMAIN_POLISH = 5
+    DOMAIN_PORTUGUESE = 6
+    DOMAIN_RUSSIAN = 9
+    DOMAIN_SPANISH = 2
+    DOMAIN_SWEDISH = 7
+    DOMAIN_TURKISH = 8
+    IMAGES_ORDER_DATE = 'dateadded'
+    IMAGES_ORDER_POPULARITY = 'popularity'
+    PERIOD_12MONTHS = '12month'
+    PERIOD_1MONTH = '1month'
+    PERIOD_3MONTHS = '3month'
+    PERIOD_6MONTHS = '6month'
+    PERIOD_7DAYS = '7day'
+    PERIOD_OVERALL = 'overall'
+    SCROBBLE_MODE_BANNED = 'B'
+    SCROBBLE_MODE_LOVED = 'L'
+    SCROBBLE_MODE_PLAYED = ''
+    SCROBBLE_MODE_SKIPPED = 'S'
+    SCROBBLE_SOURCE_LASTFM = 'L'
+    SCROBBLE_SOURCE_NON_PERSONALIZED_BROADCAST = 'R'
+    SCROBBLE_SOURCE_PERSONALIZED_BROADCAST = 'E'
+    SCROBBLE_SOURCE_UNKNOWN = 'U'
+    SCROBBLE_SOURCE_USER = 'P'
+    SSL_CONTEXT = <ssl.SSLContext object>
+    STATUS_AUTH_FAILED = 4
+    STATUS_INVALID_API_KEY = 10
+    STATUS_INVALID_FORMAT = 5
+    STATUS_INVALID_METHOD = 3
+    STATUS_INVALID_PARAMS = 6
+    STATUS_INVALID_RESOURCE = 7
+    STATUS_INVALID_SERVICE = 2
+    STATUS_INVALID_SIGNATURE = 13
+    STATUS_INVALID_SK = 9
+    STATUS_OFFLINE = 11
+    STATUS_SUBSCRIBERS_ONLY = 12
+    STATUS_TOKEN_ERROR = 8
+    STATUS_TOKEN_EXPIRED = 15
+    STATUS_TOKEN_UNAUTHORIZED = 14
+    __author__ = 'Amr Hassan, hugovk, Mice P\xc3\xa1pai'
+    __copyright__ = 'Copyright (C) 2008-2010 Amr Hassan, 2013-2017 hugovk,...
+    __email__ = 'amr.hassan@gmail.com'
+    __license__ = 'apache2'
+    __version__ = '2.0.0'
+VERSION
+    2.0.0
+AUTHOR
+    Amr Hassan, hugovk, Mice Pápai

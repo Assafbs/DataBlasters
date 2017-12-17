@@ -1,8 +1,10 @@
 import MySQLdb as mdb
 import pylast
+from musixmatch import Musixmatch
 
-API_KEY = "d202d3c8b0726f003b32954d7d37e6ab"
-API_SECRET = "186006795c45cabe0d4692cd8dd6b01c"
+LFM_API_KEY = "d202d3c8b0726f003b32954d7d37e6ab"
+LFM_API_SECRET = "186006795c45cabe0d4692cd8dd6b01c"
+MM_API_KEY = "3dbef1b0188814ddcc0f7bdd95ed9902"
 
 # In order to perform a write operation you need to authenticate yourself
 username = "lederdavid"
@@ -53,8 +55,8 @@ def insert_new_song(con, title, artist_id, album_id, song_counter):
             return cur.fetchone()[0]
 
 
-def get_tracks():
-    network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET,
+def get_tracks_last_fm():
+    network = pylast.LastFMNetwork(api_key=LFM_API_KEY, api_secret=LFM_API_SECRET,
                                    username=username, password_hash=password_hash)
     con = mdb.connect('localhost', 'root', 'Armageddon1', "mr_music")
     chart_songs = network.get_top_tracks(1000)
@@ -79,5 +81,15 @@ def get_tracks():
         song_counter += 1
 
 
+def get_tracks_musixmatch():
+    try:
+        musixmatch = Musixmatch(MM_API_KEY)
+        chart = musixmatch.chart_tracks_get(1, 2, 3)
+
+        print chart
+    except:
+        pass
+
+
 if __name__ == '__main__':
-    get_tracks()
+    get_tracks_musixmatch()

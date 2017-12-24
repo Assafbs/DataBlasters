@@ -1,10 +1,12 @@
 import MySQLdb as mdb
 import pylast
 from musixmatch import Musixmatch
+from yandex_translate import YandexTranslate
 
 LFM_API_KEY = "d202d3c8b0726f003b32954d7d37e6ab"
 LFM_API_SECRET = "186006795c45cabe0d4692cd8dd6b01c"
 MM_API_KEY = "3dbef1b0188814ddcc0f7bdd95ed9902"
+YANDEX_KEY = 'trnsl.1.1.20171218T200252Z.d74bdb39ed5665a9.5314bb5a519d4d4d70774e148276d6bf69d2d4ae'
 
 # In order to perform a write operation you need to authenticate yourself
 username = "lederdavid"
@@ -122,7 +124,7 @@ def get_artist_ratings():
     con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
     with con:
         cur = con.cursor()
-        cur.execute("SELECT artist_id FROM artists")
+        cur.execute("SELECT artist_id FROM artists WHERE rating IS NULL")
         everything_list = []
         for i in range(cur.rowcount):
             id = cur.fetchone()[0]
@@ -139,7 +141,7 @@ def get_album_ratings():
     con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
     with con:
         cur = con.cursor()
-        cur.execute("SELECT album_id FROM albums")
+        cur.execute("SELECT album_id FROM albums WHERE rating IS NULL")
         everything_list = []
         for i in range(cur.rowcount):
             id = cur.fetchone()[0]
@@ -157,7 +159,7 @@ def get_tracks_musixmatch():
         musixmatch = Musixmatch(MM_API_KEY)
         con = mdb.connect('localhost', 'root', 'Armageddon1', 'musixmatch')
         for i in range(1, 10):
-            chart = musixmatch.chart_tracks_get(i, 100, 0)
+            chart = musixmatch.chart_tracks_get(i, 100, 0, country='il')
             list_of_tracks = chart.get('message').get('body').get('track_list')
             for j in range(100):
                 track = list_of_tracks[j].get('track')
@@ -223,17 +225,20 @@ def get_all_tracks_from_albums():
         cur = con.cursor()
         list_of_lists_of_songs = list()
         try:
-            cur.execute("SELECT album_id FROM albums WHERE type = 'Album' OR type = 'Compilation' OR type = 'EP'")
+            cur.execute(
+                "SELECT album_id, album_mbid FROM albums WHERE album_mbid IS NOT NULL")
             for i in range(cur.rowcount):
-                album_id = cur.fetchone()[0]
-                list_of_lists_of_songs.append(
-                    musixmatch.album_tracks_get(album_id, 1, 1, 100).get('message').get('body').get('track_list'))
+                row = cur.fetchone()
+                album_id, album_mbid = row[0], row[1]
+                ll = musixmatch.album_tracks_get(album_id, 1, 100, album_mbid).get('message')
+                list_of_lists_of_songs.append(ll.get('body').get('track_list'))
             insert_new_tracks_from_list(con, list_of_lists_of_songs)
         except Exception as e:
             print "error occurred: "
             print e.message
             print "size of list of lists: " + str(len(list_of_lists_of_songs))
             insert_new_tracks_from_list(con, list_of_lists_of_songs)
+
 
 def update_albums_release_date_and_type(cur, dict_of_dates):
     for album_id in dict_of_dates:
@@ -249,6 +254,34 @@ def update_albums_release_date_and_type(cur, dict_of_dates):
                 cur.execute(
                     "UPDATE albums SET type = %s, release_year = %s WHERE album_id = %s",
                     (album_type, year, album_id))
+
+
+def update_album_mbid(cur, dict_of_mbids):
+    for album_id in dict_of_mbids:
+        album_mbid = dict_of_mbids[album_id]
+        cur.execute(
+            "UPDATE albums SET album_mbid = %s WHERE album_id = %s",
+            (album_mbid, album_id))
+
+
+def get_mbid_from_albums():
+    musixmatch = Musixmatch(MM_API_KEY)
+    con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
+    with con:
+        cur = con.cursor()
+        dict_of_mbids = dict()
+        try:
+            cur.execute("SELECT album_id FROM albums WHERE albums.album_mbid IS NULL")
+            for i in range(cur.rowcount):
+                album_id = cur.fetchone()[0]
+                album = musixmatch.album_get(album_id).get('message').get('body').get('album')
+                album_mbid = album.get('album_mbid')
+                dict_of_mbids.update({album_id: album_mbid})
+        except Exception as e:
+            print "error occurred: "
+            print e.message
+            print "size of dict: " + str(len(dict_of_mbids))
+        update_album_mbid(cur, dict_of_mbids)
 
 
 def get_release_dates_albums_and_types():
@@ -280,10 +313,110 @@ def get_release_dates_albums_and_types():
             update_albums_release_date_and_type(cur, dict_of_dates)
 
 
+def insert_into_lyrics(cur, dict_of_lyrics):
+    for song_id in dict_of_lyrics:
+        try:
+            cur.execute("SELECT song_id FROM lyrics WHERE song_id = %s", song_id)
+            if cur.rowcount == 0:
+                text = dict_of_lyrics[song_id][0]
+                src_language = dict_of_lyrics[song_id][1]
+                cur.execute(
+                    "INSERT INTO lyrics (song_id, text, src_lang) VALUES(%s, %s, %s)", (song_id, text, src_language))
+        except Exception as e:
+            print "error occurred: "
+            print e.message
+
+
+def get_existing_lyrics(con):
+    cur = con.cursor()
+    set_of_ids = set()
+    cur.execute("SELECT song_id FROM lyrics")
+    for i in range(cur.rowcount):
+        set_of_ids.add(cur.fetchone()[0])
+    return set_of_ids
+
+
+def get_lyrics_of_tracks():
+    musixmatch = Musixmatch(MM_API_KEY)
+    con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
+    con.set_character_set('utf8')
+    with con:
+        cur = con.cursor()
+        cur.execute('SET CHARACTER SET utf8')
+        cur.execute('SET character_set_connection=utf8')
+        dict_of_lyrics = dict()
+        set_of_existing_ids = get_existing_lyrics(con)
+        try:
+            cur.execute("SELECT song_id FROM songs")
+            for i in range(cur.rowcount):
+                song_id = cur.fetchone()[0]
+                if song_id not in set_of_existing_ids:
+                    message = musixmatch.track_lyrics_get(song_id).get('message')
+                    if message.get('header').get('status_code') == 200:
+                        lyrics = message.get('body').get('lyrics')
+                        text = lyrics.get('lyrics_body')
+                        src_language = lyrics.get('lyrics_language')
+                        dict_of_lyrics.update({song_id: (text, src_language)})
+        except Exception as e:
+            print "error occurred: "
+            print e.message
+            print "size of dict: " + str(len(dict_of_lyrics))
+        insert_into_lyrics(cur, dict_of_lyrics)
+
+
+def insert_into_lyrics_translation(cur, dict_of_lyrics):
+    for song_id in dict_of_lyrics:
+        try:
+            translation = dict_of_lyrics[song_id][0]
+            cur.execute(
+                "UPDATE lyrics SET translation = %s WHERE song_id =  %s", (translation, song_id))
+        except Exception as e:
+            print "error occurred: "
+            print e.message
+            print e.args
+    # get_lyrics_translation()
+
+
+def get_lyrics_translation():
+    translate = YandexTranslate('trnsl.1.1.20171218T200252Z.d74bdb39ed5665a9.5314bb5a519d4d4d70774e148276d6bf69d2d4ae')
+    con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
+    con.set_character_set('utf8')
+    with con:
+        cur = con.cursor()
+        cur.execute('SET CHARACTER SET utf8')
+        cur.execute('SET character_set_connection=utf8')
+        dict_of_lyrics = dict()
+        try:
+            cur.execute("SELECT song_id, text, src_lang FROM lyrics WHERE text != '' AND translation IS NULL")
+            if cur.rowcount == 0:
+                exit(0)
+            for i in range(cur.rowcount):
+                row = cur.fetchone()
+                song_id = row[0]
+                text = row[1]
+                src_language = row[2]
+                if src_language == '':
+                    src_language = 'en'
+                message = translate.translate(text, src_language + '-he')
+                if message.get('code') == 200:
+                    translation = message.get('text')
+                    dict_of_lyrics.update({song_id: translation})
+                else:
+                    print message.get('code')
+        except Exception as e:
+            print "error occurred: "
+            print e.message
+            print "size of dict: " + str(len(dict_of_lyrics))
+        insert_into_lyrics_translation(cur, dict_of_lyrics)
+
+
 if __name__ == '__main__':
     # get_tracks_musixmatch()
-    # get_artist_ratings()
-    # get_album_ratings()
-    # get_all_albums_from_artists()
-    # get_release_dates_albums_and_types()
+    get_artist_ratings()
+    get_album_ratings()
+    get_all_albums_from_artists()
+    get_release_dates_albums_and_types()
+    get_mbid_from_albums()
     get_all_tracks_from_albums()
+    get_lyrics_of_tracks()
+    get_lyrics_translation()

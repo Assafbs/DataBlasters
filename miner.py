@@ -417,13 +417,17 @@ def get_lyrics_translation():
 def insert_popular_songs_to_table(country, list_of_songs):
     print 'starting insert: size = ' + str(len(list_of_songs))
     con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
-    for song in list_of_songs:
-        song_name = song[0]
-        artist_name = song[1]
-        playcount = song[2]
-        album_cover = song[3]
-        with con:
-            cur = con.cursor()
+    con.set_character_set('utf8')
+
+    with con:
+        cur = con.cursor()
+        cur.execute('SET CHARACTER SET utf8')
+        cur.execute('SET character_set_connection=utf8')
+        for song in list_of_songs:
+            song_name = song[0].encode('utf-8')
+            artist_name = song[1].encode('utf-8')
+            playcount = song[2]
+            album_cover = song[3].encode('utf-8')
             try:
                 cur.execute(
                     "INSERT INTO popular_songs (country_name, song_name, artist_name, playcount, album_cover) VALUES(%s, %s, %s, %s,%s)",
@@ -441,26 +445,47 @@ def insert_popular_songs_to_table(country, list_of_songs):
                 print e.message
 
 
+def insert_popular_song_to_table(con, country, song_name, artist_name, playcount, album_cover):
+    with con:
+        cur = con.cursor()
+        cur.execute('SET CHARACTER SET utf8')
+        cur.execute('SET character_set_connection=utf8')
+        cur.execute(
+            "SELECT * FROM popular_songs_by_country WHERE country_name = %s AND song_name = %s AND artist_name = %s",
+            (country, song_name, artist_name))
+        if cur.rowcount == 0:
+            try:
+                cur.execute(
+                    "INSERT INTO popular_songs (country_name, song_name, artist_name, playcount, album_cover) VALUES(%s, %s, %s, %s,%s)",
+                    (country, song_name, artist_name, playcount, album_cover))
+            except Exception as e:
+                print "error occurred: couldn't insert song name: " + song_name
+                print e.message
+
+
 def get_top_tracks_by_country(country, limit):
     network = pylast.LastFMNetwork(api_key=LFM_API_KEY, api_secret=LFM_API_SECRET,
                                    username=username, password_hash=password_hash)
-    list_of_tracks = list()
+    con = mdb.connect('localhost', 'root', 'Armageddon1', "musixmatch")
+    con.set_character_set('utf8')
+    # list_of_tracks = list()
     geo_songs = network.get_geo_top_tracks(country=country, limit=limit)
     for i in range(len(geo_songs)):
         track = geo_songs.pop()
         try:
             track_item = track.item
-            title = track_item.title
-            artist = track_item.artist.get_name()
+            title = track_item.title.encode('utf-8')
+            artist = track_item.artist.get_name().encode('utf-8')
             playcount = track_item.get_playcount()
             album = track_item.get_album()
-            album_cover = album.get_cover_image()
-            list_of_tracks.append((title, artist, playcount, album_cover))
+            album_cover = album.get_cover_image().encode('utf-8')
+            insert_popular_song_to_table(con, country, title, artist, playcount, album_cover)
+            # list_of_tracks.append((title, artist, playcount, album_cover))
         except Exception as e:
             print "error occurred: "
             print e.message
-            print "size of list: " + str(len(list_of_tracks))
-    insert_popular_songs_to_table(country, list_of_tracks)
+            # print "size of list: " + str(len(list_of_tracks))
+    # insert_popular_songs_to_table(country, list_of_tracks)
 
 
 if __name__ == '__main__':
@@ -473,4 +498,4 @@ if __name__ == '__main__':
     # get_all_tracks_from_albums()
     # get_lyrics_of_tracks()
     # get_lyrics_translation()
-    get_top_tracks_by_country('Israel', 200)
+    get_top_tracks_by_country("United States", 200)

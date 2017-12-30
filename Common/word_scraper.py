@@ -58,6 +58,11 @@ def sort_dict_by_value(dict_of_words):
     sorted_list = sorted(dict_of_words.items(), key=operator.itemgetter(1))
     return sorted_list
 
+def get5PopularWords(text):
+    my_dict = get_dict_word_count(text)
+    lst = sort_dict_by_value(my_dict)
+    lst.reverse()
+    return lst[0:6]
 
 if __name__ == '__main__':
     text = "Hello, I love you, won't you tell me your name? you you name"
@@ -65,3 +70,6 @@ if __name__ == '__main__':
     lst = sort_dict_by_value(my_dict)
     lst.reverse()
     print lst
+    temp = get5PopularWords(text)
+    print temp
+

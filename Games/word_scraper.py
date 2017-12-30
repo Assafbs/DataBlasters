@@ -62,7 +62,10 @@ def get5PopularWords(text):
     my_dict = get_dict_word_count(text)
     lst = sort_dict_by_value(my_dict)
     lst.reverse()
-    return lst[0:6]
+    result = []
+    for i in range(0, 5):
+        result.append(lst[i][0])
+    return result
 
 if __name__ == '__main__':
     text = "Hello, I love you, won't you tell me your name? you you name"

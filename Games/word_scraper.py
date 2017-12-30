@@ -31,13 +31,17 @@ def replace_slashn(word):
 
 
 def get_dict_word_count(text):
+    wordsToIgnore = ['a', 'after', 'although', 'as', 'because', 'before', 'her', 'i', 'if', 'in', 'once',
+                     'only', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till', 'unless', 'until', 'when',
+                     'whenever', 'where', 'wherever', 'while']
+    #TODO maybe i will need to update this list
     dict_of_words = dict()
     for word in text.split(' '):
         word = word.lower()
         word = replace_punctuations(word)
         word = replace_slashn(word)
 
-        if has_only_letters(word):
+        if (has_only_letters(word)) and word not in wordsToIgnore:
             if word not in dict_of_words:
                 dict_of_words.update({word: 1})
             else:

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response,session
 import MySQLdb as mdb
 from word_scraper import get5PopularWords
+import random
 
 app = Flask(__name__)
 
@@ -12,21 +13,22 @@ def calcQuestionAndAns():
     # TODO: loop of number of questions i want to ask the user (10?) - after 1 question will work
     translatedSongRow = calcTranslatedSongRow(con)
     translatedLyrics = translatedSongRow['hebrew_translation']
-    rightAns = translatedSongRow['name']
+    rightAnswer = translatedSongRow['name']
     popularWords = get5PopularWords(translatedSongRow['lyrics']) #TODO: do somethig if ther is less then 5 words. should never happen
     wrongAnswers = calcAnswers(con, popularWords, translatedSongRow['song_id'], translatedSongRow['lyrics_language'])
+    answers = random.sample(wrongAnswers + [rightAnswer], 4)
 
 
-    # TODO: need to mix the answers so the right ans will apear in different place each time
+
     # TODO: need to define onClick for each bottun which will mark in red, or mark in green and add points to score
     #       TODO: maybe on click will route to this page again (and in the last iteration to levels page (maybe after presenting the score))
     # TODO: understant how to change the ui params in end of iteration - after 1 question will work
     return render_template('translateLevel.html',
                            question=translatedLyrics,
-                           option_1=rightAns,
-                           option_2=wrongAnswers[0],
-                           option_3=wrongAnswers[1],
-                           option_4=wrongAnswers[2],
+                           option_1=answers[0],
+                           option_2=answers[1],
+                           option_3=answers[2],
+                           option_4=answers[3],
                            current_score=score)
 
 
@@ -42,9 +44,6 @@ def calcTranslatedSongRow(con):
         cur.execute(query)
         ans = cur.fetchone()
         return ans
-
-
-# TODO: need to find the 5 popular words before calling calcAns
 
 
 def calcAnswers(con, popularWords, answerSongId, lyricsLang):
@@ -91,7 +90,6 @@ def createAnswersQuery(popularWords, answerSongId, lyricsLang):
              'GROUP BY wordsCnt.song_id\n'
              'ORDER BY numWords DESC\n'
              'LIMIT 3').format(*fillers)
-    #TODO: the format isn't working + popular words return words like: in , i, the etc.
     return query
 
 

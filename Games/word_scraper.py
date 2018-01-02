@@ -35,7 +35,6 @@ def get_dict_word_count(text):
                      'only', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till', 'unless', 'until', 'when',
                      'whenever', 'where', 'wherever', 'while']
     #TODO maybe i will need to update this list
-    #I would leave 'whenever' and 'wherever' like the Shakira song
     dict_of_words = dict()
     for word in text.split(' '):
         word = word.lower()

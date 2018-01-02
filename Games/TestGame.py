@@ -1,2 +1,2 @@
 def foo():
-    print("delete me before submission")
+    print("delete me before submition")

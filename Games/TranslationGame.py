@@ -3,10 +3,10 @@ import MySQLdb as mdb
 from word_scraper import get5PopularWords
 import random
 
-app = Flask(__name__)
+app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
 
-@app.route('/translateLevel')
+@app.route('/translateGame')
 def calcQuestionAndAns():
     score = 0
     con = mdb.connect('localhost', 'root', 'Password!1', "my_schema")
@@ -17,19 +17,30 @@ def calcQuestionAndAns():
     popularWords = get5PopularWords(translatedSongRow['lyrics']) #TODO: do somethig if ther is less then 5 words. should never happen
     wrongAnswers = calcAnswers(con, popularWords, translatedSongRow['song_id'], translatedSongRow['lyrics_language'])
     answers = random.sample(wrongAnswers + [rightAnswer], 4)
+    functioncalls = []
+    for i in range(len(answers)):
+        if answers[i] == rightAnswer:
+            functioncalls.append("onCorrectAnswer('button{}')".format(i+1))
+        else:
+            functioncalls.append("onWrongAnswer('button{}')".format(i+1))
 
 
 
     # TODO: need to define onClick for each bottun which will mark in red, or mark in green and add points to score
     #       TODO: maybe on click will route to this page again (and in the last iteration to levels page (maybe after presenting the score))
     # TODO: understant how to change the ui params in end of iteration - after 1 question will work
-    return render_template('translateLevel.html',
+    return render_template('TranslateGame.html',
                            question=translatedLyrics,
                            option_1=answers[0],
+                           method1=onRightAnswer,
                            option_2=answers[1],
                            option_3=answers[2],
                            option_4=answers[3],
-                           current_score=score)
+                           current_score=score,
+                           funcCall1=functioncalls[0],
+                           funcCall2=functioncalls[1],
+                           funcCall3=functioncalls[2],
+                           funcCall4=functioncalls[3])
 
 
 def calcTranslatedSongRow(con):
@@ -92,6 +103,9 @@ def createAnswersQuery(popularWords, answerSongId, lyricsLang):
              'LIMIT 3').format(*fillers)
     return query
 
+
+def onRightAnswer(): #TODO: this method can't be called directly from the html. need JS in the middle
+    print('onRightAnswer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 
 # TODO: delete the / route, this is just for debugging

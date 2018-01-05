@@ -2,8 +2,7 @@
 function onCorrectAnswer(elemId) {
   document.getElementById(elemId).style.background='#00e600';
   disableAllAnswersButtons();
-  // TODO: open popup with next question buuton or sleep and then redirect or disable
-    // TODO: other buttons and put nextquestion button
+  showNextButton();
 
   //setTimeout('Redirect()', 10000); //TODO: test it!
   //window.prompt("sometext","defaultText");
@@ -13,6 +12,7 @@ function onCorrectAnswer(elemId) {
 function onWrongAnswer(elemId) {
   document.getElementById(elemId).style.background='#FF0000';
   disableAllAnswersButtons();
+  showNextButton();
 }
 
 function disableAllAnswersButtons() {
@@ -20,6 +20,10 @@ function disableAllAnswersButtons() {
     buttonId = "button".concat(i);
     document.getElementById(buttonId).setAttribute('disabled','disabled');
   }
+}
+
+function showNextButton() {
+    document.getElementById("next").style.visibility = "visible";
 }
 
 

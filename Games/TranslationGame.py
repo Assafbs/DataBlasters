@@ -114,7 +114,7 @@ def onRightAnswer(): #TODO: this method can't be called directly from the html. 
 # TODO: delete the / route, this is just for debugging
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return "Imagine Assaf's Level Selection Page"
 
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main pa
 @app.route('/translateGame')
 def calcQuestionAndAns():
     score = 0
-    con = mdb.connect('localhost', 'root', 'Password!1', "my_schema")
+    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
     # TODO: loop of number of questions i want to ask the user (10?) - after 1 question will work
     translatedSongRow = calcTranslatedSongRow(con)
     translatedLyrics = translatedSongRow['hebrew_translation']
@@ -17,12 +17,12 @@ def calcQuestionAndAns():
     popularWords = get5PopularWords(translatedSongRow['lyrics']) #TODO: do somethig if ther is less then 5 words. should never happen
     wrongAnswers = calcAnswers(con, popularWords, translatedSongRow['song_id'], translatedSongRow['lyrics_language'])
     answers = random.sample(wrongAnswers + [rightAnswer], 4)
-    functioncalls = []
+    functionCalls = []
     for i in range(len(answers)):
         if answers[i] == rightAnswer:
-            functioncalls.append("onCorrectAnswer('button{}')".format(i+1))
+            functionCalls.append("onCorrectAnswer('button{}')".format(i+1))
         else:
-            functioncalls.append("onWrongAnswer('button{}')".format(i+1))
+            functionCalls.append("onWrongAnswer('button{}')".format(i+1))
 
 
 
@@ -30,23 +30,26 @@ def calcQuestionAndAns():
     #       TODO: maybe on click will route to this page again (and in the last iteration to levels page (maybe after presenting the score))
     # TODO: understant how to change the ui params in end of iteration - after 1 question will work
     return render_template('TranslateGame.html',
-                           question=translatedLyrics,
+                           question=translatedLyrics.decode('utf-8'),
                            option_1=answers[0],
                            method1=onRightAnswer,
                            option_2=answers[1],
                            option_3=answers[2],
                            option_4=answers[3],
                            current_score=score,
-                           funcCall1=functioncalls[0],
-                           funcCall2=functioncalls[1],
-                           funcCall3=functioncalls[2],
-                           funcCall4=functioncalls[3])
+                           funcCall1=functionCalls[0],
+                           funcCall2=functionCalls[1],
+                           funcCall3=functionCalls[2],
+                           funcCall4=functionCalls[3])
 
 
 def calcTranslatedSongRow(con):
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute('SET character_set_results = \'utf8\', character_set_client = \'utf8\', '
+                    'character_set_connection = \'utf8\','
+                    'character_set_database = \'utf8\', character_set_server = \'utf8\'') # TODO: delete
         query = ('SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.name\n'
                     'FROM lyrics JOIN songs ON lyrics.song_id = songs.sond_id\n'
                     'WHERE lyrics.hebrew_translation IS NOT NULL\n' 
@@ -72,8 +75,8 @@ def calcAnswers(con, popularWords, answerSongId, lyricsLang):
 
 
 def createAnswersQuery(popularWords, answerSongId, lyricsLang):
-    fillers = popularWords + [lyricsLang] + [answerSongId]
-    query = ('SELECT songs.name, (count(*) - 1) AS numWords\n'
+    fillers = popularWords + [lyricsLang] + [answerSongId] #TODO: may improve the query with distint (befoe limit 3)
+    query = ('SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n'
              'FROM songs JOIN (\n'
                  '(SELECT song_id \n'
                  'FROM lyrics \n'
@@ -115,4 +118,4 @@ def hello_world():
 
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

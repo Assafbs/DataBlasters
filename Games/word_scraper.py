@@ -32,8 +32,8 @@ def replace_slashn(word):
 
 def get_dict_word_count(text):
     wordsToIgnore = ['a', 'after', 'although', 'are', 'as', 'because', 'before', 'her', 'i', 'if', 'in', 'me', 'my',
-                     'once', 'only', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till', 'unless', 'until',
-                     'when', 'whenever', 'where', 'wherever', 'while']
+                     'on','once', 'only', 'of', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till',
+                     'unless', 'until', 'when', 'whenever', 'where', 'wherever', 'while']
     #TODO maybe i will need to update this list
     dict_of_words = dict()
     for word in text.split(' '):
@@ -72,7 +72,8 @@ def get5PopularWords(text):
     return result
 
 if __name__ == '__main__':
-    text = "Hello, I love you, won't you tell me your name? you you name"
+    text = 'Old friends, old friends Sat on their park bench like bookends A newspaper blown through the grass Falls on the round toes Of the high shoes of the old friends'
+
     my_dict = get_dict_word_count(text)
     lst = sort_dict_by_value(my_dict)
     lst.reverse()

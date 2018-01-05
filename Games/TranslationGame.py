@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response,session
+from flask import Flask, render_template, redirect, url_for, request, make_response, Response
 import MySQLdb as mdb
 from word_scraper import get5PopularWords
 import random
@@ -21,7 +21,11 @@ def translate_game():
 
 
 @app.route('/translateGame_')
-def translate_game_with_score():
+def translate_game_mid():
+    allow_access = request.cookies.get('allowAccess')
+    if allow_access != 'true':
+        return Response('You are not authorized to refresh in order to change question!', 401,
+                        {'WWWAuthenticate': 'Basic realm="Login Required"'})
     global SCORE
     points = int(request.cookies.get('points'))
     SCORE += points
@@ -65,6 +69,7 @@ def create_game_page(con):
                                              funcCall4=functionCalls[3]))
     global ANSWER_NUM
     response.set_cookie('questionNum', str(ANSWER_NUM + 1))
+    response.set_cookie('allowAccess', 'false')
     response.set_cookie('points', '0')  # setting points back to 0 to prevent cheating
     return response
 

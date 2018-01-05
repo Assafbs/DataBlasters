@@ -3,14 +3,12 @@ var c_numQuestionsPerGame = 5;
 var c_pointsPerQuestion = 10;
 
 // global vars:
-var questionNum = 0;
 var correctAnswer = false;
 
 
 function onCorrectAnswer(elemId) {
   document.getElementById(elemId).style.background='#00e600';
   disableAllAnswersButtons();
-  questionNum++;
   correctAnswer = true;
   changePointsText(c_pointsPerQuestion);
   showNextButtonAndWonPoints();
@@ -20,7 +18,6 @@ function onCorrectAnswer(elemId) {
 function onWrongAnswer(elemId) {
   document.getElementById(elemId).style.background='#FF0000';
   disableAllAnswersButtons();
-  questionNum++;
   showNextButtonAndWonPoints();
 }
 
@@ -32,8 +29,8 @@ function disableAllAnswersButtons() {
 }
 
 function showNextButtonAndWonPoints() {
-    var qNum =  parseInt(getCookiebyName('questionNum'));
-    if (qNum == c_numQuestionsPerGame){
+    var questionNum =  parseInt(getCookiebyName('questionNum'));
+    if (questionNum == c_numQuestionsPerGame){
       document.getElementById('next').innerHTML = "Finish Game";
     }
     document.getElementById("pointsForAns").style.visibility = "visible";
@@ -51,6 +48,7 @@ function Redirect() {
     correctAnswer = false;
   }
   document.cookie = 'points='.concat(points.toString());
+  document.cookie = 'allowAccess=true'
   window.location.href = '../translateGame_';
 }
 

@@ -1,7 +1,11 @@
+var questionNum = 0;
+var numQuestionsPerGame = 1;
+
 
 function onCorrectAnswer(elemId) {
   document.getElementById(elemId).style.background='#00e600';
   disableAllAnswersButtons();
+  questionNum++;
   changePointsText(5);
   showNextButtonAndWonPoints();
 }
@@ -10,6 +14,7 @@ function onCorrectAnswer(elemId) {
 function onWrongAnswer(elemId) {
   document.getElementById(elemId).style.background='#FF0000';
   disableAllAnswersButtons();
+  questionNum++;
   showNextButtonAndWonPoints();
 }
 
@@ -21,6 +26,9 @@ function disableAllAnswersButtons() {
 }
 
 function showNextButtonAndWonPoints() {
+    if (questionNum == numQuestionsPerGame){
+      document.getElementById('next').innerHTML = "Finish Game";
+    }
     document.getElementById("pointsForAns").style.visibility = "visible";
     document.getElementById("next").style.visibility = "visible";
 }
@@ -30,5 +38,10 @@ function changePointsText(points) {
 }
 
  function Redirect() {
-  window.location.href = '../';
+  if (questionNum == numQuestionsPerGame){
+    window.location.href = '../'; //TODO: route to game selection page
+  }
+  else {
+    window.location.href = '../'; //TODO: route to other question
+  }
 }

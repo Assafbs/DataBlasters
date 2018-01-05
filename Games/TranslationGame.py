@@ -5,10 +5,11 @@ import random
 
 app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
+score = 0
+questionNum = 0
 
 @app.route('/translateGame')
 def calcQuestionAndAns():
-    score = 0
     con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
     # TODO: loop of number of questions i want to ask the user (10?) - after 1 question will work
     translatedSongRow = calcTranslatedSongRow(con)

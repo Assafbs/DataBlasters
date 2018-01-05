@@ -5,43 +5,68 @@ import random
 
 app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
-score = 0
-questionNum = 0
+SCORE = 0
+ANSWER_NUM = 0
+NUM_QUESTIONS_PER_GAME = 5
 
 @app.route('/translateGame')
-def calcQuestionAndAns():
-    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
-    # TODO: loop of number of questions i want to ask the user (10?) - after 1 question will work
+def translate_game():
+    global SCORE
+    SCORE = 0
+    global ANSWER_NUM
+    ANSWER_NUM = 0
+
+    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic") #TODO: use assaf method when ready
+    return create_game_page(con)
+
+
+@app.route('/translateGame_')
+def translate_game_with_score():
+    global SCORE
+    points = int(request.cookies.get('points'))
+    SCORE += points
+    global ANSWER_NUM
+    ANSWER_NUM += 1
+    global NUM_QUESTIONS_PER_GAME
+
+    if ANSWER_NUM == NUM_QUESTIONS_PER_GAME:
+        # TODO: call david's method for updating score with SCORE
+        return redirect(url_for('hello_world')) # TODO: route to game choose page
+    else:
+        con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
+        return create_game_page(con)
+
+
+def create_game_page(con):
     translatedSongRow = calcTranslatedSongRow(con)
     translatedLyrics = translatedSongRow['hebrew_translation']
     rightAnswer = translatedSongRow['name']
-    popularWords = get5PopularWords(translatedSongRow['lyrics']) #TODO: do somethig if ther is less then 5 words. should never happen
+    popularWords = get5PopularWords(
+        translatedSongRow['lyrics'])  # TODO: do something if there is less then 5 words. should never happen
     wrongAnswers = calcAnswers(con, popularWords, translatedSongRow['song_id'], translatedSongRow['lyrics_language'])
     answers = random.sample(wrongAnswers + [rightAnswer], 4)
     functionCalls = []
     for i in range(len(answers)):
         if answers[i] == rightAnswer:
-            functionCalls.append("onCorrectAnswer('button{}')".format(i+1))
+            functionCalls.append("onCorrectAnswer('button{}')".format(i + 1))
         else:
-            functionCalls.append("onWrongAnswer('button{}')".format(i+1))
+            functionCalls.append("onWrongAnswer('button{}')".format(i + 1))
 
-
-
-    # TODO: need to define onClick for each bottun which will mark in red, or mark in green and add points to score
-    #       TODO: maybe on click will route to this page again (and in the last iteration to levels page (maybe after presenting the score))
-    # TODO: understant how to change the ui params in end of iteration - after 1 question will work
-    return render_template('TranslateGame.html',
-                           question=translatedLyrics.decode('utf-8'),
-                           option_1=answers[0],
-                           method1=onRightAnswer,
-                           option_2=answers[1],
-                           option_3=answers[2],
-                           option_4=answers[3],
-                           current_score=score,
-                           funcCall1=functionCalls[0],
-                           funcCall2=functionCalls[1],
-                           funcCall3=functionCalls[2],
-                           funcCall4=functionCalls[3])
+    response = make_response(render_template('TranslateGame.html',
+                                             question=translatedLyrics.decode('utf-8'),
+                                             option_1=answers[0],
+                                             option_2=answers[1],
+                                             option_3=answers[2],
+                                             option_4=answers[3],
+                                             current_score=SCORE,
+                                             funcCall1=functionCalls[0],
+                                             funcCall2=functionCalls[1],
+                                             funcCall3=functionCalls[2],
+                                             funcCall4=functionCalls[3]))
+    global ANSWER_NUM
+    response.set_cookie('questionNum', str(ANSWER_NUM + 1))
+    response.set_cookie('points', '0')  # setting points back to 0 to prevent cheating
+    return response
 
 
 def calcTranslatedSongRow(con):
@@ -108,8 +133,7 @@ def createAnswersQuery(popularWords, answerSongId, lyricsLang):
     return query
 
 
-def onRightAnswer(): #TODO: this method can't be called directly from the html. need JS in the middle
-    print('onRightAnswer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
 
 
 # TODO: delete the / route, this is just for debugging

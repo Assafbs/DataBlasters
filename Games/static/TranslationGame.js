@@ -1,12 +1,18 @@
+// consts:
+var c_numQuestionsPerGame = 5;
+var c_pointsPerQuestion = 10;
+
+// global vars:
 var questionNum = 0;
-var numQuestionsPerGame = 1;
+var correctAnswer = false;
 
 
 function onCorrectAnswer(elemId) {
   document.getElementById(elemId).style.background='#00e600';
   disableAllAnswersButtons();
   questionNum++;
-  changePointsText(5);
+  correctAnswer = true;
+  changePointsText(c_pointsPerQuestion);
   showNextButtonAndWonPoints();
 }
 
@@ -26,7 +32,8 @@ function disableAllAnswersButtons() {
 }
 
 function showNextButtonAndWonPoints() {
-    if (questionNum == numQuestionsPerGame){
+    var qNum =  parseInt(getCookiebyName('questionNum'));
+    if (qNum == c_numQuestionsPerGame){
       document.getElementById('next').innerHTML = "Finish Game";
     }
     document.getElementById("pointsForAns").style.visibility = "visible";
@@ -37,11 +44,17 @@ function changePointsText(points) {
     document.getElementById('pointsForAns').innerHTML = "You won " + points + " points for that answer";
 }
 
- function Redirect() {
-  if (questionNum == numQuestionsPerGame){
-    window.location.href = '../'; //TODO: route to game selection page
+function Redirect() {
+  var points = 0;
+  if (correctAnswer){
+    points = c_pointsPerQuestion;
+    correctAnswer = false;
   }
-  else {
-    window.location.href = '../'; //TODO: route to other question
-  }
+  document.cookie = 'points='.concat(points.toString());
+  window.location.href = '../translateGame_';
 }
+
+var getCookiebyName = function(name){
+	var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
+	return !!pair ? pair[1] : null;
+};

@@ -31,8 +31,8 @@ def replace_slashn(word):
 
 
 def get_dict_word_count(text):
-    wordsToIgnore = ['a', 'after', 'although', 'are', 'as', 'because', 'before', 'her', 'i', 'if', 'in', 'me', 'my',
-                     'on','once', 'only', 'of', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till',
+    wordsToIgnore = ['a', 'after', 'although', 'are', 'as', 'because', 'before', 'her', 'i', 'if', 'in', 'it', 'me',
+                     'my', 'on', 'once', 'only', 'of', 'since', 'so', 'the', 'these', 'than', 'that', 'though', 'till',
                      'unless', 'until', 'when', 'whenever', 'where', 'wherever', 'while']
     #TODO maybe i will need to update this list
     dict_of_words = dict()

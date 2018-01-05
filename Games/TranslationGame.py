@@ -111,7 +111,8 @@ def calcAnswers(con, popularWords, answerSongId, answerSongName, lyricsLang):
 
 
 def createAnswersQuery(popularWords, answerSongId, answerSongName, lyricsLang):
-    fillers = popularWords + [lyricsLang] + [answerSongId] + [answerSongName]
+    # the replace ' is for avoiding escape errors
+    fillers = popularWords + [lyricsLang] + [answerSongId] + [answerSongName.replace("'", "\'")]
     #TODO: may improve the query with distint (befoe limit 3)
     query = ('SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n'
              'FROM songs JOIN (\n'
@@ -141,6 +142,7 @@ def createAnswersQuery(popularWords, answerSongId, answerSongName, lyricsLang):
              'GROUP BY wordsCnt.song_id\n'
              'ORDER BY numWords DESC\n'
              'LIMIT 3').format(*fillers)
+
     return query
 
 

@@ -130,7 +130,7 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
 # TODO: delete the / route, this is just for debugging
 @app.route('/')
 def hello_world():
-    return "Imagine Assaf's Level Selection Page"
+    return "Imagine Assaf's Game Selection Page"
 
 
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging

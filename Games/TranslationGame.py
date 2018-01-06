@@ -3,44 +3,35 @@ import MySQLdb as mdb
 from word_scraper import get5PopularWords
 import random
 import sys
+import GameManager
 
 app = Flask(__name__)  # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
-SCORE = 0
-ANSWER_NUM = 0
+
 NUM_QUESTIONS_PER_GAME = 5
+game_manager = GameManager.GameManager()
 
 
 @app.route('/translateGame')
 def translate_game():
-    global SCORE
-    SCORE = 0
-    global ANSWER_NUM
-    ANSWER_NUM = 0
+    game_manager.start_new_game()
 
-    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic") #TODO: use assaf method when ready
+    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")  # TODO: use assaf method when ready
     return create_game_page(con)
 
 
 @app.route('/translateGame_')
 def translate_game_mid():
-    allow_access = request.cookies.get('allowAccess')
-    if allow_access != 'true':
-        return Response('You are not authorized to refresh in order to change question!', 401,
-                        {'WWWAuthenticate': 'Basic realm="Login Required"'})
-    global SCORE
-    points = int(request.cookies.get('points'))
-    SCORE += points
-    global ANSWER_NUM
-    ANSWER_NUM += 1
-    global NUM_QUESTIONS_PER_GAME
 
-    if ANSWER_NUM == NUM_QUESTIONS_PER_GAME:
-        # TODO: call david's method for updating score with SCORE
-        return redirect(url_for('hello_world'))  # TODO: route to game choose page
-    else:
+    allow_access = request.cookies.get('allowAccess')
+    points = int(request.cookies.get('points'))
+    response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME)
+
+    if response is None:
         con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
         return create_game_page(con)
+    else:
+        return response
 
 
 def create_game_page(con):
@@ -63,13 +54,10 @@ def create_game_page(con):
                                              option_2=answers[1],
                                              option_3=answers[2],
                                              option_4=answers[3],
-                                             current_score=SCORE))
-    global ANSWER_NUM
-    response.set_cookie('questionNum', str(ANSWER_NUM + 1))
-    response.set_cookie('allowAccess', 'false')
+                                             current_score=game_manager.score))
+
     response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    response.set_cookie('points', '0')  # setting points back to 0 to prevent cheating
-    return response
+    return game_manager.update_cookies_for_new_question(response)
 
 
 def calc_translated_song_row(con):

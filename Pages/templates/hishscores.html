@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>DataBlasters {{level_name}} </title>
+    <link rel="icon" href="http://www.favicon.cc/logo3d/4442.png">
+    <title>HighScores Table</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,13 +25,13 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Level Selection</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="#">HighScores</a>
           </li>
         </ul>
@@ -42,28 +41,70 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
-      <div class="container">
-          <h3><p><p>{{question}}</h3>
+      <div class="row">
+        <div class="col-md-4" align="right">
+          <h1><p><p>Top Players</h1>
+        </div>
+        <div class="col-md-4" align="right">
+          <img src="https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Trophy-and-Medals-PNG/Golden_Cup_Trophy_PNG_Clipart.png?m=1434276589" height="250" />
+        </div>
       </div>
     </div>
 
     <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_1}}</a></p>
-        </div>
-        <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_2}}</a></p>
-       </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_3}}</a></p>
-        </div>
-        <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_4}}</a></p>
-       </div>
-      </div>
+      <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>User</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>{{user_1}}</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>{{user_2}}</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>{{user_3}}</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>{{user_4}}</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>{{user_5}}</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>{{user_6}}</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>{{user_7}}</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>{{user_8}}</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>{{user_9}}</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>{{user_10}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+    </div>
 
       <hr>
 

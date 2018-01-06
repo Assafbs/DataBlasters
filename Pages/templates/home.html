@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="http://www.favicon.cc/logo3d/4442.png">
+    <title>Welcome To Mr. Music!</title>
 
-    <title>&#9834; Mr.Music &#9834;</title>
-
-    <link rel="stylesheet" type="text/css" href="../static/TranslateGame.css"/>
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
-
-    <script src="../static/TranslationGame.js" type="text/javascript"></script>
-
   </head>
 
   <body>
@@ -26,7 +21,8 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">DataBlasters</a>
+	<a href="https://imgbb.com/"><img src="https://image.ibb.co/n68GS6/logo.png" alt="logo" border="0" width="31.5" height="54"></a>
+	<a class="navbar-brand" href="#">DataBlasters</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
@@ -40,47 +36,29 @@
             <a class="nav-link" href="#">HighScores</a>
           </li>
         </ul>
-          <div><kbd>My Score: {{current_score}}</kbd></div>
+		<ul class="navbar-nav navbar-right">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Sign Up</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Login</a>
+			</li>
+		</ul>
       </div>
     </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron bg-info">
-      <div class="container">
-        <h2> What is the name of the song the following translated lyrics are taken from?</h2>
-        <p id="translation" charset="utf-8" align="right">{{question}}</p>
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-md-12" align="center">
+          <h1><p><p>Welcome to Mr. Music</h1>
+        </div>
       </div>
+	  <div class="col-md-12" align="center">
+          <iframe src="https://giphy.com/embed/YZJDdw5DBaPbG" width="480" height="313" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/feel-appointment-advocate-YZJDdw5DBaPbG"></a></p>
+        </div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <p><button id="button1" class="btn btn-secondary" onclick="{{funcCall1}}">{{option_1}}</button></p>
-        </div>
-        <div class="col-md-4">
-          <p><button id="button2" class="btn btn-secondary" onclick="{{funcCall2}}">{{option_2}}</button></p>
-       </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <p><button id="button3" class="btn btn-secondary" onclick="{{funcCall3}}">{{option_3}}</button></p>
-        </div>
-        <div class="col-md-4">
-          <p><button id="button4" class="btn btn-secondary" onclick="{{funcCall4}}">{{option_4}}</button></p>
-       </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 text-right">
-    		<p id="pointsForAns">
-
-            </p>
-    	</div>
-        <div class="col-md-12 text-right">
-    		<button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect()">
-              Next Question
-            </button>
-    	</div>
-      </div>
 
       <hr>
 

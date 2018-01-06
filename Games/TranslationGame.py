@@ -56,12 +56,6 @@ def create_game_page(con):
     wrong_answers = calc_answers(con, popular_words, translated_song_row['song_id'],
                                  translated_song_row['name'], translated_song_row['lyrics_language'])
     answers = random.sample(wrong_answers + [right_answer], 4)
-    function_calls = []
-    for i in range(len(answers)):
-        if answers[i] == right_answer:
-            function_calls.append("onCorrectAnswer('button{}')".format(i + 1))
-        else:
-            function_calls.append("onWrongAnswer('button{}')".format(i + 1))
 
     response = make_response(render_template('TranslateGame.html',
                                              question=translated_lyrics.decode('utf-8'),
@@ -69,14 +63,11 @@ def create_game_page(con):
                                              option_2=answers[1],
                                              option_3=answers[2],
                                              option_4=answers[3],
-                                             current_score=SCORE,
-                                             funcCall1=function_calls[0],
-                                             funcCall2=function_calls[1],
-                                             funcCall3=function_calls[2],
-                                             funcCall4=function_calls[3]))
+                                             current_score=SCORE))
     global ANSWER_NUM
     response.set_cookie('questionNum', str(ANSWER_NUM + 1))
     response.set_cookie('allowAccess', 'false')
+    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
     response.set_cookie('points', '0')  # setting points back to 0 to prevent cheating
     return response
 

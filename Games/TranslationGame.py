@@ -4,11 +4,12 @@ from word_scraper import get5PopularWords
 import random
 import sys
 
-app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
+app = Flask(__name__)  # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
 SCORE = 0
 ANSWER_NUM = 0
 NUM_QUESTIONS_PER_GAME = 5
+
 
 @app.route('/translateGame')
 def translate_game():
@@ -36,7 +37,7 @@ def translate_game_mid():
 
     if ANSWER_NUM == NUM_QUESTIONS_PER_GAME:
         # TODO: call david's method for updating score with SCORE
-        return redirect(url_for('hello_world')) # TODO: route to game choose page
+        return redirect(url_for('hello_world'))  # TODO: route to game choose page
     else:
         con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
         return create_game_page(con)
@@ -47,31 +48,32 @@ def create_game_page(con):
     reload(sys)
     sys.setdefaultencoding('UTF8')
 
-    translatedSongRow = calcTranslatedSongRow(con)
-    translatedLyrics = translatedSongRow['hebrew_translation']
-    rightAnswer = translatedSongRow['name']
-    popularWords = get5PopularWords(translatedSongRow['lyrics'])  # TODO: do something if there is less then 5 words. should never happen
-    wrongAnswers = calcAnswers(con, popularWords, translatedSongRow['song_id'],
-                                translatedSongRow['name'], translatedSongRow['lyrics_language'])
-    answers = random.sample(wrongAnswers + [rightAnswer], 4)
-    functionCalls = []
+    translated_song_row = calc_translated_song_row(con)
+    translated_lyrics = translated_song_row['hebrew_translation']
+    right_answer = translated_song_row['name']
+    # TODO: do something if there is less then 5 words. should never happen
+    popular_words = get5PopularWords(translated_song_row['lyrics'])
+    wrong_answers = calc_answers(con, popular_words, translated_song_row['song_id'],
+                                 translated_song_row['name'], translated_song_row['lyrics_language'])
+    answers = random.sample(wrong_answers + [right_answer], 4)
+    function_calls = []
     for i in range(len(answers)):
-        if answers[i] == rightAnswer:
-            functionCalls.append("onCorrectAnswer('button{}')".format(i + 1))
+        if answers[i] == right_answer:
+            function_calls.append("onCorrectAnswer('button{}')".format(i + 1))
         else:
-            functionCalls.append("onWrongAnswer('button{}')".format(i + 1))
+            function_calls.append("onWrongAnswer('button{}')".format(i + 1))
 
     response = make_response(render_template('TranslateGame.html',
-                                             question=translatedLyrics.decode('utf-8'),
+                                             question=translated_lyrics.decode('utf-8'),
                                              option_1=answers[0],
                                              option_2=answers[1],
                                              option_3=answers[2],
                                              option_4=answers[3],
                                              current_score=SCORE,
-                                             funcCall1=functionCalls[0],
-                                             funcCall2=functionCalls[1],
-                                             funcCall3=functionCalls[2],
-                                             funcCall4=functionCalls[3]))
+                                             funcCall1=function_calls[0],
+                                             funcCall2=function_calls[1],
+                                             funcCall3=function_calls[2],
+                                             funcCall4=function_calls[3]))
     global ANSWER_NUM
     response.set_cookie('questionNum', str(ANSWER_NUM + 1))
     response.set_cookie('allowAccess', 'false')
@@ -79,13 +81,13 @@ def create_game_page(con):
     return response
 
 
-def calcTranslatedSongRow(con):
+def calc_translated_song_row(con):
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute('SET character_set_results = \'utf8\', character_set_client = \'utf8\', '
                     'character_set_connection = \'utf8\','
-                    'character_set_database = \'utf8\', character_set_server = \'utf8\'') # TODO: delete
+                    'character_set_database = \'utf8\', character_set_server = \'utf8\'')
         query = ('SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.name\n'
                     'FROM lyrics JOIN songs ON lyrics.song_id = songs.sond_id\n'
                     'WHERE lyrics.hebrew_translation IS NOT NULL\n' 
@@ -96,12 +98,48 @@ def calcTranslatedSongRow(con):
         return ans
 
 
-def calcAnswers(con, popularWords, answerSongId, answerSongName, lyricsLang):
+def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_lang):
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
-        query = createAnswersQuery(popularWords, answerSongId, answerSongName, lyricsLang)
-        cur.execute(query)
+        query = "SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n" \
+                "FROM songs JOIN (\n" \
+                    "(SELECT song_id \n" \
+                    "FROM lyrics\n" \
+                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
+                    "UNION ALL\n" \
+                    "(SELECT song_id \n" \
+                    "FROM lyrics \n" \
+                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
+                    "UNION ALL\n" \
+                    "(SELECT song_id \n" \
+                    "FROM lyrics \n" \
+                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
+                    "UNION ALL\n" \
+                    "(SELECT song_id \n" \
+                    "FROM lyrics\n" \
+                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
+                    "UNION ALL\n" \
+                    "(SELECT song_id \n" \
+                    "FROM lyrics\n" \
+                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
+                    "UNION ALL \n" \
+                    "(SELECT song_id FROM lyrics)\n" \
+                    ") AS wordsCnt ON wordsCnt.song_id = songs.sond_id\n" \
+                "WHERE wordsCnt.song_id <> %s AND songs.name <> %s\n" \
+                "GROUP BY wordsCnt.song_id\n" \
+                "ORDER BY numWords DESC\n" \
+                "LIMIT 3"
+
+        # TODO: delete those print after testing
+        print('translate query: ' + query)
+        print('popular words: +'+popular_words[0] + ' +'+popular_words[1] + ' +'+popular_words[2] +
+              ' +'+popular_words[3] + ' +'+popular_words[4] + '\nlyricsLang: ' + lyrics_lang + ' ,answerSongId: ' +
+              str(answer_song_id) + ' ,answerSongName: ' + answer_song_name)
+
+        cur.execute(query, ('+'+popular_words[0], lyrics_lang, '+'+popular_words[1], lyrics_lang, '+'+popular_words[2],
+                            lyrics_lang, '+'+popular_words[3], lyrics_lang, '+'+popular_words[4], lyrics_lang,
+                            answer_song_id, answer_song_name))
         rows = cur.fetchall()
 
         res = []
@@ -110,49 +148,11 @@ def calcAnswers(con, popularWords, answerSongId, answerSongName, lyricsLang):
         return res
 
 
-def createAnswersQuery(popularWords, answerSongId, answerSongName, lyricsLang):
-    # the replace ' is for avoiding escape errors
-    fillers = popularWords + [lyricsLang] + [answerSongId] + [answerSongName.replace("'", "\'")]
-    #TODO: may improve the query with distint (befoe limit 3)
-    query = ('SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n'
-             'FROM songs JOIN (\n'
-                 '(SELECT song_id \n'
-                 'FROM lyrics \n'
-                 'WHERE MATCH(lyrics) AGAINST(\'+{0}\' IN BOOLEAN MODE) AND lyrics_language = \'{5}\')\n'
-                 'UNION ALL\n'
-                 '(SELECT song_id \n'
-                 'FROM lyrics \n'
-                 'WHERE MATCH(lyrics) AGAINST(\'+{1}\' IN BOOLEAN MODE) AND lyrics_language = \'{5}\')\n'
-                 'UNION ALL\n'
-                 '(SELECT song_id \n'
-                 'FROM lyrics\n'
-                 'WHERE MATCH(lyrics) AGAINST(\'+{2}\' IN BOOLEAN MODE) AND lyrics_language = \'{5}\')\n'
-                 'UNION ALL\n'
-                 '(SELECT song_id\n'
-                 'FROM lyrics \n'
-                 'WHERE MATCH(lyrics) AGAINST(\'+{3}\' IN BOOLEAN MODE) AND lyrics_language = \'{5}\')\n'
-                 'UNION ALL'
-                 '(SELECT song_id\n'
-                 'FROM lyrics \n'
-                 'WHERE MATCH(lyrics) AGAINST(\'+{4}\' IN BOOLEAN MODE) AND lyrics_language = \'{5}\')\n'
-                 'UNION ALL(SELECT song_id \n'
-                 'FROM lyrics) \n'
-                 ') AS wordsCnt ON wordsCnt.song_id = songs.sond_id\n'
-             'WHERE wordsCnt.song_id <> {6} AND songs.name <> \'{7}\'\n'
-             'GROUP BY wordsCnt.song_id\n'
-             'ORDER BY numWords DESC\n'
-             'LIMIT 3').format(*fillers)
-
-    return query
-
-
-
-
-
 # TODO: delete the / route, this is just for debugging
 @app.route('/')
 def hello_world():
     return "Imagine Assaf's Level Selection Page"
+
 
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 if __name__ == '__main__':

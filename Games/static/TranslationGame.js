@@ -38,7 +38,7 @@ function showNextButtonAndWonPoints() {
 }
 
 function changePointsText(points) {
-    document.getElementById('pointsForAns').innerHTML = "You won " + points + " points for that answer";
+    document.getElementById('pointsForAns').innerHTML = "You won " + points + " points for that answer!";
 }
 
 function Redirect() {

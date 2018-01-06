@@ -41,7 +41,7 @@ function changePointsText(points) {
     document.getElementById('pointsForAns').innerHTML = "You won " + points + " points for that answer!";
 }
 
-function Redirect() {
+function Redirect(path) {
   var points = 0;
   if (correctAnswer){
     points = c_pointsPerQuestion;
@@ -49,7 +49,7 @@ function Redirect() {
   }
   document.cookie = 'points='.concat(points.toString());
   document.cookie = 'allowAccess=true'
-  window.location.href = '../translateGame_';
+  window.location.href = path;
 }
 
 var getCookiebyName = function(name){

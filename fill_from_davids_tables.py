@@ -11,7 +11,7 @@ def print_header(header):
 def get_albums_sql(row):
     return "INSERT INTO dbmysql09.albums VALUES({}, {}, {}, {}, {}, {}, {})".format(
         sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]), sql_esc(row[3]), sql_esc(row[4]),
-        sql_mounth_esc(row[5]), sql_esc(row[6]))
+        sql_month_esc(row[5]), sql_esc(row[6]))
 
 
 def get_songs_sql(row):
@@ -121,7 +121,7 @@ def sql_esc(s):
         return "'" + str(s).replace("'", "''") + "'"
 
 
-def sql_mounth_esc(s):
+def sql_month_esc(s):
     if s is None or s < 1:
         return mdb.NULL
     else:

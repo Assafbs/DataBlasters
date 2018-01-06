@@ -57,11 +57,11 @@ DELIMITER ;
 
 
 CREATE  TABLE `DbMysql09`.`songs` (
-  `sond_id` INT NOT NULL ,
+  `song_id` INT NOT NULL ,
   `name` VARCHAR(50) NOT NULL ,
   `album_id` INT NULL ,
   `rank` TINYINT NULL ,
-  PRIMARY KEY (`sond_id`),
+  PRIMARY KEY (`song_id`),
   INDEX `albums_fk_idx` (`album_id` ASC) ,
   CONSTRAINT `album_fk`
     FOREIGN KEY (`album_id` )
@@ -108,7 +108,7 @@ CREATE  TABLE `DbMysql09`.`performed_by` (
   INDEX `artists_fk_idx` (`artist_id` ASC) ,
   CONSTRAINT `songs_fk`
     FOREIGN KEY (`song_id` )
-    REFERENCES `DbMysql09`.`songs` (`sond_id` )
+    REFERENCES `DbMysql09`.`songs` (`song_id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
   CONSTRAINT `artists_fk`
@@ -126,7 +126,7 @@ CREATE  TABLE `DbMysql09`.`lyrics` (
   FULLTEXT INDEX `fulltext` (`lyrics` ASC) ,
   CONSTRAINT `songs_lyrics_fk`
     FOREIGN KEY (`song_id` )
-    REFERENCES `DbMysql09`.`songs` (`sond_id` )
+    REFERENCES `DbMysql09`.`songs` (`song_id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT);
 
@@ -139,7 +139,7 @@ CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
   INDEX `popular_songs_countries_idx` (`song_id` ASC) ,
   CONSTRAINT `popular_songs_countries_fk`
     FOREIGN KEY (`song_id` )
-    REFERENCES `DbMysql09`.`songs` (`sond_id` )
+    REFERENCES `DbMysql09`.`songs` (`song_id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT);
 

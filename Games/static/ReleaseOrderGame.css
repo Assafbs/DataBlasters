@@ -1,0 +1,9 @@
+
+.option_name{
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.25;
+    border: 1px solid transparent;
+    padding: .5rem 1rem;
+    border-radius: .25rem;
+}

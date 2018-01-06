@@ -6,8 +6,15 @@ app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main pa
 
 
 @app.route('/releaseOrderGame')
-def calcQuestionAndAns():
+def release_order_game():
     score = 0
+    return render_template('ReleaseOrderGame.html',
+                           current_score=score,
+                           question='question',
+                           option_1='option_1',
+                           option_2='option_2',
+                           option_3='option_3',
+                           option_4='option_4')
 
 
 

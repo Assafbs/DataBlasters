@@ -7,8 +7,9 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Mr Music</title>
+    <title>&#9834; Mr.Music &#9834;</title>
 
+    <link rel="stylesheet" type="text/css" href="../static/ReleaseOrderGame.css"/>
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -22,7 +23,7 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">DataBlasters</a>
+      <a class="navbar-brand" href="#">Mr. Music</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
@@ -41,27 +42,67 @@
     </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron bg-info">
       <div class="container">
-          <h3><p><p>{{question}}</h3>
+          <h2><p><p>Order the following songs by their release date:</h2>
       </div>
     </div>
 
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_1}}</a></p>
+          <p>
+            <label for="options1">
+              <span class="option_name">{{option_1}} </span>
+            </label>
+            <select id="options1">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </p>
         </div>
         <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_2}}</a></p>
+          <p>
+            <label for="options2">
+              <span class="option_name">{{option_2}} </span>
+            </label>
+            <select id="options2">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </p>
        </div>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_3}}</a></p>
+          <p>
+            <label for="options3">
+              <span class="option_name">{{option_3}} </span>
+            </label>
+            <select id="options3">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </p>
         </div>
         <div class="col-md-4">
-          <p><a class="btn btn-secondary" href="#" role="button">{{option_4}}</a></p>
+          <p>
+            <label for="options4">
+              <span class="option_name">{{option_4}} </span>
+            </label>
+            <select id="options4">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </p>
        </div>
       </div>
 

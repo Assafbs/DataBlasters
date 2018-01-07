@@ -11,7 +11,7 @@ class QueryGenerator:
         return "INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)", (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), game_id, score)
 
     @staticmethod
-    def get_translated_song_query():
+    def get_translated_song_question_query():
         return "SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n" \
                "FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n" \
                "WHERE lyrics.hebrew_translation IS NOT NULL\n" \
@@ -64,3 +64,33 @@ class QueryGenerator:
                "GROUP BY nickname\n" \
                "ORDER BY final_score DESC\n" \
                "LIMIT 10"
+
+    @staticmethod
+    def get_release_order_question_query():
+        return "SELECT albums.album_id, albums.release_month, albums.release_year, songs.name\n" \
+               "FROM albums join songs ON albums.album_id = songs.album_id\n" \
+               "WHERE release_month IS NOT NULL\n" \
+               "ORDER BY rand()\n" \
+               "LIMIT 1"
+
+
+    @staticmethod
+    def get_release_order_answers_query():
+        # TODO [tal]: maybe %s suppose to be %d here with number (otherwise it will add '')
+        return "SELECT *\n" \
+               "FROM\n" \
+               "  (SELECT dateDist.monthDif, dateDist.name\n" \
+               "  FROM\n" \
+               "    (SELECT albums.album_id, IF(release_year = %s,\n" \
+               "                     abs(%s - release_month),\n" \
+               "                     IF (release_year > %s,\n" \
+               "                         release_month + (12 - %s) + 12*(release_year-(%s+1)),\n" \
+               "                         -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n" \
+               "             songs.name\n" \
+               "    FROM albums JOIN songs ON albums.album_id = songs.album_id\n" \
+               "    WHERE release_month IS NOT NULL and albums.album_id <> %s\n" \
+               "    ORDER BY rand()) AS dateDist\n" \
+               "  GROUP BY dateDist.album_id\n" \
+               "  ORDER BY abs(dateDist.monthDif)\n" \
+               "  LIMIT 3) AS closestReleased\n" \
+               "ORDER BY closestReleased.monthDif"

@@ -7,7 +7,7 @@ app = Flask(__name__)
 game_manager = GameManager.GameManager()
 
 
-@app.route('/GameSelection')
+@app.route('/game-selection')
 def create_game_selection_page():
     response = make_response(render_template('game_selection.html', current_score=game_manager.score))
     return response

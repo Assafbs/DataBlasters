@@ -1,7 +1,7 @@
 from flask import redirect, url_for, Response
 
 
-
+# game manager has an instance per game (for example translate game), and not per the whole application
 class GameManager:
 
     def __init__(self):

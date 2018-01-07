@@ -1,15 +1,13 @@
 from flask import Flask, render_template, make_response
-from Games import GameManager
 
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 app = Flask(__name__)
 
-game_manager = GameManager.GameManager()
-
 
 @app.route('/game-selection')
 def create_game_selection_page():
-    response = make_response(render_template('game_selection.html', current_score=game_manager.score))
+    # TODO: replace with real score
+    response = make_response(render_template('game_selection.html', current_score=0))
     return response
 
 

@@ -48,3 +48,19 @@ class QueryGenerator:
                "GROUP BY wordsCnt.song_id\n" \
                "ORDER BY numWords DESC\n" \
                "LIMIT 3"
+
+    @staticmethod
+    def get_top_ten_query():
+        return "SELECT nickname, SUM(total_per_game.final_score_per_game) AS final_score\n" \
+               "FROM(SELECT total_per_game.nickname,total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game\n" \
+               "FROM (SELECT nickname, game_id, SUM(score) AS total\n" \
+               "FROM musicdb.scores\n" \
+               "GROUP BY nickname, game_id) AS total_per_game,\n" \
+               "(SELECT nickname, game_id, MAX(score) AS max_score\n" \
+               "FROM musicdb.scores\n" \
+               "GROUP BY nickname, game_id) AS max_per_game\n" \
+               "WHERE total_per_game.nickname = max_per_game.nickname\n" \
+               "AND total_per_game.game_id = max_per_game.game_id) AS total_per_game\n" \
+               "GROUP BY nickname\n" \
+               "ORDER BY final_score DESC\n" \
+               "LIMIT 10"

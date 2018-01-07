@@ -12,7 +12,7 @@ NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager()
 
 
-@app.route('/translateGame')
+@app.route('/translate-game')
 def translate_game():
     game_manager.start_new_game()
 
@@ -20,7 +20,7 @@ def translate_game():
     return create_game_page(con)
 
 
-@app.route('/translateGame_')
+@app.route('/translate-game-')
 def translate_game_mid():
 
     allow_access = request.cookies.get('allowAccess')

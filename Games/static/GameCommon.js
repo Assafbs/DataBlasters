@@ -6,8 +6,8 @@ var c_pointsPerQuestion = 10;
 var correctAnswer = false;
 
 
-function onCorrectAnswer(elemId) {
-  document.getElementById(elemId).style.background='#00e600';
+function onCorrectAnswer(answerNum) {
+  document.getElementById('button'.concat(answerNum.toString())).style.background='#00e600';
   disableAllAnswersButtons();
   correctAnswer = true;
   changePointsText(c_pointsPerQuestion);
@@ -15,10 +15,20 @@ function onCorrectAnswer(elemId) {
 }
 
 
-function onWrongAnswer(elemId) {
-  document.getElementById(elemId).style.background='#FF0000';
+function onWrongAnswer(answerNum) {
+  document.getElementById('button'.concat(answerNum.toString())).style.background='#FF0000';
   disableAllAnswersButtons();
   showNextButtonAndWonPoints();
+}
+
+function onAnswer(answerNum) {
+    var correctAnswerNum =  parseInt(getCookiebyName('correctAnswerNum'));
+    if (answerNum == correctAnswerNum){
+        onCorrectAnswer(answerNum);
+    }
+    else{
+        onWrongAnswer(answerNum);
+    }
 }
 
 function disableAllAnswersButtons() {
@@ -41,7 +51,7 @@ function changePointsText(points) {
     document.getElementById('pointsForAns').innerHTML = "You won " + points + " points for that answer!";
 }
 
-function Redirect() {
+function Redirect(path) {
   var points = 0;
   if (correctAnswer){
     points = c_pointsPerQuestion;
@@ -49,10 +59,10 @@ function Redirect() {
   }
   document.cookie = 'points='.concat(points.toString());
   document.cookie = 'allowAccess=true'
-  window.location.href = '../translateGame_';
+  window.location.href = path;
 }
 
 var getCookiebyName = function(name){
 	var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
 	return !!pair ? pair[1] : null;
-};
+}

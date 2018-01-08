@@ -5,9 +5,17 @@ import random
 app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
 
-@app.route('/releaseOrderGame')
+
+@app.route('/release-order-game')
 def calcQuestionAndAns():
     score = 0
+    return render_template('ReleaseOrderGame.html',
+                           current_score=score,
+                           question='question',
+                           option_1='option_1',
+                           option_2='option_2',
+                           option_3='option_3',
+                           option_4='option_4')
 
 
 

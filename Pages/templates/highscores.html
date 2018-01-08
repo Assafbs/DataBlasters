@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.png">
-    <title>Welcome To Mr. Music!</title>
+    <title>HighScores Table</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,44 +29,102 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Game Selection</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="#">HighScores</a>
             </li>
         </ul>
-        <ul class="navbar-nav navbar-right">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Login</a>
-            </li>
-        </ul>
+        <div><kbd>My Score: {{current_score}}</kbd></div>
     </div>
 </nav>
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron bg-info">
+<div class="jumbotron">
     <div class="row">
-        <div class="col-md-12" align="center">
+        <div class="col-md-4" align="right">
             <h1><p>
-                <p>Welcome to Mr. Music!</h1><br><br>
-            <h2>It's your time to shine!</h2>
-        <br><br><br>
+                <p>Top Players</h1>
+        </div>
+        <div class="col-md-4" align="right">
+            <img src="https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Trophy-and-Medals-PNG/Golden_Cup_Trophy_PNG_Clipart.png?m=1434276589"
+                 height="250"/>
         </div>
     </div>
-    <div class="col-md-12" align="center">
-        <img src="https://static.wixstatic.com/media/6c0d51_47800f8207d24abea66d36e1ce731050~mv2.gif"/>
-
-    </div>
-
 </div>
 
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/gold.svg"
+                                            width="30"/></td>
+                <td>{{user_1}}</td>
+                <td>{{score_user_1}}</td>
+            </tr>
+            <tr>
+                <td>2&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/silver.svg"
+                                            width="30"/></td>
+                <td>{{user_2}}</td>
+                <td>{{score_user_2}}</td>
+            </tr>
+            <tr>
+                <td>3&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/bronze.svg"
+                                            width="30"/></td>
+                <td>{{user_3}}</td>
+                <td>{{score_user_3}}</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>{{user_4}}</td>
+                <td>{{score_user_4}}</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>{{user_5}}</td>
+                <td>{{score_user_5}}</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>{{user_6}}</td>
+                <td>{{score_user_6}}</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>{{user_7}}</td>
+                <td>{{score_user_7}}</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>{{user_8}}</td>
+                <td>{{score_user_8}}</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>{{user_9}}</td>
+                <td>{{score_user_9}}</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>{{user_10}}</td>
+                <td>{{score_user_10}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <hr>
 

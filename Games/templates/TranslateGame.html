@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="../../favicon.png">
 
     <title>&#9834; Mr.Music &#9834;</title>
 
@@ -14,9 +14,9 @@
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
+    <link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">
 
-    <script src="../static/TranslationGame.js" type="text/javascript"></script>
+    <script src="../static/GameCommon.js" type="text/javascript"></script>
 
   </head>
 
@@ -26,7 +26,8 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">DataBlasters</a>
+      <span class="icon-bar"><img src="https://image.ibb.co/n68GS6/logo.png" alt="logo" border="0" width="31.5" height="54" hspace="10"></span>
+	  <a class="navbar-brand" href="#">Mr. Music</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
@@ -34,7 +35,7 @@
             <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Level Selection</a>
+            <a class="nav-link" href="#">Game Selection</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">HighScores</a>
@@ -55,18 +56,18 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <p><button id="button1" class="btn btn-secondary" onclick="{{funcCall1}}">{{option_1}}</button></p>
+          <p><button id="button1" class="btn btn-secondary" onclick="onAnswer(1)">{{option_1}}</button></p>
         </div>
         <div class="col-md-4">
-          <p><button id="button2" class="btn btn-secondary" onclick="{{funcCall2}}">{{option_2}}</button></p>
+          <p><button id="button2" class="btn btn-secondary" onclick="onAnswer(2)">{{option_2}}</button></p>
        </div>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <p><button id="button3" class="btn btn-secondary" onclick="{{funcCall3}}">{{option_3}}</button></p>
+          <p><button id="button3" class="btn btn-secondary" onclick="onAnswer(3)">{{option_3}}</button></p>
         </div>
         <div class="col-md-4">
-          <p><button id="button4" class="btn btn-secondary" onclick="{{funcCall4}}">{{option_4}}</button></p>
+          <p><button id="button4" class="btn btn-secondary" onclick="onAnswer(4)">{{option_4}}</button></p>
        </div>
       </div>
       <div class="row">
@@ -76,7 +77,7 @@
             </p>
     	</div>
         <div class="col-md-12 text-right">
-    		<button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect()">
+    		<button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../translateGame_')">
               Next Question
             </button>
     	</div>

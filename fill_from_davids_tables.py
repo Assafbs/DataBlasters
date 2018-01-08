@@ -9,14 +9,14 @@ def print_header(header):
 
 
 def get_albums_sql(row):
-    return "INSERT INTO dbmysql09.albums VALUES({}, {}, {}, {}, {}, {}, {})".format(
+    return "INSERT INTO DbMysql09.albums VALUES({}, {}, {}, {}, {}, {}, {})".format(
         sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]), sql_esc(row[3]), sql_esc(row[4]),
         sql_month_esc(row[5]), sql_esc(row[6]))
 
 
 def get_songs_sql(row):
     if not ("(" in row[1]):
-        return "INSERT INTO dbmysql09.songs VALUES({}, {}, {}, {})".format(
+        return "INSERT INTO DbMysql09.songs VALUES({}, {}, {}, {})".format(
                     sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]), sql_esc(row[3]))
     else:
         return "dropped " + row[1]
@@ -24,28 +24,29 @@ def get_songs_sql(row):
 
 def get_artists_sql(row):
     # if not("&" in row[1] or "feat." in row[1] or " and " in row[1]):
-    return "INSERT INTO dbmysql09.artists VALUES({}, {}, {})".format(
+    return "INSERT INTO DbMysql09.artists VALUES({}, {}, {})".format(
               sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]))
 
 
 def get_performed_by_sql(row):
-    return "INSERT INTO dbmysql09.performed_by VALUES({}, {})".format(
+    return "INSERT INTO DbMysql09.performed_by VALUES({}, {})".format(
                 sql_esc(row[0]), sql_esc(row[1]))
 
 
 def get_lyrics_sql(row):
-    return "INSERT INTO dbmysql09.lyrics VALUES({}, {}, {}, {})".format(
-            sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]), sql_esc(row[3]))
+    return "INSERT INTO DbMysql09.lyrics VALUES({}, {}, {}, {})".format(
+            sql_esc(row[0]), sql_lyrics_esc(row[1]), sql_esc(row[2]), sql_lyrics_esc(row[3]))
 
 
 def get_popular_by_country_sql(row):
-    return "INSERT INTO dbmysql09.popular_songs_by_country VALUES({}, {}, {})".format(
+    return "INSERT INTO DbMysql09.popular_songs_by_country VALUES({}, {}, {})".format(
             sql_esc(row[0]), sql_esc(row[1]), sql_esc(row[2]))
 
 
 def fill_table(get_sql, select):
     david_con = mdb.connect(host="localhost", user="root", passwd="Tahan049", db="david")
-    mycon = mdb.connect(host="localhost", user="root", passwd="Tahan049", db="dbmysql09")
+    # mycon = mdb.connect(host="localhost", user="root", passwd="Tahan049", db="dbmysql09")
+    mycon = mdb.connect(host="localhost", user="DbMysql09", passwd="DbMysql09", db="DbMysql09", port=3305)
 
     david_cur = david_con.cursor()
     mycur = mycon.cursor()
@@ -121,6 +122,15 @@ def sql_esc(s):
         return "'" + str(s).replace("'", "''") + "'"
 
 
+def sql_lyrics_esc(s):
+
+    if s is None:
+        return mdb.NULL
+    else:
+        s = '\n'.join(s.split('\n')[:-2])
+        return "'" + str(s).replace("'", "''") + "'"
+
+
 def sql_month_esc(s):
     if s is None or s < 1:
         return mdb.NULL
@@ -131,8 +141,8 @@ def sql_month_esc(s):
 if __name__ == '__main__':
     # get_artists()
     # get_albums()
-    # get_songs()
-    # get_lyrics()
-    # get_performed_by()
-    # get_popular_by_country()
+    get_songs()
+    get_lyrics()
+    get_performed_by()
+    get_popular_by_country()
     print_header("finish")

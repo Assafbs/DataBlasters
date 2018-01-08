@@ -2,7 +2,7 @@ CREATE SCHEMA `DbMysql09` ;
 
 CREATE  TABLE `DbMysql09`.`artists` (
   `artist_id` INT NOT NULL ,
-  `name` VARCHAR(50) NOT NULL ,
+  `name` VARCHAR(100) NOT NULL ,
   `country_name` VARCHAR(50) NULL ,
   PRIMARY KEY (`artist_id`));
 
@@ -135,7 +135,7 @@ CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
   `country_name` VARCHAR(20) NOT NULL ,
   `song_id` INT NOT NULL ,
   `play_count` INT NOT NULL ,
-  PRIMARY KEY (`country_id`, `rank`) ,
+  PRIMARY KEY (`country_name`, `rank`) ,
   INDEX `popular_songs_countries_idx` (`song_id` ASC) ,
   CONSTRAINT `popular_songs_countries_fk`
     FOREIGN KEY (`song_id` )
@@ -143,17 +143,6 @@ CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
     ON DELETE RESTRICT
     ON UPDATE RESTRICT);
 
-CREATE  TABLE `DbMysql09`.`popular_artists_by_country` (
-  `country_name` VARCHAR(20) NOT NULL,
-  `artist_id` INT NOT NULL ,
-  `rank` SMALLINT NOT NULL ,
-  PRIMARY KEY (`country_name`, `rank`) ,
-  INDEX `popular_artists_countries_idx` (`artist_id` ASC) ,
-  CONSTRAINT `popular_artists_countries_fk`
-    FOREIGN KEY (`artist_id` )
-    REFERENCES `DbMysql09`.`artists` (`artist_id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT);
 
 CREATE  TABLE `DbMysql09`.`users` (
   `nickname` VARCHAR(20) NOT NULL ,

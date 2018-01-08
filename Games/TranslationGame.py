@@ -13,7 +13,7 @@ NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager()
 
 
-translate_game = Blueprint('translate_game', __name__, template_folder='templates', static_folder='static', static_url_path='/static/translate_game')
+translate_game = Blueprint('translate_game', __name__, template_folder='templates')
 @translate_game.route('/translate_game')
 def translate_game_start():
     game_manager.start_new_game()
@@ -22,7 +22,7 @@ def translate_game_start():
     return create_game_page(con)
 
 
-translate_game_ = Blueprint('translate_game_', __name__, template_folder='templates', static_folder='static', static_url_path='/static/translate_game')
+translate_game_ = Blueprint('translate_game_', __name__, template_folder='templates')
 @translate_game_.route('/translate_game_')
 def translate_game_mid():
 

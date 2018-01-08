@@ -1,26 +1,29 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response, Response
+from flask import Flask, render_template, redirect, url_for, request, make_response, Response, Blueprint
 import MySQLdb as mdb
 from word_scraper import get5PopularWords
 import random
 import sys
 import GameManager
+from db_connector import DbConnector
+from query_generator import QueryGenerator
 
-app = Flask(__name__)  # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
 
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager()
 
 
-@app.route('/translate-game')
-def translate_game():
+translate_game = Blueprint('translate_game', __name__, template_folder='templates', static_folder='static', static_url_path='/static/translate_game')
+@translate_game.route('/translate_game')
+def translate_game_start():
     game_manager.start_new_game()
 
     con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")  # TODO: use assaf method when ready
     return create_game_page(con)
 
 
-@app.route('/translate-game-')
+translate_game_ = Blueprint('translate_game_', __name__, template_folder='templates', static_folder='static', static_url_path='/static/translate_game')
+@translate_game_.route('/translate_game_')
 def translate_game_mid():
 
     allow_access = request.cookies.get('allowAccess')
@@ -126,13 +129,3 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
             res.append(row['name'])
         return res
 
-
-# TODO: delete the / route, this is just for debugging
-@app.route('/')
-def hello_world():
-    return "Imagine Assaf's Game Selection Page"
-
-
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-if __name__ == '__main__':
-    app.run(debug=True)

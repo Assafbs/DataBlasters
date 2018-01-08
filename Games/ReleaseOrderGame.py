@@ -1,12 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response,session
+from flask import Flask, render_template, redirect, url_for, request, make_response,session, Blueprint
 import MySQLdb as mdb
 import random
 
-app = Flask(__name__) # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 
-
-
-@app.route('/release-order-game')
+release_order_game = Blueprint('release_order_game', __name__, template_folder='templates')
+@release_order_game.route('/release_order_game')
 def calcQuestionAndAns():
     score = 0
     return render_template('ReleaseOrderGame.html',
@@ -19,7 +17,7 @@ def calcQuestionAndAns():
 
 
 
-
+'''
 # TODO: delete the / route, this is just for debugging
 @app.route('/')
 def hello_world():
@@ -28,3 +26,4 @@ def hello_world():
 # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 if __name__ == '__main__':
     app.run()
+'''

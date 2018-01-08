@@ -15,15 +15,3 @@ def calcQuestionAndAns():
                            option_3='option_3',
                            option_4='option_4')
 
-
-
-'''
-# TODO: delete the / route, this is just for debugging
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-if __name__ == '__main__':
-    app.run()
-'''

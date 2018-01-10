@@ -1,18 +1,16 @@
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, Blueprint
 from Games import GameManager
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-app = Flask(__name__)
 
 game_manager = GameManager.GameManager()
 
-
-@app.route('/highscores')
+highscores = Blueprint('highscores', __name__, template_folder='templates')
+@highscores.route('/highscores')
 def create_game_selection_page():
     top_users = DbConnector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
-    dummy_user = ("", 0)
+    dummy_user = ("", "")
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user, )
         print top_users
@@ -41,7 +39,3 @@ def create_game_selection_page():
                                              ))
     return response
 
-
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-if __name__ == '__main__':
-    app.run(debug=True)

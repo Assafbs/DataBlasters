@@ -1,16 +1,12 @@
-from flask import Flask, render_template, make_response
-
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-app = Flask(__name__)
+from flask import Flask, render_template, make_response, Blueprint
+from query_generator import QueryGenerator
 
 
-@app.route('/game-selection')
+game_selection = Blueprint('game_selection', __name__, template_folder='templates')
+@game_selection.route('/game_selection')
 def create_game_selection_page():
     # TODO: replace with real score
     response = make_response(render_template('game_selection.html', current_score=0))
     return response
 
 
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-if __name__ == '__main__':
-    app.run(debug=True)

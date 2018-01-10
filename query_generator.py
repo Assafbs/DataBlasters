@@ -116,18 +116,21 @@ class QueryGenerator:
     @staticmethod
     def create_view_songs_per_artists():
         return """CREATE OR REPLACE VIEW songs_per_artists AS
-                      SELECT
-                        artist_id,
-                        count(*) AS songs_per_artist
+                      SELECT artist_id
                       FROM
                         (SELECT
-                           title,
-                           song_id,
-                           albums.artist_id,
-                           songs.album_id
-                         FROM songs
-                           JOIN albums ON songs.album_id = albums.album_id) AS T
-                      GROUP BY artist_id"""
+                          artist_id,
+                          count(*) AS songs_per_artist
+                          FROM
+                          (SELECT
+                             title,
+                             song_id,
+                             albums.artist_id,
+                             songs.album_id
+                           FROM songs
+                             JOIN albums ON songs.album_id = albums.album_id) AS T
+                    GROUP BY artist_id) AS T2
+                    WHERE songs_per_artist > 1"""
 
     @staticmethod
     def drop_view_songs_per_artists():
@@ -136,11 +139,8 @@ class QueryGenerator:
     @staticmethod
     def get_n_random_artists(n):
         return """SELECT artist_id
-                  FROM songs_per_artists AS r1
-                    JOIN (SELECT CEIL(RAND() * (SELECT MAX(artist_id)
-                                                FROM songs_per_artists)) AS id) AS r2
-                  WHERE r1.artist_id >= r2.id
-                  ORDER BY r1.artist_id ASC
+                  FROM songs_per_artists
+                  ORDER BY RAND()
                   LIMIT %s""", n
 
     @staticmethod
@@ -148,12 +148,9 @@ class QueryGenerator:
         return """SELECT
                   title,
                   song_id
-                FROM songs_by_artist AS r1
-                  JOIN (SELECT CEIL(RAND() * (SELECT MAX(artist_id)
-                                              FROM songs_by_artist)) AS id) AS r2
-                WHERE r1.artist_id >= r2.id
-                ORDER BY r1.artist_id ASC
-                LIMIT %s""", n
+                  FROM songs_by_artist
+                  ORDER BY RAND()
+                  LIMIT %s""", n
 
     @staticmethod
     def get_artist_name_by_id(artist_id):

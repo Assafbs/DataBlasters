@@ -30,10 +30,7 @@ def translate_game_mid():
         return response
 
 
-def create_game_page():
-    reload(sys)
-    sys.setdefaultencoding('UTF8')
-    DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
+def get_all_songs():
     lst_of_artists = DbConnector.get_n_random_artists(7)
     winner_artist = random.randint(0, 6)
     lst_of_bad_songs = list()
@@ -43,6 +40,15 @@ def create_game_page():
             winner_songs = DbConnector.get_n_random_songs_from_artist(2, lst_of_artists[i])
         else:
             lst_of_bad_songs.append(DbConnector.get_n_random_songs_from_artist(1, lst_of_artists[i]))
+    return winner_songs, lst_of_bad_songs
+
+
+def create_game_page():
+    reload(sys)
+    sys.setdefaultencoding('UTF8')
+    DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
+
+    winner_songs, lst_of_bad_songs = get_all_songs()
 
     right_answer = winner_songs[0][0] + " | | " + winner_songs[1][0]
     wrong_answers = calc_answers(lst_of_bad_songs)

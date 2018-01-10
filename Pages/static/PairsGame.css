@@ -1,0 +1,14 @@
+
+#translation{
+    direction: rtl;
+    white-space: pre-line;
+}
+
+#pointsForAns{
+    visibility: hidden;
+}
+
+#next{
+    visibility: hidden;
+    border: 2px solid #292b2c;
+}

@@ -58,7 +58,7 @@ DELIMITER ;
 
 CREATE  TABLE `DbMysql09`.`songs` (
   `song_id` INT NOT NULL ,
-  `name` VARCHAR(50) NOT NULL ,
+  `title` VARCHAR(50) NOT NULL ,
   `album_id` INT NULL ,
   `rank` TINYINT NULL ,
   PRIMARY KEY (`song_id`),
@@ -147,7 +147,7 @@ CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
 CREATE  TABLE `DbMysql09`.`users` (
   `nickname` VARCHAR(20) NOT NULL ,
   `email` VARCHAR(50) NOT NULL ,
-  `hash_passwors` VARCHAR(20) NOT NULL ,
+  `hash_passwords` VARCHAR(20) NOT NULL ,
   PRIMARY KEY (`nickname`) );
 
 CREATE  TABLE `DbMysql09`.`scores` (

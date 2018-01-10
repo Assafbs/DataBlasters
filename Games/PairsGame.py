@@ -13,14 +13,12 @@ pairs_game_ = Blueprint('pairs_game_', __name__, template_folder='templates')
 
 
 @pairs_game.route('/pairs_game')
-# @app.route('/pairs_game')
 def translate_game_start():
     game_manager.start_new_game()
     return create_game_page()
 
 
 @pairs_game_.route('/pairs_game_')
-# @app.route('/pairs_game_')
 def translate_game_mid():
     allow_access = request.cookies.get('allowAccess')
     points = int(request.cookies.get('points'))

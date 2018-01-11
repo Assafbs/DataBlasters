@@ -43,6 +43,7 @@ def create_game_page(con):
     sys.setdefaultencoding('UTF8')
 
     translated_song_row = calc_translated_song_row(con)
+    #translated_song_row = DbConnector.get_result_for_query(QueryGenerator.get_translated_song_question_query())
     translated_lyrics = translated_song_row['hebrew_translation']
     right_answer = translated_song_row['name']
     # TODO: do something if there is less then 5 words. should never happen
@@ -67,14 +68,15 @@ def calc_translated_song_row(con):
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute('SET character_set_results = \'utf8\', character_set_client = \'utf8\', '
-                    'character_set_connection = \'utf8\','
-                    'character_set_database = \'utf8\', character_set_server = \'utf8\'')
-        query = ('SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.name\n'
-                    'FROM lyrics JOIN songs ON lyrics.song_id = songs.sond_id\n'
-                    'WHERE lyrics.hebrew_translation IS NOT NULL\n' 
-                    'ORDER BY rand()\n'
-                    'LIMIT 1')
+        cur.execute("""SET character_set_results = 'utf8', character_set_client = 'utf8', 
+                    character_set_connection = 'utf8',
+                    character_set_database = 'utf8', character_set_server = 'utf8'""")
+
+        query = ("""SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.name\n
+                    FROM lyrics JOIN songs ON lyrics.song_id = songs.sond_id\n
+                    WHERE lyrics.hebrew_translation IS NOT NULL\n
+                    ORDER BY rand()\n
+                    LIMIT 1""")
         cur.execute(query)
         ans = cur.fetchone()
         return ans
@@ -84,34 +86,34 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
-        query = "SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n" \
-                "FROM songs JOIN (\n" \
-                    "(SELECT song_id \n" \
-                    "FROM lyrics\n" \
-                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
-                    "UNION ALL\n" \
-                    "(SELECT song_id \n" \
-                    "FROM lyrics \n" \
-                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
-                    "UNION ALL\n" \
-                    "(SELECT song_id \n" \
-                    "FROM lyrics \n" \
-                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
-                    "UNION ALL\n" \
-                    "(SELECT song_id \n" \
-                    "FROM lyrics\n" \
-                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
-                    "UNION ALL\n" \
-                    "(SELECT song_id \n" \
-                    "FROM lyrics\n" \
-                    "WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n" \
-                    "UNION ALL \n" \
-                    "(SELECT song_id FROM lyrics)\n" \
-                    ") AS wordsCnt ON wordsCnt.song_id = songs.sond_id\n" \
-                "WHERE wordsCnt.song_id <> %s AND songs.name <> %s\n" \
-                "GROUP BY wordsCnt.song_id\n" \
-                "ORDER BY numWords DESC\n" \
-                "LIMIT 3"
+        query = """SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n
+                FROM songs JOIN (\n
+                    (SELECT song_id \n
+                    FROM lyrics\n
+                    WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
+                    UNION ALL\n
+                    (SELECT song_id \n
+                    FROM lyrics \n
+                    WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
+                    UNION ALL\n
+                    (SELECT song_id \n
+                    FROM lyrics \n
+                    WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
+                    UNION ALL\n
+                    (SELECT song_id \n
+                    FROM lyrics\n
+                    WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
+                    UNION ALL\n
+                    (SELECT song_id \n
+                    FROM lyrics\n
+                    WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
+                    UNION ALL \n
+                    (SELECT song_id FROM lyrics)\n
+                    ) AS wordsCnt ON wordsCnt.song_id = songs.sond_id\n
+                WHERE wordsCnt.song_id <> %s AND songs.name <> %s\n
+                GROUP BY wordsCnt.song_id\n
+                ORDER BY numWords DESC\n
+                LIMIT 3"""
 
         # TODO: delete those print after testing
         print('translate query: ' + query)

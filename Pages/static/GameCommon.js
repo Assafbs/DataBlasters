@@ -23,7 +23,7 @@ function onWrongAnswer(answerNum) {
 
 function onAnswer(answerNum) {
     var correctAnswerNum =  parseInt(getCookiebyName('correctAnswerNum'));
-    if (answerNum == correctAnswerNum){
+    if (answerNum === correctAnswerNum){
         onCorrectAnswer(answerNum);
     }
     else{
@@ -32,15 +32,16 @@ function onAnswer(answerNum) {
 }
 
 function disableAllAnswersButtons() {
-  for (i = 1; i <= 4; i++){
-    buttonId = "button".concat(i);
-    document.getElementById(buttonId).setAttribute('disabled','disabled');
-  }
+    var buttonId;
+    for (var i = 1; i <= 4; i++) {
+        buttonId = "button".concat(i);
+        document.getElementById(buttonId).setAttribute('disabled', 'disabled');
+    }
 }
 
 function showNextButtonAndWonPoints() {
     var questionNum =  parseInt(getCookiebyName('questionNum'));
-    if (questionNum == c_numQuestionsPerGame){
+    if (questionNum === c_numQuestionsPerGame){
       document.getElementById('next').innerHTML = "Finish Game";
     }
     document.getElementById("pointsForAns").style.visibility = "visible";

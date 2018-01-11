@@ -28,7 +28,7 @@ def login():
     if request.method=='GET':
         return render_template('login.html')
     elif request.method=='POST':
-        nick = request.form['nickname']
+        nick =mdb.escape_string(request.form['nickname']) #avoid injection
         password = request.form['pwd']
         if (authenticate(nick,password)):
             session['logged_in'] = True
@@ -44,7 +44,9 @@ def login():
 def authenticate(nick,password):
     if not(is_valid_login_input(nick,password)):
         return False
-    cursor.execute("SELECT * FROM users WHERE nickname='" + nick + "'") #can change to hash_password instead of *
+    #safe selection
+    query="SELECT * FROM users WHERE nickname=%s"
+    cursor.execute(query,(nick,)) #can change to hash_password instead of *
     data = cursor.fetchone()
     if data is None:
         return False
@@ -102,14 +104,15 @@ def signup():
     if request.method == 'GET':
         return render_template('signup.html', error=err)
     elif request.method == 'POST':
-        nick=request.form['nickname']
-        password=request.form['pwd']
-        email=str(request.form['email'])
+        nick=mdb.escape_string(request.form['nickname'])
+        password=request.form['pwd'] #no need to sanitize. going through hash
+        email=mdb.escape_string(str(request.form['email']))
 
         if (id_vailid_sign_up_input(nick,email,password)):
             hash_password=pbkdf2_sha256.hash(password)
             length= len(hash_password)
-            cursor.execute("INSERT INTO dbmysql09.users values(%s,%s,%s)",(nick,email,hash_password))
+            query="INSERT INTO dbmysql09.users values(%s,%s,%s)"
+            cursor.execute(query,(nick,email,hash_password))
             db.commit()
             session['logged_in'] = True
             session['nickname'] = nick

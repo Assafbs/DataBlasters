@@ -67,7 +67,7 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_question_query():
-        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title\n
+        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.name\n
                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
                WHERE release_month IS NOT NULL\n
                ORDER BY rand()\n
@@ -75,20 +75,19 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_answers_query():
-        # TODO [tal]: maybe %s suppose to be %d here with number (otherwise it will add '') [David] No, it only works with %s
 
-        return """SELECT monthDif, title\n
+        return """SELECT monthDif, name\n
                FROM (\n
-                    SELECT min(rowNum),  monthDif, title\n
+                    SELECT min(rowNum),  monthDif, name\n
                     FROM (\n
                         SELECT @n := @n + 1 rowNum, dateDist.*\n
                          FROM (SELECT @n:=0) initvars,\n
                               (SELECT IF(release_year = %s,\n
-                                          abs(%s - release_month),\n
+                                          %s - release_month,\n
                                           IF (release_year > %s,\n
                                               release_month + (12 - %s) + 12*(release_year-(%s+1)),\n
                                               -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
-                                          songs.title\n
+                                          songs.name\n
                                 FROM albums JOIN songs ON albums.album_id = songs.album_id\n
                                 WHERE release_month IS NOT NULL AND albums.album_id <> %s\n
                                 ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n

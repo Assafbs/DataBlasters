@@ -12,6 +12,13 @@ class RedundancyHandler:
         # Make them lower case.
         word1 = word1.lower()
         word2 = word2.lower()
+        # Remove brackets
+        word1 = re.sub(r'\(.*\)', '', word1)
+        word2 = re.sub(r'\(.*\)', '', word2)
+        word1 = re.sub(r'\[.*\]', '', word1)
+        word2 = re.sub(r'\[.*\]', '', word2)
+        word1 = re.sub(r'\{.*\}', '', word1)
+        word2 = re.sub(r'\{.*\}', '', word2)
         # Remove punctuation.
         word1 = word1.translate(None, string.punctuation)
         word2 = word2.translate(None, string.punctuation)
@@ -32,6 +39,10 @@ if __name__ == '__main__':
     else:
         print "Not similar"
     if RedundancyHandler.areSimilar("Oh Baby", "Oh Mama", 0.9):
+        print "Similar"
+    else:
+        print "Not similar"
+    if RedundancyHandler.areSimilar("You Are Not Alone", "You Are Not Alone (Live At The Greek)", 0.9):
         print "Similar"
     else:
         print "Not similar"

@@ -1,4 +1,5 @@
 import MySQLdb as mdb
+from server import session
 from query_generator import QueryGenerator
 
 ADDRESS = 'localhost'
@@ -45,9 +46,9 @@ class DbConnector:
             return cur.fetchall()
 
     @staticmethod
-    # TODO: nickname should be taken from session and not given as argument
-    def update_game_result(nickname, game_id, score):
+    def update_game_result(game_id, score):
         con = mdb.connect(ADDRESS, USERNAME, PASSWORD, SCHEMA)
+        nickname = session['nickname']
         with con:
             cur = con.cursor()
             query, tuple_of_vars = QueryGenerator.create_score_update_query(nickname, game_id, score)
@@ -104,8 +105,5 @@ class DbConnector:
         query, tuple_of_vars = QueryGenerator.get_artist_name_by_id(artist_id)
         cur.execute(query, tuple_of_vars)
         return cur.fetchone[0]
-
-
-
 
 # TODO: Add missing methods

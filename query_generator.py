@@ -75,7 +75,6 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_answers_query():
-
         return """SELECT monthDif, title\n
                FROM (\n
                     SELECT min(rowNum),  monthDif, title\n

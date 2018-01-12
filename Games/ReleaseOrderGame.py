@@ -17,6 +17,8 @@ curr_question_points = 0
 release_order_game = Blueprint('release_order_game', __name__, template_folder='templates')
 @release_order_game.route('/release_order_game',  methods=['POST','GET'])
 def release_order_game_start():
+    if request.method == 'GET':
+        game_manager.start_new_game()
     return handle_route(request)
 
 
@@ -35,7 +37,6 @@ def release_order_game_mid():
 
 def handle_route(request):
     if request.method == 'GET':
-        game_manager.start_new_game()
         return create_game_page()
     elif request.method == 'POST':
         global ordered_answers
@@ -47,9 +48,14 @@ def handle_route(request):
                 num_correct_songs += 1
         global curr_question_points
         curr_question_points = num_correct_songs*5
+        next_button_content = 'Next Question'
+        if (game_manager.answer_num + 1) == NUM_QUESTIONS_PER_GAME:
+            next_button_content = 'Finish Game'
         return render_template('ReleaseOrderGameScore.html',
+                               current_score=game_manager.score,
                                num_correct=num_correct_songs,
-                               points=curr_question_points)
+                               points=curr_question_points,
+                               next_content=next_button_content)
 
 def create_game_page():
     # Avoiding UnicodeDecodeError
@@ -75,6 +81,8 @@ def create_game_page():
             ordered_answers.append(rand_song_name)
             inserted_rand_song_row = True
         ordered_answers.append(answers_rows[i][1])
+    if not inserted_rand_song_row:
+        ordered_answers.append(rand_song_name)
 
     rand_order_answers = random.sample(ordered_answers, 4)
 

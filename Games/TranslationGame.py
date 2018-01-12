@@ -45,11 +45,11 @@ def create_game_page(con):
     translated_song_row = calc_translated_song_row(con)
     #translated_song_row = DbConnector.get_result_for_query(QueryGenerator.get_translated_song_question_query())
     translated_lyrics = translated_song_row['hebrew_translation']
-    right_answer = translated_song_row['name']
+    right_answer = translated_song_row['title']
     # TODO: do something if there is less then 5 words. should never happen
     popular_words = get5PopularWords(translated_song_row['lyrics'])
     wrong_answers = calc_answers(con, popular_words, translated_song_row['song_id'],
-                                 translated_song_row['name'], translated_song_row['lyrics_language'])
+                                 translated_song_row['title'], translated_song_row['lyrics_language'])
     answers = random.sample(wrong_answers + [right_answer], 4)
 
     response = make_response(render_template('TranslateGame.html',
@@ -72,8 +72,8 @@ def calc_translated_song_row(con):
                     character_set_connection = 'utf8',
                     character_set_database = 'utf8', character_set_server = 'utf8'""")
 
-        query = ("""SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.name\n
-                    FROM lyrics JOIN songs ON lyrics.song_id = songs.sond_id\n
+        query = ("""SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n
+                    FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n
                     WHERE lyrics.hebrew_translation IS NOT NULL\n
                     ORDER BY rand()\n
                     LIMIT 1""")
@@ -86,7 +86,7 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
 
     with con:
         cur = con.cursor(mdb.cursors.DictCursor)
-        query = """SELECT DISTINCT songs.name, (count(*) - 1) AS numWords\n
+        query = """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords\n
                 FROM songs JOIN (\n
                     (SELECT song_id \n
                     FROM lyrics\n
@@ -109,8 +109,8 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
                     WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
                     UNION ALL \n
                     (SELECT song_id FROM lyrics)\n
-                    ) AS wordsCnt ON wordsCnt.song_id = songs.sond_id\n
-                WHERE wordsCnt.song_id <> %s AND songs.name <> %s\n
+                    ) AS wordsCnt ON wordsCnt.song_id = songs.song_id\n
+                WHERE wordsCnt.song_id <> %s AND songs.title <> %s\n
                 GROUP BY wordsCnt.song_id\n
                 ORDER BY numWords DESC\n
                 LIMIT 3"""
@@ -128,6 +128,6 @@ def calc_answers(con, popular_words, answer_song_id, answer_song_name, lyrics_la
 
         res = []
         for row in rows:
-            res.append(row['name'])
+            res.append(row['title'])
         return res
 

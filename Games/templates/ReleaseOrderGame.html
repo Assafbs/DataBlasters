@@ -14,6 +14,8 @@
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
+
+    <script src="../static/ReleaseOrderGame.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -61,7 +63,7 @@
           <p>Newest</p>
        </div>
       </div>
-        <form class="form-horizontal" action="/release_order_game" method="post">
+        <form name="answers" class="form-horizontal" action="/release_order_game" onsubmit="return validateForm()" method="post">
             <div class="row">
                 <div class="form-group col-md-3">
                     <select class="form-control" id="song1" name="song1" required>
@@ -100,18 +102,6 @@
                         <option>{{option_4}}</option>
                     </select>
                 </div>
-            </div>
-
-
-			<!--<div class="form-group">
-				<label class="control-label col-md-4" align="left" for="nickname">Nickname:</label>
-				<div class="col-md-4">
-					<input type="text" class="form-control" id="nickname" placeholder="Enter nickname" name="nickname">
-				</div>
-			</div> -->
-
-            <div class="row">
-                <p></p>
             </div>
 
 			<div class="form-group col-md-12 text-right">

@@ -22,7 +22,6 @@ class GameManager:
 
         if self.answer_num == num_questions_per_game:
             # TODO: call david's method for updating score with SCORE
-            a = url_for('create_game_selection_page')
             return redirect('/game_selection')
         else:
             return None

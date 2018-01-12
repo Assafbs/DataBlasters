@@ -67,7 +67,7 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_question_query():
-        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.name\n
+        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title\n
                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
                WHERE release_month IS NOT NULL\n
                ORDER BY rand()\n
@@ -76,9 +76,9 @@ class QueryGenerator:
     @staticmethod
     def get_release_order_answers_query():
 
-        return """SELECT monthDif, name\n
+        return """SELECT monthDif, title\n
                FROM (\n
-                    SELECT min(rowNum),  monthDif, name\n
+                    SELECT min(rowNum),  monthDif, title\n
                     FROM (\n
                         SELECT @n := @n + 1 rowNum, dateDist.*\n
                          FROM (SELECT @n:=0) initvars,\n
@@ -87,7 +87,7 @@ class QueryGenerator:
                                           IF (release_year > %s,\n
                                               release_month + (12 - %s) + 12*(release_year-(%s+1)),\n
                                               -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
-                                          songs.name\n
+                                          songs.title\n
                                 FROM albums JOIN songs ON albums.album_id = songs.album_id\n
                                 WHERE release_month IS NOT NULL AND albums.album_id <> %s\n
                                 ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n

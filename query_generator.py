@@ -192,3 +192,33 @@ class QueryGenerator:
                   WHERE country_name = %s
                   ORDER BY RAND()
                   LIMIT %s"""
+
+    @staticmethod
+    def get_four_ranked_songs_in_country(self):
+        return """SELECT top_for_country.song_name AS highest_rank, top_for_country2.song_name AS alternative1,
+                         top_for_country3.song_name AS alternative2,  top_for_country4.song_name AS alternative3
+                  FROM  (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+	                    FROM songs, popular_songs_by_country 
+	                    WHERE songs.song_id = popular_songs_by_country.song_id
+	                    AND popular_songs_by_country.country_name = %s) AS top_for_country,
+                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+	                    FROM songs, popular_songs_by_country 
+	                    WHERE songs.song_id = popular_songs_by_country.song_id
+	                    AND popular_songs_by_country.country_name = %s) AS top_for_country2,
+                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+	                    FROM songs, popular_songs_by_country 
+	                    WHERE songs.song_id = popular_songs_by_country.song_id
+	                    AND popular_songs_by_country.country_name = %s) AS top_for_country3,
+                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+	                    FROM songs, popular_songs_by_country 
+	                    WHERE songs.song_id = popular_songs_by_country.song_id
+	                    AND popular_songs_by_country.country_name = %s) AS top_for_country4
+                  WHERE top_for_country.song_rank < top_for_country2.song_rank 
+		                AND top_for_country2.song_rank < top_for_country3.song_rank
+                        AND top_for_country3.song_rank < top_for_country4.song_rank
+                        AND top_for_country2.song_rank - top_for_country.song_rank <= 5
+                        AND top_for_country3.song_rank - top_for_country2.song_rank >= 10
+                        AND top_for_country3.song_rank - top_for_country2.song_rank <= 30
+                        AND top_for_country4.song_rank - top_for_country2.song_rank >= 50 
+                  ORDER BY RAND()
+                  LIMIT 1"""

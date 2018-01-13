@@ -70,16 +70,20 @@ def create_game_page():
     connector.execute_query(QueryGenerator.create_view_songs_per_artists())
     winner_songs, lst_of_bad_songs = get_all_songs()
 
-    right_answer = winner_songs[0][0] + " | | " + winner_songs[1][0]
+    right_answer = winner_songs[0][0] + "!@" + winner_songs[1][0]
     wrong_answers = calc_answers(lst_of_bad_songs)
     answers = random.sample(wrong_answers + [right_answer], 4)
     try:
         response = make_response(render_template('PairsGame.html',
                                                  question=" Which of these pairs of songs were released by the same artist?",
-                                                 option_1=answers[0],
-                                                 option_2=answers[1],
-                                                 option_3=answers[2],
-                                                 option_4=answers[3],
+                                                 option_1_1=answers[0].split('!@')[0],
+                                                 option_1_2=answers[0].split('!@')[1],
+                                                 option_2_1=answers[1].split('!@')[0],
+                                                 option_2_2=answers[1].split('!@')[1],
+                                                 option_3_1=answers[2].split('!@')[0],
+                                                 option_3_2=answers[2].split('!@')[1],
+                                                 option_4_1=answers[3].split('!@')[0],
+                                                 option_4_2=answers[3].split('!@')[1],
                                                  current_score=game_manager.score))
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
@@ -93,7 +97,7 @@ def create_game_page():
 def calc_answers(bad_songs):
     lst_of_answers = list()
     for i in range(3):
-        lst_of_answers.append(bad_songs.pop()[0][0] + " | | " + bad_songs.pop()[0][0])
+        lst_of_answers.append(bad_songs.pop()[0][0] + "!@" + bad_songs.pop()[0][0])
     return lst_of_answers
 
 

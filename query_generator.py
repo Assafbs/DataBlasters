@@ -107,8 +107,7 @@ class QueryGenerator:
             songs.song_id,
             artist_id
           FROM songs, performed_by
-          WHERE performed_by.artist_id = %s AND songs.song_id = performed_by.song_id
-          GROUP BY title)"""
+          WHERE performed_by.artist_id = %s AND songs.song_id = performed_by.song_id)"""
 
     @staticmethod
     def drop_view_songs_by_artist():
@@ -128,7 +127,8 @@ class QueryGenerator:
                               songs.song_id,
                               artist_id
                             FROM songs
-                              JOIN performed_by AS pb ON songs.song_id = pb.song_id) AS T
+                              JOIN performed_by AS pb ON songs.song_id = pb.song_id
+                              GROUP BY title) AS T
                          GROUP BY artist_id) AS T2
                       WHERE songs_per_artist > 1"""
 

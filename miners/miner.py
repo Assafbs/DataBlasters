@@ -490,11 +490,11 @@ def get_top_tracks_by_country(country, limit):
     # insert_popular_songs_to_table(country, list_of_tracks)
 
 
-def update_popular(con, title, artist_name, rank, country):
+def update_popular(con, title, artist_name, rank, country_name):
     with con:
         cur = con.cursor()
         cur.execute(
-            "UPDATE musixmatch.popular_songs SET rank = %s WHERE country_name = %s AND title = %s AND artist_name = %s", (rank, country, title, artist_name))
+            "UPDATE musixmatch.popular_songs SET rank = %s WHERE country_name = %s AND title = %s AND artist_name = %s", (rank, country_name, title, artist_name))
 
 
 def get_rank_of_popular_songs(country_name, limit):
@@ -533,6 +533,7 @@ if __name__ == '__main__':
     # get_lyrics_of_tracks()
     # get_lyrics_translation()
     # get_top_tracks_by_country("United States", 200)
-    lst = {'Argentina', 'France', 'Israel', 'Spain', 'United Kingdom', 'United States'}
+    # lst = {'Argentina', 'France', 'Israel', 'Spain', 'United Kingdom', 'United States'}
+    lst = {'Argentina', 'Spain'}
     for country in lst:
         get_rank_of_popular_songs(country, 200)

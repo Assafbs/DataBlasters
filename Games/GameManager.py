@@ -1,4 +1,8 @@
+import time
 from flask import redirect, url_for, Response
+from server import session
+from db_connector import DbConnector
+from query_generator import QueryGenerator
 
 
 # game manager has an instance per game (for example translate game), and not per the whole application
@@ -7,10 +11,12 @@ class GameManager:
     def __init__(self):
         self.score = 0
         self.answer_num = 0
+        self.game_id = 0
 
-    def start_new_game(self):
+    def start_new_game(self, game_id):
         self.score = 0
         self.answer_num = 0
+        self.game_id = game_id
 
     # if this function returns None, need to call the function for generating new question page
     def calc_mid_game(self, allow_access, points, num_questions_per_game):
@@ -21,7 +27,7 @@ class GameManager:
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
-            # TODO: call david's method for updating score with SCORE
+            self.update_game_result()
             return redirect('/game_selection')
         else:
             return None
@@ -33,3 +39,6 @@ class GameManager:
 
         return response
 
+    def update_game_result(self):
+        nickname = session['nickname']
+        DbConnector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))

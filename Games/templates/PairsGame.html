@@ -6,13 +6,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.png">
-    <title>Welcome To Mr. Music!</title>
 
+    <title>&#9834; Mr.Music &#9834;</title>
+
+    <link rel="stylesheet" type="text/css" href="../static/TranslateGame.css"/>
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">
+
+    <script src="../static/GameCommon.js" type="text/javascript"></script>
+
 </head>
 
 <body>
@@ -30,49 +35,70 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/game_selection">Game Selection</a>
+                <a class="nav-link" href="#">Game Selection</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/highscores">HighScores</a>
+                <a class="nav-link" href="#">HighScores</a>
             </li>
         </ul>
-        <ul class="navbar-nav navbar-right">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Login</a>
-            </li>
-        </ul>
+        <div><kbd>My Score: {{current_score}}</kbd></div>
     </div>
 </nav>
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron bg-info">
-    <div class="row">
-        <div class="col-md-12" align="center">
-            <h1><p>
-                <p>Welcome to Mr. Music!</h1><br><br>
-            <h2>It's your time to shine!</h2>
-        <br><br><br>
-        </div>
+    <div class="container">
+        <h2>{{question}}</h2>
+        <p id="translation" charset="utf-8" align="right"></p>
     </div>
-    <div class="col-md-12" align="center">
-        <img src="https://static.wixstatic.com/media/6c0d51_47800f8207d24abea66d36e1ce731050~mv2.gif"/>
-
-    </div>
-
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <button id="button1" class="btn btn-secondary" onclick="onAnswer(1)">{{option_1}}</button>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <button id="button2" class="btn btn-secondary" onclick="onAnswer(2)">{{option_2}}</button>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <button id="button3" class="btn btn-secondary" onclick="onAnswer(3)">{{option_3}}</button>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <button id="button4" class="btn btn-secondary" onclick="onAnswer(4)">{{option_4}}</button>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <p id="pointsForAns">
 
-<hr>
+            </p>
+        </div>
+        <div class="col-md-12 text-right">
+            <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../pairs_game_')">
+                Next Question
+            </button>
+        </div>
+    </div>
 
-<footer>
-    <p>&copy; DataBlasters 2018</p>
-</footer>
+    <hr>
+
+    <footer>
+        <p>&copy; DataBlasters 2018</p>
+    </footer>
 </div> <!-- /container -->
 
 

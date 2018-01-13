@@ -8,7 +8,7 @@ class QueryGenerator:
 
     @staticmethod
     def create_score_update_query(nickname, game_id, score):
-        return "INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)", (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), game_id, score)
+        return """INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)""", (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), game_id, score)
 
     @staticmethod
     def get_translated_song_question_query():
@@ -67,30 +67,90 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_question_query():
-        return "SELECT albums.album_id, albums.release_month, albums.release_year, songs.name\n" \
-               "FROM albums join songs ON albums.album_id = songs.album_id\n" \
-               "WHERE release_month IS NOT NULL\n" \
-               "ORDER BY rand()\n" \
-               "LIMIT 1"
-
+        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.name\n
+               FROM albums JOIN songs ON albums.album_id = songs.album_id\n
+               WHERE release_month IS NOT NULL\n
+               ORDER BY rand()\n
+               LIMIT 1"""
 
     @staticmethod
     def get_release_order_answers_query():
-        # TODO [tal]: maybe %s suppose to be %d here with number (otherwise it will add '')
-        return "SELECT *\n" \
-               "FROM\n" \
-               "  (SELECT dateDist.monthDif, dateDist.name\n" \
-               "  FROM\n" \
-               "    (SELECT albums.album_id, IF(release_year = %s,\n" \
-               "                     abs(%s - release_month),\n" \
-               "                     IF (release_year > %s,\n" \
-               "                         release_month + (12 - %s) + 12*(release_year-(%s+1)),\n" \
-               "                         -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n" \
-               "             songs.name\n" \
-               "    FROM albums JOIN songs ON albums.album_id = songs.album_id\n" \
-               "    WHERE release_month IS NOT NULL and albums.album_id <> %s\n" \
-               "    ORDER BY rand()) AS dateDist\n" \
-               "  GROUP BY dateDist.album_id\n" \
-               "  ORDER BY abs(dateDist.monthDif)\n" \
-               "  LIMIT 3) AS closestReleased\n" \
-               "ORDER BY closestReleased.monthDif"
+
+        return """SELECT monthDif, name\n
+               FROM (\n
+                    SELECT min(rowNum),  monthDif, name\n
+                    FROM (\n
+                        SELECT @n := @n + 1 rowNum, dateDist.*\n
+                         FROM (SELECT @n:=0) initvars,\n
+                              (SELECT IF(release_year = %s,\n
+                                          %s - release_month,\n
+                                          IF (release_year > %s,\n
+                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),\n
+                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
+                                          songs.name\n
+                                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s\n
+                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n
+                    GROUP BY dateDistWithNums.monthDif \n
+                    HAVING dateDistWithNums.monthDif <> 0\n
+                    ORDER BY abs(dateDistWithNums.monthDif)\n
+                    LIMIT 3 ) AS closestReleased\n
+               ORDER BY closestReleased.monthDif"""
+
+    @staticmethod
+    def create_view_songs_by_artist(artist_id):
+        return """CREATE OR REPLACE VIEW songs_by_artist AS
+          (SELECT
+             title,
+             song_id,
+             artist_id
+           FROM songs, albums
+           WHERE albums.artist_id = %s AND songs.album_id = albums.album_id
+           GROUP BY title)""", artist_id
+
+    @staticmethod
+    def drop_view_songs_by_artist():
+        return """DROP VIEW IF EXISTS songs_by_artist"""
+
+    @staticmethod
+    def create_view_songs_per_artists():
+        return """CREATE OR REPLACE VIEW songs_per_artists AS
+                      SELECT artist_id
+                      FROM
+                        (SELECT
+                          artist_id,
+                          count(*) AS songs_per_artist
+                          FROM
+                          (SELECT
+                             title,
+                             song_id,
+                             albums.artist_id,
+                             songs.album_id
+                           FROM songs
+                             JOIN albums ON songs.album_id = albums.album_id) AS T
+                    GROUP BY artist_id) AS T2
+                    WHERE songs_per_artist > 1"""
+
+    @staticmethod
+    def drop_view_songs_per_artists():
+        return """DROP VIEW IF EXISTS songs_per_artists"""
+
+    @staticmethod
+    def get_n_random_artists(n):
+        return """SELECT artist_id
+                  FROM songs_per_artists
+                  ORDER BY RAND()
+                  LIMIT %s""", n
+
+    @staticmethod
+    def get_n_random_songs_by_artist(n):
+        return """SELECT
+                  title,
+                  song_id
+                  FROM songs_by_artist
+                  ORDER BY RAND()
+                  LIMIT %s""", n
+
+    @staticmethod
+    def get_artist_name_by_id(artist_id):
+        return """SELECT name FROM artists WHERE artist_id = %s""", artist_id

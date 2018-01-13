@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1c7a821f-81c8-4a73-8362-0d1df25af57a" name="blasters" url="http://localhost:3306">
+        <fileTransfer port="0" mountedRoot="C:\ProgramData\MySQL\MySQL Server 5.7\Data" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>

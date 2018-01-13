@@ -1,5 +1,5 @@
 import time
-from flask import redirect, Response
+from flask import redirect, Response, render_template, Blueprint
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 from server import session
@@ -28,7 +28,7 @@ class GameManager:
 
         if self.answer_num == num_questions_per_game:
             # self.update_game_result() #TODO: fix nickname bug here
-            return redirect('/game_selection')
+            return redirect('/game_conclusion/' + str(self.score))
         else:
             return None
 
@@ -45,3 +45,19 @@ class GameManager:
         connector = DbConnector()
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
         connector.close()
+
+
+game_conclusion = Blueprint('game_conclusion', __name__, template_folder='templates')
+@game_conclusion.route('/game_conclusion/<int:points>')
+def create_game_conclusion_page(points):
+    mood_gif = "https://s-media-cache-ak0.pinimg.com/originals/35/84/79/35847900475295ef1ae9b2bff189a9a6.gif"
+    label = "Congratulation"
+    if points == 0:
+        mood_gif = "https://static.tumblr.com/04027311832137002618110a602e2631/v3arm60/92Hoxigo1/tumblr_static_tumblr_static_crv29h2v35wg444s84g08osks_640.gif"
+        label = ""
+
+    return render_template('gameConclusion.html',
+                           label=label,
+                           points=points,
+                           mood_gif=mood_gif)
+

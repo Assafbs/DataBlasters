@@ -39,11 +39,9 @@ def create_game_page():
     result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[0], COUNTRIES[0], COUNTRIES[0], COUNTRIES[0]))
     connector.close()
     options = result[0]
-    print options
     right_answer = options[0]
     answers = list(options)
     random.shuffle(answers)
-    print answers
 
     response = make_response(render_template('RankByCountryGame.html',
                                              country=COUNTRIES[game_manager.answer_num],

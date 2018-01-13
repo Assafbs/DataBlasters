@@ -69,7 +69,7 @@ class QueryGenerator:
     def get_release_order_question_query():
         return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title\n
                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-               WHERE release_month IS NOT NULL\n
+               WHERE release_month IS NOT NULL AND rank > 70\n
                ORDER BY rand()\n
                LIMIT 1"""
 
@@ -88,7 +88,7 @@ class QueryGenerator:
                                               -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
                                           songs.title\n
                                 FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-                                WHERE release_month IS NOT NULL AND albums.album_id <> %s\n
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank > 70\n
                                 ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n
                     GROUP BY dateDistWithNums.monthDif \n
                     HAVING dateDistWithNums.monthDif <> 0\n

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response,session, Blueprint
+from flask import render_template, request, make_response, Blueprint
 import random
 import GameManager
 import sys
@@ -10,7 +10,6 @@ GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
 
-err = None
 ordered_answers = []
 curr_question_points = 0
 

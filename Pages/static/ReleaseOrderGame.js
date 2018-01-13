@@ -9,7 +9,10 @@ function validateForm() {
     var song3 = document.forms["answers"]["song3"].value;
     var song4 = document.forms["answers"]["song4"].value;
     if ((song1 == song2) || (song1 == song3) ||(song1 == song4) ||(song2 == song3) ||(song2 == song4) ||(song3 == song4)) {
-        alert('You cant choose the same song twice!!');
+        document.getElementById("sameSong").style.visibility = "visible";
         return false;
+    }
+    else {
+        document.getElementById("sameSong").style.visibility = "hidden";
     }
 }

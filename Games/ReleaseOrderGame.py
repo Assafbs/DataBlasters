@@ -8,7 +8,7 @@ from query_generator import QueryGenerator
 
 GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
-game_manager = GameManager.GameManager()
+game_manager = GameManager.GameManager(GAME_ID)
 
 err = None
 ordered_answers = []
@@ -19,7 +19,7 @@ release_order_game = Blueprint('release_order_game', __name__, template_folder='
 @release_order_game.route('/release_order_game',  methods=['POST','GET'])
 def release_order_game_start():
     if request.method == 'GET':
-        game_manager.start_new_game(GAME_ID)
+        game_manager.start_new_game()
     return handle_route(request)
 
 

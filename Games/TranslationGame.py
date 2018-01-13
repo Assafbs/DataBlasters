@@ -10,13 +10,13 @@ from query_generator import QueryGenerator
 
 GAME_ID = 5
 NUM_QUESTIONS_PER_GAME = 5
-game_manager = GameManager.GameManager()
+game_manager = GameManager.GameManager(GAME_ID)
 
 
 translate_game = Blueprint('translate_game', __name__, template_folder='templates')
 @translate_game.route('/translate_game')
 def translate_game_start():
-    game_manager.start_new_game(GAME_ID)
+    game_manager.start_new_game()
 
     return create_game_page()
 

@@ -8,15 +8,14 @@ from server import session
 # game manager has an instance per game (for example translate game), and not per the whole application
 class GameManager:
 
-    def __init__(self):
-        self.score = 0
-        self.answer_num = 0
-        self.game_id = 0
-
-    def start_new_game(self, game_id):
+    def __init__(self, game_id):
         self.score = 0
         self.answer_num = 0
         self.game_id = game_id
+
+    def start_new_game(self):
+        self.score = 0
+        self.answer_num = 0
 
     # if this function returns None, need to call the function for generating new question page
     def calc_mid_game(self, allow_access, points, num_questions_per_game):

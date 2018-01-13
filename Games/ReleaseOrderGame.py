@@ -89,14 +89,20 @@ def create_game_page():
 
     rand_order_answers = random.sample(ordered_answers, 4)
 
-    response = make_response(render_template('ReleaseOrderGame.html',
-                                             current_score=game_manager.score,
-                                             question='"' + '",  "'.join(rand_order_answers) + '"',
-                                             option_1=rand_order_answers[0],
-                                             option_2=rand_order_answers[1],
-                                             option_3=rand_order_answers[2],
-                                             option_4=rand_order_answers[3]))
+    try:
+        response = make_response(render_template('ReleaseOrderGame.html',
+                                                 current_score=game_manager.score,
+                                                 question='"' + '",  "'.join(rand_order_answers) + '"',
+                                                 option_1=rand_order_answers[0],
+                                                 option_2=rand_order_answers[1],
+                                                 option_3=rand_order_answers[2],
+                                                 option_4=rand_order_answers[3]))
 
-    return game_manager.update_cookies_for_new_question(response)
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        create_game_page()
+
 
 

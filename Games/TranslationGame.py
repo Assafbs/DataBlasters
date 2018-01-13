@@ -52,16 +52,21 @@ def create_game_page():
     connector.close()
     answers = random.sample(wrong_answers + [right_answer], 4)
 
-    response = make_response(render_template('TranslateGame.html',
-                                             question=translated_lyrics.decode('utf-8'),
-                                             option_1=answers[0],
-                                             option_2=answers[1],
-                                             option_3=answers[2],
-                                             option_4=answers[3],
-                                             current_score=game_manager.score))
+    try:
+        response = make_response(render_template('TranslateGame.html',
+                                                 question=translated_lyrics.decode('utf-8'),
+                                                 option_1=answers[0],
+                                                 option_2=answers[1],
+                                                 option_3=answers[2],
+                                                 option_4=answers[3],
+                                                 current_score=game_manager.score))
 
-    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        create_game_page()
 
 
 def calc_answers(connector, popular_words, answer_song_id, answer_song_name, lyrics_lang):

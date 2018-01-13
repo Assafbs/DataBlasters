@@ -1,12 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response, Response, Blueprint
-import MySQLdb as mdb
-from word_scraper import get5PopularWords
+from flask import render_template, request, make_response, Blueprint
+from word_scraper import get_5_popular_words
 import random
 import sys
 import GameManager
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
+# TODO: delete after ready: mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
 
 GAME_ID = 5
 NUM_QUESTIONS_PER_GAME = 5
@@ -18,8 +18,7 @@ translate_game = Blueprint('translate_game', __name__, template_folder='template
 def translate_game_start():
     game_manager.start_new_game(GAME_ID)
 
-    con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")  # TODO: use assaf method when ready
-    return create_game_page(con)
+    return create_game_page()
 
 
 translate_game_ = Blueprint('translate_game_', __name__, template_folder='templates')
@@ -31,13 +30,12 @@ def translate_game_mid():
     response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME)
 
     if response is None:
-        con = mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
-        return create_game_page(con)
+        return create_game_page()
     else:
         return response
 
 
-def create_game_page(con):
+def create_game_page():
     # Avoiding UnicodeDecodeError
     reload(sys)
     sys.setdefaultencoding('UTF8')
@@ -48,8 +46,7 @@ def create_game_page(con):
 
     translated_lyrics = translated_song_row[3]
     right_answer = translated_song_row[4]
-    # TODO: do something if there is less then 5 words. should never happen
-    popular_words = get5PopularWords(translated_song_row[1])
+    popular_words = get_5_popular_words(translated_song_row[1])
     wrong_answers = calc_answers(connector, popular_words, translated_song_row[0],
                                  translated_song_row[4], translated_song_row[2])
     connector.close()

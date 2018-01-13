@@ -10,8 +10,7 @@ from query_generator import QueryGenerator
 GAME_ID = 1
 game_manager = GameManager.GameManager(GAME_ID)
 NUM_QUESTIONS_PER_GAME = 5
-REAL_COUNTRIES = ["Argentina", "France", "Israel", "Spain", "United Kingdom", "United States"]
-COUNTRIES = ["France", "France", "France", "France", "France", "France"]
+COUNTRIES = ["Argentina", "France", "Israel", "Spain", "United Kingdom", "United States"]
 game_manager = GameManager.GameManager(GAME_ID)
 rank_by_country_game = Blueprint('rank_by_country_game', __name__, template_folder='templates')
 rank_by_country_game_ = Blueprint('rank_by_country_game_', __name__, template_folder='templates')

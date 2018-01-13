@@ -51,8 +51,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron bg-info">
     <div class="container">
-        <h2>{{question}}</h2>
-        <p id="translation" charset="utf-8" align="right"></p>
+        <h2> Which of the following songs is ranked the highest in {{country}}?</h2>
     </div>
 </div>
 
@@ -60,32 +59,24 @@
     <div class="row">
         <div class="col-md-4">
             <p>
-                <button id="button1" class="btn btn-secondary" style="text-align:left" onclick="onAnswer(1)">
-                    1. {{option_1_1}}<br>2. {{option_1_2}}
-                </button>
+                <button id="button1" class="btn btn-secondary" onclick="onAnswer(1)">{{option_1.decode('latin-1')}}</button>
             </p>
         </div>
         <div class="col-md-4">
             <p>
-                <button id="button2" class="btn btn-secondary" style="text-align:left" onclick="onAnswer(2)">
-                    1. {{option_2_1}}<br>2. {{option_2_2}}
-                </button>
+                <button id="button2" class="btn btn-secondary" onclick="onAnswer(2)">{{option_2.decode('latin-1')}}</button>
             </p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
             <p>
-                <button id="button3" class="btn btn-secondary" style="text-align:left" onclick="onAnswer(3)">
-                    1. {{option_3_1}}<br>2. {{option_3_2}}
-                </button>
+                <button id="button3" class="btn btn-secondary" onclick="onAnswer(3)">{{option_3.decode('latin-1')}}</button>
             </p>
         </div>
         <div class="col-md-4">
             <p>
-                <button id="button4" class="btn btn-secondary" style="text-align:left" onclick="onAnswer(4)">
-                    1. {{option_4_1}}<br>2. {{option_4_2}}
-                </button>
+                <button id="button4" class="btn btn-secondary" onclick="onAnswer(4)">{{option_4.decode('latin-1')}}</button>
             </p>
         </div>
     </div>
@@ -96,7 +87,7 @@
             </p>
         </div>
         <div class="col-md-12 text-right">
-            <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../pairs_game_')"
+            <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../rank_by_country_game_')"
                     style="cursor:pointer">
                 Next Question
             </button>

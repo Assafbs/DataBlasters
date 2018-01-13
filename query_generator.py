@@ -194,7 +194,39 @@ class QueryGenerator:
                   LIMIT %s"""
 
     @staticmethod
-    def get_four_ranked_songs_in_country(self):
+    def create_view_possible_artists():
+        return """CREATE OR REPLACE VIEW possible_artists AS
+                    SELECT artist_id
+                    FROM
+                      (SELECT
+                         artist_id,
+                         COUNT(*) AS num_of_albums
+                       FROM albums
+                       WHERE albums_cover IS NOT NULL AND albums_cover NOT LIKE '%%nocover%%'
+                       GROUP BY artist_id) AS albums_per_artist
+                    WHERE num_of_albums > 1"""
+
+    @staticmethod
+    def drop_view_possible_views():
+        return """DROP VIEW IF EXISTS possible_artists"""
+
+    @staticmethod
+    def get_n_random_artists_from_possible_artists():
+        return """SELECT artist_id
+                      FROM possible_artists
+                      ORDER BY RAND()
+                      LIMIT %s"""
+
+    @staticmethod
+    def get_n_album_covers_from_artist():
+        return """SELECT albums_cover
+                  FROM albums
+                  WHERE albums_cover IS NOT NULL AND albums_cover NOT LIKE '%%nocover%%' AND artist_id = %s
+                  ORDER BY RAND()
+                  LIMIT %s"""
+
+    @staticmethod
+    def get_four_ranked_songs_in_country():
         return """SELECT top_for_country.song_name AS highest_rank, top_for_country2.song_name AS alternative1,
                          top_for_country3.song_name AS alternative2,  top_for_country4.song_name AS alternative3
                   FROM  (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank

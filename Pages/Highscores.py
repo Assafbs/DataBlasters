@@ -4,7 +4,7 @@ from db_connector import DbConnector
 from query_generator import QueryGenerator
 
 
-game_manager = GameManager.GameManager()
+game_manager = GameManager.GameManager(3)
 
 highscores = Blueprint('highscores', __name__, template_folder='templates')
 @highscores.route('/highscores')

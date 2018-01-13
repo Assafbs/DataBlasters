@@ -27,7 +27,7 @@ class GameManager:
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
-            self.update_game_result()
+            # self.update_game_result() #TODO: fix nickname bug here
             return redirect('/game_selection')
         else:
             return None

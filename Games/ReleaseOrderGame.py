@@ -6,6 +6,7 @@ from db_connector import DbConnector
 from query_generator import QueryGenerator
 
 
+GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager()
 
@@ -18,7 +19,7 @@ release_order_game = Blueprint('release_order_game', __name__, template_folder='
 @release_order_game.route('/release_order_game',  methods=['POST','GET'])
 def release_order_game_start():
     if request.method == 'GET':
-        game_manager.start_new_game()
+        game_manager.start_new_game(GAME_ID)
     return handle_route(request)
 
 
@@ -63,16 +64,18 @@ def create_game_page():
     reload(sys)
     sys.setdefaultencoding('UTF8')
 
-    rand_song_row = DbConnector.get_result_for_query(QueryGenerator.get_release_order_question_query())
+    connector = DbConnector()
+    rand_song_row = connector.get_one_result_for_query(QueryGenerator.get_release_order_question_query())
     rand_song_name = rand_song_row[3]
 
     album_id = rand_song_row[0]
     release_month = rand_song_row[1]
     release_year = rand_song_row[2]
 
-    answers_rows = DbConnector.get_all_results_for_query_with_args(
+    answers_rows = connector.get_all_results_for_query(
         QueryGenerator.get_release_order_answers_query(),
         (release_year, release_month, release_year, release_month, release_year, release_month, release_year, album_id))
+    connector.close()
 
     global ordered_answers
     ordered_answers = []

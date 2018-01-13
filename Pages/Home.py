@@ -1,14 +1,17 @@
 from flask import Flask, render_template, make_response
 from Pages.GameSelection import game_selection
+from Games.GameManager import game_conclusion
 from Pages.Highscores import highscores
-from Games.ReleaseOrderGame import release_order_game
+from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
 from Games.PairsGame import pairs_game, pairs_game_
 
 app = Flask(__name__)
 app.register_blueprint(game_selection)
+app.register_blueprint(game_conclusion)
 app.register_blueprint(highscores)
 app.register_blueprint(release_order_game)
+app.register_blueprint(release_order_game_)
 app.register_blueprint(translate_game)
 app.register_blueprint(translate_game_)
 app.register_blueprint(pairs_game)

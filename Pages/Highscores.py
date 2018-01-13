@@ -9,7 +9,9 @@ game_manager = GameManager.GameManager()
 highscores = Blueprint('highscores', __name__, template_folder='templates')
 @highscores.route('/highscores')
 def create_game_selection_page():
-    top_users = DbConnector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
+    connector = DbConnector()
+    top_users = connector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
+    connector.close()
     dummy_user = ("", "")
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user, )

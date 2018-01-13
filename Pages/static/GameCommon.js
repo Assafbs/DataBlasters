@@ -21,13 +21,21 @@ function onWrongAnswer(answerNum) {
   showNextButtonAndWonPoints();
 }
 
+function onWrongAnswerShowRight(answerNum) {
+  var correctAnswerNum =  parseInt(getCookiebyName('correctAnswerNum'));
+  document.getElementById('button'.concat(answerNum.toString())).style.background='#FF0000';
+  document.getElementById('button'.concat(correctAnswerNum.toString())).style.background='#ffcc33';
+  disableAllAnswersButtons();
+  showNextButtonAndWonPoints();
+}
+
 function onAnswer(answerNum) {
     var correctAnswerNum =  parseInt(getCookiebyName('correctAnswerNum'));
     if (answerNum === correctAnswerNum){
         onCorrectAnswer(answerNum);
     }
     else{
-        onWrongAnswer(answerNum);
+        onWrongAnswerShowRight(answerNum);
     }
 }
 

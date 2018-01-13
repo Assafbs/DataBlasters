@@ -63,7 +63,8 @@ def sort_dict_by_value(dict_of_words):
     sorted_list = sorted(dict_of_words.items(), key=operator.itemgetter(1))
     return sorted_list
 
-def get5PopularWords(text):
+
+def get_5_popular_words(text):
     my_dict = get_dict_word_count(text)
     lst = sort_dict_by_value(my_dict)
     lst.reverse()
@@ -79,6 +80,6 @@ if __name__ == '__main__':
     lst = sort_dict_by_value(my_dict)
     lst.reverse()
     print lst
-    temp = get5PopularWords(text)
+    temp = get_5_popular_words(text)
     print temp
 

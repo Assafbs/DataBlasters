@@ -506,7 +506,7 @@ def get_rank_of_popular_songs(country_name, limit):
     geo_songs = network.get_geo_top_tracks(country=country_name, limit=limit)
     rank = 0
     for i in range(len(geo_songs)):
-        track = geo_songs.pop()
+        track = geo_songs.pop(0)
         try:
             track_item = track.item
             title = track_item.title.encode('utf-8')

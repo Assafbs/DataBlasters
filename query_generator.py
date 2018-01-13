@@ -194,7 +194,7 @@ class QueryGenerator:
                   LIMIT %s"""
 
     @staticmethod
-    def get_four_ranked_songs_in_country(self):
+    def get_four_ranked_songs_in_country():
         return """SELECT top_for_country.song_name AS highest_rank, top_for_country2.song_name AS alternative1,
                          top_for_country3.song_name AS alternative2,  top_for_country4.song_name AS alternative3
                   FROM  (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank

@@ -2,6 +2,7 @@ from flask import Flask, render_template, make_response
 from Pages.GameSelection import game_selection
 from Games.GameManager import game_conclusion
 from Pages.Highscores import highscores
+from Games.RankByCountryGame import rank_by_country_game, rank_by_country_game_
 from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
 from Games.PairsGame import pairs_game, pairs_game_
@@ -16,6 +17,8 @@ app.register_blueprint(translate_game)
 app.register_blueprint(translate_game_)
 app.register_blueprint(pairs_game)
 app.register_blueprint(pairs_game_)
+app.register_blueprint(rank_by_country_game)
+app.register_blueprint(rank_by_country_game_)
 
 
 @app.route('/')

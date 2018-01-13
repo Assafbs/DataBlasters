@@ -17,7 +17,7 @@ class QueryGenerator:
     def get_translated_song_question_query():
         return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n
                FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n
-               WHERE lyrics.hebrew_translation IS NOT NULL\n
+               WHERE lyrics.hebrew_translation IS NOT NULL AND CHAR_LENGTH(lyrics) > 200\n
                ORDER BY rand()\n
                LIMIT 1"""
 

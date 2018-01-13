@@ -1,7 +1,7 @@
-import wikipedia
+#import wikipedia
 import MySQLdb as mdb
 import string
-import spotipy
+#import spotipy
 
 def scrape_page(title, con):
     page = wikipedia.page(title)

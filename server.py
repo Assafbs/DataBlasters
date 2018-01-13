@@ -3,27 +3,27 @@ from flask import Flask, redirect, render_template, request, session, url_for
 import os
 from passlib.hash import pbkdf2_sha256
 from db_connector import DbConnector
+import query_generator
 
 # TODO logout button
 # TODO check out html form validation
 # TODO get score on login
 
-app = Flask(__name__)
-
 # db= mdb.connect('localhost','root','root','dbmysql09')
 # cursor = db.cursor()
 err = None
 
-
-@app.route('/')
+login_signup = Blueprint('login_signup', __name__, template_folder='templates')
+login_signup.route('/') #might need to change
 def home():
     if not session.get('logged_in'):
-        return render_template('home.html', current_score=0)  # change to total score
+        user_score=session.get('score')
+        return render_template('home.html')
     else:
-        return render_template('home.html', current_score=1234)
+        return render_template('home.html', current_score=user_score)
 
 
-@app.route('/login', methods=['POST', 'GET'])
+login_signup.route('/login', methods=['POST', 'GET'])
 def login():
     global err
     err = ''
@@ -97,7 +97,7 @@ def id_valid_sign_up_input(nick, email, password):
     return True
 
 
-@app.route('/logout')
+login_signup.route('/logout')
 def logout():
     session['logged_in'] = False
     session.pop(['nickname'], None)
@@ -105,7 +105,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/signup', methods=['POST', 'GET'])
+login_signup.route('/sign_up', methods=['POST', 'GET'])
 def signup():
     global err
     err = ''
@@ -120,22 +120,22 @@ def signup():
             hash_password = pbkdf2_sha256.hash(password)
             length = len(hash_password)
             query = "INSERT INTO dbmysql09.users VALUES(%s,%s,%s)"
-            # cursor.execute(query, (nick, email, hash_password))
-            # db.commit()
             connector = DbConnector()
             connector.execute_query(query, (nick, email, hash_password))
+            query = "INSET INTO dbmysql09.score VALUES(%s,%s,%s,%s)"
+            connector.execute_query(query,(nick,))
             session['logged_in'] = True
             session['nickname'] = nick
             err = "You have signed up successfully! Let's play!"
         return render_template('signup.html', error=err)
 
 
-@app.route('/highscores', )
+login_signup.route('/highscores', )
 def highscores():
     return render_template('highscores.html')
 
 
-@app.route('/game_selection', )
+login_signup.route('/game_selection', )
 def levels():
     return render_template('game_selection.html')
 

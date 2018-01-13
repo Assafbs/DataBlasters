@@ -254,3 +254,29 @@ class QueryGenerator:
                         AND top_for_country4.song_rank - top_for_country2.song_rank >= 50 
                   ORDER BY RAND()
                   LIMIT 1"""
+
+    @staticmethod
+    def get_songs_lyrics_contain():
+        return """SELECT DISTINCT songs.name
+        FROM songs INNER JOIN(
+                    SELECT song_id,lyrics
+                    FROM dbmysql09.lyrics
+					WHERE lyrics_language='en'
+                    AND MATCH(lyrics) AGAINST('%s' in natural language mode))lycs 
+				ON songs.song_id=lycs.song_id
+		WHERE songs.name NOT LIKE %s
+		ORDER BY rand()
+        LIMIT 3"""
+
+    @staticmethod
+    def get_songs_lyrics_not_contain():
+        return """SELECT songs.name
+        FROM dbmysql09.songs INNER JOIN(
+	        SELECT DISTINCT songs.name as songname
+	        FROM dbmysql09.songs INNER JOIN(SELECT song_id,lyrics
+									    FROM dbmysql09.lyrics
+									    WHERE lyrics_language='en'
+									    AND NOT Match(lyrics) AGAINST('love' in natural language mode))lycs 
+						        ON songs.song_id=lycs.song_id
+	        WHERE songs.name NOT LIKE '%love%')temp ON temp.songname=songs.name
+        WHERE songs.name='Whatcha Got In That Cup'"""

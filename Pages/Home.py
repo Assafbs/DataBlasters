@@ -2,10 +2,11 @@ from flask import Flask, render_template, make_response
 from Pages.GameSelection import game_selection
 from Games.GameManager import game_conclusion
 from Pages.Highscores import highscores
-from Games.RankByCountryGame import rank_by_country_game, rank_by_country_game_
 from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
 from Games.PairsGame import pairs_game, pairs_game_
+from Pages.server import login_signup
+from flask import session
 
 app = Flask(__name__)
 app.register_blueprint(game_selection)
@@ -17,14 +18,14 @@ app.register_blueprint(translate_game)
 app.register_blueprint(translate_game_)
 app.register_blueprint(pairs_game)
 app.register_blueprint(pairs_game_)
-app.register_blueprint(rank_by_country_game)
-app.register_blueprint(rank_by_country_game_)
+app.register_blueprint(login_signup)
 
 
 @app.route('/')
 def create_game_selection_page():
-    # TODO: replace with real score
-    response = make_response(render_template('home.html', current_score=0))
+    if (session.get(['logged_in'])):
+        query =
+        response = make_response(render_template('home.html', current_score=))
     return response
 
 

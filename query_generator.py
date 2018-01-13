@@ -8,6 +8,12 @@ class QueryGenerator:
         return """INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)"""
 
     @staticmethod
+    def setting_for_read_hebrew_from_db_query():
+        return """SET character_set_results = 'utf8', character_set_client = 'utf8', 
+                    character_set_connection = 'utf8',
+                    character_set_database = 'utf8', character_set_server = 'utf8'"""
+
+    @staticmethod
     def get_translated_song_question_query():
         return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n
                FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n

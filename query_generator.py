@@ -153,5 +153,42 @@ class QueryGenerator:
                   LIMIT %s"""
 
     @staticmethod
-    def get_artist_name_by_id(artist_id):
-        return """SELECT name FROM artists WHERE artist_id = %s""", artist_id
+    def get_artist_name_by_id():
+        return """SELECT name FROM artists WHERE artist_id = %s"""
+
+    @staticmethod
+    def create_view_artists_per_country():
+        return """CREATE OR REPLACE VIEW artists_per_country AS
+                    SELECT
+                      country_name,
+                      artists_per_country
+                    FROM
+                      (SELECT
+                         artists.country_name,
+                         COUNT(*) AS artists_per_country
+                       FROM artists,
+                         (SELECT DISTINCT country_name
+                          FROM artists
+                          WHERE country_name != '') AS countries
+                       WHERE artists.country_name = countries.country_name
+                       GROUP BY artists.country_name) AS T
+                    WHERE artists_per_country > 1"""
+
+    @staticmethod
+    def drop_view_artists_per_country():
+        return """DROP VIEW IF EXISTS songs_per_artists"""
+
+    @staticmethod
+    def get_n_random_countries():
+        return """SELECT country_name
+                  FROM artists_per_country
+                  ORDER BY RAND()
+                  LIMIT %s"""
+
+    @staticmethod
+    def get_n_artists_from_country():
+        return """SELECT artist_id
+                  FROM artists
+                  WHERE country_name = %s
+                  ORDER BY RAND()
+                  LIMIT %s"""

@@ -43,3 +43,4 @@ class GameManager:
         nickname = session['nickname']
         connector = DbConnector()
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
+        connector.close()

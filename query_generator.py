@@ -55,7 +55,7 @@ class QueryGenerator:
     @staticmethod
     def get_top_ten_query():
         return """SELECT nickname, SUM(total_per_game.final_score_per_game) AS final_score
-               FROM (SELECT total_per_game.nickname,total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game
+               FROM (SELECT total_per_game.nickname,total_per_game.game_id, ROUND(max_score + 10 *LOG2(total),2) AS final_score_per_game
                     FROM (SELECT nickname, game_id, SUM(score) AS total
                           FROM musicdb.scores
                           GROUP BY nickname, game_id) AS total_per_game,
@@ -67,6 +67,20 @@ class QueryGenerator:
                GROUP BY nickname
                ORDER BY final_score DESC
                LIMIT 10"""
+
+    @staticmethod
+    def get_score():
+        return """SELECT ROUND(SUM(total_per_game.final_score_per_game),2) AS final_score
+                  FROM (SELECT total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game
+                        FROM (SELECT nickname, game_id, SUM(score) AS total
+                              FROM musicdb.scores
+                              WHERE nickname = %s
+                              GROUP BY game_id) AS total_per_game,
+                              (SELECT nickname, game_id, MAX(score) AS max_score
+                              FROM musicdb.scores
+                              WHERE nickname = %s
+                              GROUP BY game_id) AS max_per_game
+                        WHERE total_per_game.game_id = max_per_game.game_id) AS total_per_game"""
 
     @staticmethod
     def get_release_order_question_query():

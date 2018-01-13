@@ -1,14 +1,11 @@
-import time
-
-
 class QueryGenerator:
 
     def __init__(self):
         pass
 
     @staticmethod
-    def create_score_update_query(nickname, game_id, score):
-        return """INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)""", (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), game_id, score)
+    def create_score_update_query():
+        return """INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)"""
 
     @staticmethod
     def get_translated_song_question_query():
@@ -97,15 +94,15 @@ class QueryGenerator:
                ORDER BY closestReleased.monthDif"""
 
     @staticmethod
-    def create_view_songs_by_artist(artist_id):
+    def create_view_songs_by_artist():
         return """CREATE OR REPLACE VIEW songs_by_artist AS
           (SELECT
-             title,
-             song_id,
-             artist_id
-           FROM songs, albums
-           WHERE albums.artist_id = %s AND songs.album_id = albums.album_id
-           GROUP BY title)""", artist_id
+            title,
+            songs.song_id,
+            artist_id
+          FROM songs, performed_by
+          WHERE performed_by.artist_id = %s AND songs.song_id = performed_by.song_id
+          GROUP BY title)"""
 
     @staticmethod
     def drop_view_songs_by_artist():
@@ -117,38 +114,37 @@ class QueryGenerator:
                       SELECT artist_id
                       FROM
                         (SELECT
-                          artist_id,
-                          count(*) AS songs_per_artist
-                          FROM
-                          (SELECT
-                             title,
-                             song_id,
-                             albums.artist_id,
-                             songs.album_id
-                           FROM songs
-                             JOIN albums ON songs.album_id = albums.album_id) AS T
-                    GROUP BY artist_id) AS T2
-                    WHERE songs_per_artist > 1"""
+                           artist_id,
+                           count(*) AS songs_per_artist
+                         FROM
+                           (SELECT
+                              title,
+                              songs.song_id,
+                              artist_id
+                            FROM songs
+                              JOIN performed_by AS pb ON songs.song_id = pb.song_id) AS T
+                         GROUP BY artist_id) AS T2
+                      WHERE songs_per_artist > 1"""
 
     @staticmethod
     def drop_view_songs_per_artists():
         return """DROP VIEW IF EXISTS songs_per_artists"""
 
     @staticmethod
-    def get_n_random_artists(n):
+    def get_n_random_artists():
         return """SELECT artist_id
                   FROM songs_per_artists
                   ORDER BY RAND()
-                  LIMIT %s""", n
+                  LIMIT %s"""
 
     @staticmethod
-    def get_n_random_songs_by_artist(n):
+    def get_n_random_songs_by_artist():
         return """SELECT
                   title,
                   song_id
                   FROM songs_by_artist
                   ORDER BY RAND()
-                  LIMIT %s""", n
+                  LIMIT %s"""
 
     @staticmethod
     def get_artist_name_by_id(artist_id):

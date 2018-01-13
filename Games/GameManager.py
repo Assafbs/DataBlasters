@@ -1,8 +1,8 @@
 import time
-from flask import redirect, url_for, Response
-from server import session
+from flask import redirect, Response
 from db_connector import DbConnector
 from query_generator import QueryGenerator
+from server import session
 
 
 # game manager has an instance per game (for example translate game), and not per the whole application
@@ -41,4 +41,5 @@ class GameManager:
 
     def update_game_result(self):
         nickname = session['nickname']
-        DbConnector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
+        connector = DbConnector()
+        connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))

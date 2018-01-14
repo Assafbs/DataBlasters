@@ -308,7 +308,7 @@ class QueryGenerator:
         return """SELECT DISTINCT songs.title
         FROM songs INNER JOIN(
                     SELECT song_id,lyrics
-                    FROM dbmysql09.lyrics
+                    FROM lyrics
 					WHERE lyrics_language='en'
                     AND MATCH(lyrics) AGAINST('%s' in natural language mode))lycs 
 				ON songs.song_id=lycs.song_id
@@ -319,10 +319,10 @@ class QueryGenerator:
     @staticmethod
     def get_songs_lyrics_not_contain():
         return """SELECT songs.title
-        FROM dbmysql09.songs INNER JOIN(
+        FROM songs INNER JOIN(
 	        SELECT DISTINCT songs.title as songname
-	        FROM dbmysql09.songs INNER JOIN(SELECT song_id,lyrics
-									    FROM dbmysql09.lyrics
+	        FROM songs INNER JOIN(SELECT song_id,lyrics
+									    FROM lyrics
 									    WHERE lyrics_language='en'
 									    AND NOT Match(lyrics) AGAINST(%s in natural language mode))lycs 
 						        ON songs.song_id=lycs.song_id

@@ -6,7 +6,7 @@ from db_connector import DbConnector
 from query_generator import QueryGenerator
 
 
-GAME_ID = 4
+GAME_ID = 6
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
 

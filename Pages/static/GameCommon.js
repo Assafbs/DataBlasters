@@ -1,6 +1,6 @@
 // consts:
 var c_numQuestionsPerGame = 5;
-var c_pointsPerQuestion = 10;
+var c_pointsPerQuestion = 20;
 
 // global vars:
 var correctAnswer = false;

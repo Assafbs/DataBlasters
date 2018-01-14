@@ -1,8 +1,9 @@
 import time
 from flask import redirect, Response, render_template, Blueprint
+
+from Pages.server import session
 from db_connector import DbConnector
 from query_generator import QueryGenerator
-from server import session
 
 
 # game manager has an instance per game (for example translate game), and not per the whole application

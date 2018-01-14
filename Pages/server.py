@@ -45,7 +45,7 @@ def login():
 def authenticate(nick, password):
     if not (is_valid_login_input(nick, password)):
         return False
-    query="SELECT * FROM dbmysql09.users WHERE nickname = %s"
+    query="SELECT * FROM users WHERE nickname = %s"
     connector=DbConnector()
     data = connector.get_one_result_for_query(query, (nick,))
     connector.close()
@@ -116,7 +116,7 @@ def signup():
         if id_valid_sign_up_input(nick, email, password):
             hash_password = pbkdf2_sha256.hash(password)
             length = len(hash_password)
-            query = "INSERT INTO dbmysql09.users VALUES(%s,%s,%s)"
+            query = "INSERT INTO users VALUES(%s,%s,%s)"
             connector = DbConnector()
             connector.execute_query(query, (nick, email, hash_password))
             connector.close()

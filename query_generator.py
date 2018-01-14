@@ -276,19 +276,19 @@ class QueryGenerator:
                          top_for_country2.song_rank AS rank2,
                          top_for_country3.song_rank AS rank3,
                          top_for_country4.song_rank AS rank4
-                  FROM  (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
+                  FROM  (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
 	                     FROM songs, popular_songs 
 	                     WHERE songs.song_id = popular_songs.song_id
 	                     AND popular_songs.country_name = %s) AS top_for_country1,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
+                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
 	                     FROM songs, popular_songs 
 	                     WHERE songs.song_id = popular_songs.song_id
                      	 AND popular_songs.country_name = %s) AS top_for_country2,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
+                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
 	                     FROM songs, popular_songs 
 	                     WHERE songs.song_id = popular_songs.song_id
 	                     AND popular_songs.country_name = %s) AS top_for_country3,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
+                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
 	                     FROM songs, popular_songs 
 	                     WHERE songs.song_id = popular_songs.song_id
 	                     AND popular_songs.country_name = %s) AS top_for_country4
@@ -305,26 +305,26 @@ class QueryGenerator:
 
     @staticmethod
     def get_songs_lyrics_contain():
-        return """SELECT DISTINCT songs.name
+        return """SELECT DISTINCT songs.title
         FROM songs INNER JOIN(
                     SELECT song_id,lyrics
                     FROM dbmysql09.lyrics
 					WHERE lyrics_language='en'
                     AND MATCH(lyrics) AGAINST('%s' in natural language mode))lycs 
 				ON songs.song_id=lycs.song_id
-		WHERE songs.name NOT LIKE %s
+		WHERE songs.title NOT LIKE %s
 		ORDER BY rand()
         LIMIT 3"""
 
     @staticmethod
     def get_songs_lyrics_not_contain():
-        return """SELECT songs.name
+        return """SELECT songs.title
         FROM dbmysql09.songs INNER JOIN(
-	        SELECT DISTINCT songs.name as songname
+	        SELECT DISTINCT songs.title as songname
 	        FROM dbmysql09.songs INNER JOIN(SELECT song_id,lyrics
 									    FROM dbmysql09.lyrics
 									    WHERE lyrics_language='en'
 									    AND NOT Match(lyrics) AGAINST(%s in natural language mode))lycs 
 						        ON songs.song_id=lycs.song_id
-	        WHERE songs.name NOT LIKE %s)temp ON temp.songname=songs.name
-        WHERE songs.name=%s"""
+	        WHERE songs.title NOT LIKE %s)temp ON temp.songname=songs.title
+        WHERE songs.title=%s"""

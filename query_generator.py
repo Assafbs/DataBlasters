@@ -243,19 +243,19 @@ class QueryGenerator:
     def get_four_ranked_songs_in_country():
         return """SELECT top_for_country.song_name AS highest_rank, top_for_country2.song_name AS alternative1,
                          top_for_country3.song_name AS alternative2,  top_for_country4.song_name AS alternative3
-                  FROM  (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                  FROM  (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country2,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country3,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country4
@@ -276,22 +276,22 @@ class QueryGenerator:
                          top_for_country2.song_rank AS rank2,
                          top_for_country3.song_rank AS rank3,
                          top_for_country4.song_rank AS rank4
-                  FROM  (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country1,
-                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-                     	 AND popular_songs.country_name = %s) AS top_for_country2,
-                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country3,
-                         (SELECT songs.title AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country4
+                  FROM  (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country1,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+                     	 AND popular_songs_by_country.country_name = %s) AS top_for_country2,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country3,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country4
                   WHERE top_for_country1.song_name = top_for_country2.song_name
 		                AND top_for_country2.song_name = top_for_country3.song_name
                         AND top_for_country3.song_name = top_for_country4.song_name

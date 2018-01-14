@@ -9,6 +9,7 @@
 
     <title>&#9834; Mr.Music &#9834;</title>
 
+    <link rel="stylesheet" type="text/css" href="../static/GameCommon.css"/>
     <link rel="stylesheet" type="text/css" href="../static/TranslateGame.css"/>
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -106,7 +107,13 @@
             </button>
         </div>
     </div>
-
+    </br></br></br>
+    <div class="progress">
+        <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
+             aria-valuemax="100" >
+            {{score}}
+        </div>
+    </div>
     <hr>
 
     <footer>

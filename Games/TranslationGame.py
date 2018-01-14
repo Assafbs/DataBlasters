@@ -59,6 +59,8 @@ def create_game_page():
                                                  option_2=answers[1],
                                                  option_3=answers[2],
                                                  option_4=answers[3],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=game_manager.score,
                                                  current_score=game_manager.score))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))

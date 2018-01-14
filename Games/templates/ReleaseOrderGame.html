@@ -9,6 +9,7 @@
 
     <title>&#9834; Mr.Music &#9834;</title>
 
+    <link rel="stylesheet" type="text/css" href="../static/GameCommon.css"/>
     <link rel="stylesheet" type="text/css" href="../static/ReleaseOrderGame.css"/>
 
     <!-- Bootstrap core CSS -->
@@ -122,7 +123,13 @@
 		</form>
         <p>{{ error }}</p>
 
-
+    </br></br></br>
+    <div class="progress">
+        <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
+             aria-valuemax="100" >
+            {{score}}
+        </div>
+    </div>
       <hr>
 
       <footer>

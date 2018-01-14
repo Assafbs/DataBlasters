@@ -91,6 +91,8 @@ def create_game_page():
 
     try:
         response = make_response(render_template('ReleaseOrderGame.html',
+                                                 game=game_manager.answer_num + 1,
+                                                 score=game_manager.score,
                                                  current_score=game_manager.score,
                                                  question='"' + '",  "'.join(rand_order_answers) + '"',
                                                  option_1=rand_order_answers[0],

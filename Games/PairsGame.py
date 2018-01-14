@@ -139,6 +139,8 @@ def generate_covers_game():
                                              option_3_2=answers[2].split('!@')[1],
                                              option_4_1=answers[3].split('!@')[0],
                                              option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
     response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
     return game_manager.update_cookies_for_new_question(response)
@@ -164,6 +166,8 @@ def generate_countries_game():
                                              option_3_2=answers[2].split('!@')[1],
                                              option_4_1=answers[3].split('!@')[0],
                                              option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
     response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
     return game_manager.update_cookies_for_new_question(response)
@@ -189,6 +193,8 @@ def generate_songs_game():
                                              option_3_2=answers[2].split('!@')[1],
                                              option_4_1=answers[3].split('!@')[0],
                                              option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
     response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
     return game_manager.update_cookies_for_new_question(response)

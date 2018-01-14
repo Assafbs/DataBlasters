@@ -15,41 +15,41 @@ class QueryGenerator:
 
     @staticmethod
     def get_translated_song_question_query():
-        return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n
-               FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n
-               WHERE lyrics.hebrew_translation IS NOT NULL AND CHAR_LENGTH(lyrics) > 200\n
-               ORDER BY rand()\n
+        return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title
+               FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id
+               WHERE lyrics.hebrew_translation IS NOT NULL AND CHAR_LENGTH(lyrics) > 200
+               ORDER BY rand()
                LIMIT 1"""
 
     @staticmethod
     def get_translated_song_answers_query():
-        return """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords\n
-               FROM songs JOIN (\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics \n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics \n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL \n
-                   (SELECT song_id FROM lyrics)\n
-                   ) AS wordsCnt ON wordsCnt.song_id = songs.song_id\n
-               WHERE wordsCnt.song_id <> %s AND songs.title <> %s\n
-               GROUP BY wordsCnt.song_id\n
-               ORDER BY numWords DESC\n
+        return """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords
+               FROM songs JOIN (
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics 
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics 
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL 
+                   (SELECT song_id FROM lyrics)
+                   ) AS wordsCnt ON wordsCnt.song_id = songs.song_id
+               WHERE wordsCnt.song_id <> %s AND songs.title <> %s
+               GROUP BY wordsCnt.song_id
+               ORDER BY numWords DESC
                LIMIT 3"""
 
     @staticmethod
@@ -84,33 +84,33 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_question_query():
-        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title\n
-               FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-               WHERE release_month IS NOT NULL AND rank > 70\n
-               ORDER BY rand()\n
+        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title
+               FROM albums JOIN songs ON albums.album_id = songs.album_id
+               WHERE release_month IS NOT NULL AND rank > 70
+               ORDER BY rand()
                LIMIT 1"""
 
     @staticmethod
     def get_release_order_answers_query():
-        return """SELECT monthDif, title\n
-               FROM (\n
-                    SELECT min(rowNum),  monthDif, title\n
-                    FROM (\n
-                        SELECT @n := @n + 1 rowNum, dateDist.*\n
-                         FROM (SELECT @n:=0) initvars,\n
-                              (SELECT IF(release_year = %s,\n
-                                          %s - release_month,\n
-                                          IF (release_year > %s,\n
-                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),\n
-                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
-                                          songs.title\n
-                                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank > 70\n
-                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n
-                    GROUP BY dateDistWithNums.monthDif \n
-                    HAVING dateDistWithNums.monthDif <> 0\n
-                    ORDER BY abs(dateDistWithNums.monthDif)\n
-                    LIMIT 3 ) AS closestReleased\n
+        return """SELECT monthDif, title
+               FROM (
+                    SELECT min(rowNum),  monthDif, title
+                    FROM (
+                        SELECT @n := @n + 1 rowNum, dateDist.*
+                         FROM (SELECT @n:=0) initvars,
+                              (SELECT IF(release_year = %s,
+                                          %s - release_month,
+                                          IF (release_year > %s,
+                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),
+                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,
+                                          songs.title
+                                FROM albums JOIN songs ON albums.album_id = songs.album_id
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank > 70
+                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums
+                    GROUP BY dateDistWithNums.monthDif 
+                    HAVING dateDistWithNums.monthDif <> 0
+                    ORDER BY abs(dateDistWithNums.monthDif)
+                    LIMIT 3 ) AS closestReleased
                ORDER BY closestReleased.monthDif"""
 
     @staticmethod

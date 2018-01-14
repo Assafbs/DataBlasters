@@ -8,6 +8,9 @@
     <link rel="icon" href="../../favicon.png">
     <title>HighScores Table</title>
 
+
+    <link href="../static/highscores.css" rel="stylesheet">
+
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -60,11 +63,17 @@
 <div class="container">
     <div class="table-responsive">
         <table class="table table-striped">
-            <thead>
+            <thead class="bg-info">
             <tr>
                 <th>#</th>
                 <th>User</th>
-                <th>Score</th>
+                <th><div class="help-tip">
+                    <p>User's Score is calculated in the follwoing way:</br></br>
+                    For every game, the score is M*log<sub>2</sub>(T),</br>
+                        Where M is the max score achieved,</br>
+                        and T is the total score.</br></br>
+                    User's score is the sum of the game scores, for all games.</p>
+                </div>Score</th>
             </tr>
             </thead>
             <tbody>

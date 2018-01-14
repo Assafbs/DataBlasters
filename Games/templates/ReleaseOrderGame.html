@@ -50,7 +50,7 @@
     <div class="jumbotron bg-info">
       <div class="container">
           <br><h2>Order the following songs by their release date:</h2>
-          <h5>{{question}}</h5>
+          <h5>{{question.decode('latin-1')}}</h5>
       </div>
     </div>
 
@@ -72,37 +72,37 @@
                     <select class="form-control" id="song1" name="song1" required>
                         <!--<input type="text" class="form-control" id="nickname" placeholder="Enter nickname" name="nickname" required>-->
                         <option value="" selected disabled hidden> </option>
-                        <option>{{option_1}}</option>
-                        <option>{{option_2}}</option>
-                        <option>{{option_3}}</option>
-                        <option>{{option_4}}</option>
+                        <option>{{option_1.decode('latin-1')}}</option>
+                        <option>{{option_2.decode('latin-1')}}</option>
+                        <option>{{option_3.decode('latin-1')}}</option>
+                        <option>{{option_4.decode('latin-1')}}</option>
                     </select>
                 </div>
                 <div class="form-group col-md-3">
                     <select class="form-control" id="song2" name="song2" required>
                         <option value="" selected disabled hidden> </option>
-                        <option>{{option_1}}</option>
-                        <option>{{option_2}}</option>
-                        <option>{{option_3}}</option>
-                        <option>{{option_4}}</option>
+                        <option>{{option_1.decode('latin-1')}}</option>
+                        <option>{{option_2.decode('latin-1')}}</option>
+                        <option>{{option_3.decode('latin-1')}}</option>
+                        <option>{{option_4.decode('latin-1')}}</option>
                     </select>
                 </div>
                 <div class="form-group col-md-3">
                     <select class="form-control" id="song3" name="song3" required>
                         <option value="" selected disabled hidden> </option>
-                        <option>{{option_1}}</option>
-                        <option>{{option_2}}</option>
-                        <option>{{option_3}}</option>
-                        <option>{{option_4}}</option>
+                        <option>{{option_1.decode('latin-1')}}</option>
+                        <option>{{option_2.decode('latin-1')}}</option>
+                        <option>{{option_3.decode('latin-1')}}</option>
+                        <option>{{option_4.decode('latin-1')}}</option>
                     </select>
                 </div>
                 <div class="form-group col-md-3">
                     <select class="form-control" id="song4" name="song4" required>
                         <option value="" selected disabled hidden> </option>
-                        <option>{{option_1}}</option>
-                        <option>{{option_2}}</option>
-                        <option>{{option_3}}</option>
-                        <option>{{option_4}}</option>
+                        <option>{{option_1.decode('latin-1')}}</option>
+                        <option>{{option_2.decode('latin-1')}}</option>
+                        <option>{{option_3.decode('latin-1')}}</option>
+                        <option>{{option_4.decode('latin-1')}}</option>
                     </select>
                 </div>
             </div>

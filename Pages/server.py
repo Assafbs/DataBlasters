@@ -1,6 +1,5 @@
 import MySQLdb as mdb
-from flask import Flask, redirect, render_template, request, session, url_for, Blueprint, Response
-import os
+from flask import Flask, redirect, render_template, request, url_for, Blueprint, Response, make_response
 from passlib.hash import pbkdf2_sha256
 from db_connector import DbConnector
 from query_generator import QueryGenerator
@@ -10,8 +9,9 @@ from query_generator import QueryGenerator
 
 err = None
 
-log_in= Blueprint('log_in', __name__, template_folder='templates')
-sign_up= Blueprint('sign_up', __name__, template_folder='templates')
+log_in = Blueprint('log_in', __name__, template_folder='templates')
+sign_up = Blueprint('sign_up', __name__, template_folder='templates')
+log_out = Blueprint('log_out',__name__, template_folder='templates')
 
 @log_in.route('/log_in', methods=['POST', 'GET'])
 def login():
@@ -20,11 +20,9 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        nick = mdb.escape_string(request.form['nickname'])  # avoid injection
+        nick = mdb.escape_string(request.form['nickname'])
         password = request.form['pwd']
         if authenticate(nick, password):
-            session['logged_in'] = True
-            session['nickname'] = nick
             query=QueryGenerator.get_score()
             connector=DbConnector()
             data=connector.get_one_result_for_query(query,(nick,nick))
@@ -32,13 +30,11 @@ def login():
                 score=0
             else:
                 score=data[0]
-                score=1234 #TODO remove this
-            session['score']=score
             err = None
-            return render_template('home.html', current_score=score)
+            response= make_response(render_template('home.html'))
+            return update_cookies_logged_in(nick,score,response)
         else:
             err = 'Invalid nickname or password. Please try again!\n If you are new to Mr. Music, please sign up'
-            session['logged_in'] = False
             return render_template('login.html', error=err)
 
 
@@ -94,12 +90,10 @@ def id_valid_sign_up_input(nick, email, password):
     return True
 
 
-#log_in.route('/logout')
-#def logout():
-#    session['logged_in'] = False
-#    session.pop(nickname, None)
-#    # pop score
-#    return redirect(url_for('home'))
+@log_out.route('/logout')
+def logout():
+   response=make_response(render_template('home.html'))
+   return update_cookies_logged_out()
 
 
 @sign_up.route('/sign_up', methods=['POST', 'GET'])
@@ -120,17 +114,16 @@ def signup():
             connector = DbConnector()
             connector.execute_query(query, (nick, email, hash_password))
             connector.close()
-            session['logged_in'] = True
-            session['nickname'] = nick
-            session['score'] = 0
-            err = "You have signed up successfully! Let's play!"
+            err = "You have signed up successfully! Let's Play!"
+            response=make_response(render_template('signup.html', error=err))
+            return update_cookies_logged_in(nick,score,response)
         return render_template('signup.html', error=err)
 
-# def update_cookies_logged_in(nick,score,response):
-#     response.set_coockies('nickname',nick)
-#     response.set_coockies('logged_in',True)
-#     response.set_coockies('score',score)
-#     return response
-#
-# def update_cookies_logged_out(response):
-#     response.set_coockies('sessionID','',expires=0)
+def update_cookies_logged_in(nick,score,response):
+    response.set_cookie('nickname',nick)
+    response.set_cookie('logged_in','true')
+    response.set_cookie('score',str(score))
+    return response
+
+def update_cookies_logged_out(response):
+    response.set_cookie('sessionID','',expires=0)

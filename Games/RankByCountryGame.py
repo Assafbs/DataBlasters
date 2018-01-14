@@ -59,6 +59,8 @@ def generate_most_popular_song_question():
                                              option_2=answers[1],
                                              option_3=answers[2],
                                              option_4=answers[3],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
 
     response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
@@ -83,6 +85,8 @@ def generate_in_which_country_is_most_popular_question():
                                              option_2=random_countries[1],
                                              option_3=random_countries[2],
                                              option_4=random_countries[3],
+                                             game=game_manager.answer_num+1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
 
     response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
@@ -107,6 +111,8 @@ def generate_in_which_country_is_least_popular_question():
                                              option_2=random_countries[1],
                                              option_3=random_countries[2],
                                              option_4=random_countries[3],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
                                              current_score=game_manager.score))
 
     response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))

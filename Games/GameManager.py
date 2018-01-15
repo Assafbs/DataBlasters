@@ -1,4 +1,5 @@
 import time
+import Common.common
 from flask import redirect, Response, render_template, Blueprint
 from db_connector import DbConnector
 from query_generator import QueryGenerator
@@ -39,7 +40,7 @@ class GameManager:
         return response
 
     def update_game_result(self):
-        # nickname = session['nickname']
+        # nickname = Common.common.get_value_from_cookie(request, 'nickname') #TODO: pass request all the way to here
         nickname = 'David'
         connector = DbConnector()
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))

@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, make_response,session
+from flask import Flask, render_template, make_response,request
 
 from Games.GameManager import game_conclusion
 from Games.PairsGame import pairs_game, pairs_game_
@@ -31,7 +31,13 @@ app.secret_key = os.urandom(12)
 @app.route('/')
 def create_game_selection_page():
     # TODO: replace with real score
-    response = make_response(render_template('home.html', current_score=0))
+    nickname = ''
+    user_logon=''
+    if 'nickname' in request.cookies:
+        nickname = request.cookies.get('nickname')
+        if nickname != '':
+            user_logon = 'true'
+    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon))
     return response
 
 

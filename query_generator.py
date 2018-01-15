@@ -15,41 +15,41 @@ class QueryGenerator:
 
     @staticmethod
     def get_translated_song_question_query():
-        return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title\n
-               FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id\n
-               WHERE lyrics.hebrew_translation IS NOT NULL AND CHAR_LENGTH(lyrics) > 200\n
-               ORDER BY rand()\n
+        return """SELECT lyrics.song_id, lyrics.lyrics, lyrics.lyrics_language, lyrics.hebrew_translation, songs.title
+               FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id
+               WHERE lyrics.hebrew_translation IS NOT NULL AND CHAR_LENGTH(lyrics) > 200
+               ORDER BY rand()
                LIMIT 1"""
 
     @staticmethod
     def get_translated_song_answers_query():
-        return """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords\n
-               FROM songs JOIN (\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics \n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics \n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL\n
-                   (SELECT song_id \n
-                   FROM lyrics\n
-                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)\n
-                   UNION ALL \n
-                   (SELECT song_id FROM lyrics)\n
-                   ) AS wordsCnt ON wordsCnt.song_id = songs.song_id\n
-               WHERE wordsCnt.song_id <> %s AND songs.title <> %s\n
-               GROUP BY wordsCnt.song_id\n
-               ORDER BY numWords DESC\n
+        return """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords
+               FROM songs JOIN (
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics 
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics 
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL
+                   (SELECT song_id 
+                   FROM lyrics
+                   WHERE MATCH(lyrics) AGAINST(%s IN BOOLEAN MODE) AND lyrics_language = %s)
+                   UNION ALL 
+                   (SELECT song_id FROM lyrics)
+                   ) AS wordsCnt ON wordsCnt.song_id = songs.song_id
+               WHERE wordsCnt.song_id <> %s AND songs.title <> %s
+               GROUP BY wordsCnt.song_id
+               ORDER BY numWords DESC
                LIMIT 3"""
 
     @staticmethod
@@ -84,33 +84,34 @@ class QueryGenerator:
 
     @staticmethod
     def get_release_order_question_query():
-        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title\n
-               FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-               WHERE release_month IS NOT NULL AND rank > 70\n
-               ORDER BY rand()\n
+        return """SELECT albums.album_id, albums.release_month, albums.release_year, songs.title
+               FROM albums JOIN songs ON albums.album_id = songs.album_id
+               WHERE release_month IS NOT NULL AND rank >= 70
+               ORDER BY rand()
                LIMIT 1"""
 
     @staticmethod
     def get_release_order_answers_query():
-        return """SELECT monthDif, title\n
-               FROM (\n
-                    SELECT min(rowNum),  monthDif, title\n
-                    FROM (\n
-                        SELECT @n := @n + 1 rowNum, dateDist.*\n
-                         FROM (SELECT @n:=0) initvars,\n
-                              (SELECT IF(release_year = %s,\n
-                                          %s - release_month,\n
-                                          IF (release_year > %s,\n
-                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),\n
-                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,\n
-                                          songs.title\n
-                                FROM albums JOIN songs ON albums.album_id = songs.album_id\n
-                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank > 70\n
-                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums\n
-                    GROUP BY dateDistWithNums.monthDif \n
-                    HAVING dateDistWithNums.monthDif <> 0\n
-                    ORDER BY abs(dateDistWithNums.monthDif)\n
-                    LIMIT 3 ) AS closestReleased\n
+        return """SELECT monthDif, title
+               FROM (
+                    SELECT min(rowNum),  monthDif, title
+                    FROM (
+                        SELECT @n := @n + 1 rowNum, dateDist.*
+                         FROM (SELECT @n:=0) initvars,
+                              (SELECT IF(release_year = %s,
+                                          %s - release_month,
+                                          IF (release_year > %s,
+                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),
+                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,
+                                          songs.title
+                                FROM albums JOIN songs ON albums.album_id = songs.album_id
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank >= 70
+                                GROUP BY songs.title
+                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums
+                    GROUP BY dateDistWithNums.monthDif 
+                    HAVING dateDistWithNums.monthDif <> 0
+                    ORDER BY abs(dateDistWithNums.monthDif)
+                    LIMIT 3 ) AS closestReleased
                ORDER BY closestReleased.monthDif"""
 
     @staticmethod
@@ -243,19 +244,19 @@ class QueryGenerator:
     def get_four_ranked_songs_in_country():
         return """SELECT top_for_country.song_name AS highest_rank, top_for_country2.song_name AS alternative1,
                          top_for_country3.song_name AS alternative2,  top_for_country4.song_name AS alternative3
-                  FROM  (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                  FROM  (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country2,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country3,
-                        (SELECT songs.name AS song_name, popular_songs_by_country.rank AS song_rank
+                        (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
 	                    FROM songs, popular_songs_by_country 
 	                    WHERE songs.song_id = popular_songs_by_country.song_id
 	                    AND popular_songs_by_country.country_name = %s) AS top_for_country4
@@ -276,22 +277,22 @@ class QueryGenerator:
                          top_for_country2.song_rank AS rank2,
                          top_for_country3.song_rank AS rank3,
                          top_for_country4.song_rank AS rank4
-                  FROM  (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country1,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-                     	 AND popular_songs.country_name = %s) AS top_for_country2,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country3,
-                         (SELECT songs.name AS song_name, popular_songs.rank AS song_rank
-	                     FROM songs, popular_songs 
-	                     WHERE songs.song_id = popular_songs.song_id
-	                     AND popular_songs.country_name = %s) AS top_for_country4
+                  FROM  (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country1,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+                     	 AND popular_songs_by_country.country_name = %s) AS top_for_country2,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country3,
+                         (SELECT songs.title AS song_name, popular_songs_by_country.rank AS song_rank
+	                     FROM songs, popular_songs_by_country 
+	                     WHERE songs.song_id = popular_songs_by_country.song_id
+	                     AND popular_songs_by_country.country_name = %s) AS top_for_country4
                   WHERE top_for_country1.song_name = top_for_country2.song_name
 		                AND top_for_country2.song_name = top_for_country3.song_name
                         AND top_for_country3.song_name = top_for_country4.song_name
@@ -305,26 +306,26 @@ class QueryGenerator:
 
     @staticmethod
     def get_songs_lyrics_contain():
-        return """SELECT DISTINCT songs.name
+        return """SELECT DISTINCT songs.title
         FROM songs INNER JOIN(
                     SELECT song_id,lyrics
-                    FROM dbmysql09.lyrics
+                    FROM lyrics
 					WHERE lyrics_language='en'
                     AND MATCH(lyrics) AGAINST('%s' in natural language mode))lycs 
 				ON songs.song_id=lycs.song_id
-		WHERE songs.name NOT LIKE %s
+		WHERE songs.title NOT LIKE %s
 		ORDER BY rand()
         LIMIT 3"""
 
     @staticmethod
     def get_songs_lyrics_not_contain():
-        return """SELECT songs.name
-        FROM dbmysql09.songs INNER JOIN(
-	        SELECT DISTINCT songs.name as songname
-	        FROM dbmysql09.songs INNER JOIN(SELECT song_id,lyrics
-									    FROM dbmysql09.lyrics
+        return """SELECT songs.title
+        FROM songs INNER JOIN(
+	        SELECT DISTINCT songs.title as songname
+	        FROM songs INNER JOIN(SELECT song_id,lyrics
+									    FROM lyrics
 									    WHERE lyrics_language='en'
 									    AND NOT Match(lyrics) AGAINST(%s in natural language mode))lycs 
 						        ON songs.song_id=lycs.song_id
-	        WHERE songs.name NOT LIKE %s)temp ON temp.songname=songs.name
-        WHERE songs.name=%s"""
+	        WHERE songs.title NOT LIKE %s)temp ON temp.songname=songs.title
+        WHERE songs.title=%s"""

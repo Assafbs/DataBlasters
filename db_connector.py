@@ -2,8 +2,8 @@ import MySQLdb as mdb
 
 ADDRESS = 'localhost'
 USERNAME = 'root'
-PASSWORD = 'root'   #'Armageddon1'
-SCHEMA = 'dbmysql09'           #'mr_music2'
+PASSWORD = 'Armageddon1'   #'Armageddon1'
+SCHEMA = 'mr_music2'           #'mr_music2'
 
 
 class DbConnector:

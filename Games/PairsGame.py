@@ -1,11 +1,10 @@
 import random
 import sys
-from flask import Flask, render_template, request, make_response, Blueprint
+from flask import render_template, request, make_response, Blueprint
 import GameManager
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
-app = Flask(__name__)  # TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
 connector = DbConnector()
 NUM_QUESTIONS_PER_GAME = 5
 GAME_ID = 3
@@ -113,6 +112,15 @@ def get_all_covers():
 
 
 def create_game_page():
+    if game_manager.answer_num % 2 == 0:
+        return generate_covers_game()
+    elif game_manager.answer_num == 1:
+        return generate_countries_game()
+    else:  # game_manager.answer_num == 3
+        return generate_songs_game()
+
+
+def generate_covers_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
 
@@ -121,28 +129,24 @@ def create_game_page():
     right_answer = winner_covers[0] + "!@" + winner_covers[1]
     wrong_answers = calc_answers_cover_pairs(bad_covers)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    try:
-        response = make_response(render_template('PairsGameCovers.html',
-                                                 question=" Which of these pairs of album covers are by the same artist?",
-                                                 option_1_1=answers[0].split('!@')[0],
-                                                 option_1_2=answers[0].split('!@')[1],
-                                                 option_2_1=answers[1].split('!@')[0],
-                                                 option_2_2=answers[1].split('!@')[1],
-                                                 option_3_1=answers[2].split('!@')[0],
-                                                 option_3_2=answers[2].split('!@')[1],
-                                                 option_4_1=answers[3].split('!@')[0],
-                                                 option_4_2=answers[3].split('!@')[1],
-                                                 current_score=game_manager.score))
-        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-        return game_manager.update_cookies_for_new_question(response)
-    except Exception as e:
-        print "Error occurred with response"
-        print e.message
-        create_game_page()
-    return
+    response = make_response(render_template('PairsGameCovers.html',
+                                             question=" Which of these pairs of album covers are by the same artist?",
+                                             option_1_1=answers[0].split('!@')[0],
+                                             option_1_2=answers[0].split('!@')[1],
+                                             option_2_1=answers[1].split('!@')[0],
+                                             option_2_2=answers[1].split('!@')[1],
+                                             option_3_1=answers[2].split('!@')[0],
+                                             option_3_2=answers[2].split('!@')[1],
+                                             option_4_1=answers[3].split('!@')[0],
+                                             option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
+                                             current_score=game_manager.score))
+    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+    return game_manager.update_cookies_for_new_question(response)
 
 
-def create_game_page3():
+def generate_countries_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
     # DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
@@ -152,28 +156,24 @@ def create_game_page3():
     right_answer = winner_artists[0] + "!@" + winner_artists[1]
     wrong_answers = calc_answers_artist_pairs(lst_of_bad_artists)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    try:
-        response = make_response(render_template('PairsGame.html',
-                                                 question=" Which of these pairs of artists come from the same country?",
-                                                 option_1_1=answers[0].split('!@')[0],
-                                                 option_1_2=answers[0].split('!@')[1],
-                                                 option_2_1=answers[1].split('!@')[0],
-                                                 option_2_2=answers[1].split('!@')[1],
-                                                 option_3_1=answers[2].split('!@')[0],
-                                                 option_3_2=answers[2].split('!@')[1],
-                                                 option_4_1=answers[3].split('!@')[0],
-                                                 option_4_2=answers[3].split('!@')[1],
-                                                 current_score=game_manager.score))
-        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-        return game_manager.update_cookies_for_new_question(response)
-    except Exception as e:
-        print "Error occurred with response"
-        print e.message
-        create_game_page()
-    return
+    response = make_response(render_template('PairsGame.html',
+                                             question=" Which of these pairs of artists come from the same country?",
+                                             option_1_1=answers[0].split('!@')[0],
+                                             option_1_2=answers[0].split('!@')[1],
+                                             option_2_1=answers[1].split('!@')[0],
+                                             option_2_2=answers[1].split('!@')[1],
+                                             option_3_1=answers[2].split('!@')[0],
+                                             option_3_2=answers[2].split('!@')[1],
+                                             option_4_1=answers[3].split('!@')[0],
+                                             option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
+                                             current_score=game_manager.score))
+    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+    return game_manager.update_cookies_for_new_question(response)
 
 
-def create_game_page2():
+def generate_songs_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
     # DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
@@ -183,25 +183,21 @@ def create_game_page2():
     right_answer = winner_songs[0][0] + "!@" + winner_songs[1][0]
     wrong_answers = calc_answers_song_pairs(lst_of_bad_songs)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    try:
-        response = make_response(render_template('PairsGame.html',
-                                                 question=" Which of these pairs of songs were released by the same artist?",
-                                                 option_1_1=answers[0].split('!@')[0],
-                                                 option_1_2=answers[0].split('!@')[1],
-                                                 option_2_1=answers[1].split('!@')[0],
-                                                 option_2_2=answers[1].split('!@')[1],
-                                                 option_3_1=answers[2].split('!@')[0],
-                                                 option_3_2=answers[2].split('!@')[1],
-                                                 option_4_1=answers[3].split('!@')[0],
-                                                 option_4_2=answers[3].split('!@')[1],
-                                                 current_score=game_manager.score))
-        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-        return game_manager.update_cookies_for_new_question(response)
-    except Exception as e:
-        print "Error occurred with response"
-        print e.message
-        create_game_page()
-    return
+    response = make_response(render_template('PairsGame.html',
+                                             question=" Which of these pairs of songs were released by the same artist?",
+                                             option_1_1=answers[0].split('!@')[0],
+                                             option_1_2=answers[0].split('!@')[1],
+                                             option_2_1=answers[1].split('!@')[0],
+                                             option_2_2=answers[1].split('!@')[1],
+                                             option_3_1=answers[2].split('!@')[0],
+                                             option_3_2=answers[2].split('!@')[1],
+                                             option_4_1=answers[3].split('!@')[0],
+                                             option_4_2=answers[3].split('!@')[1],
+                                             game=game_manager.answer_num + 1,
+                                             score=game_manager.score,
+                                             current_score=game_manager.score))
+    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+    return game_manager.update_cookies_for_new_question(response)
 
 
 def calc_answers_song_pairs(bad_songs):
@@ -223,14 +219,3 @@ def calc_answers_cover_pairs(bad_covers):
     for i in range(3):
         lst_of_answers.append(bad_covers.pop()[0] + "!@" + bad_covers.pop()[0])
     return lst_of_answers
-
-
-# TODO: delete the / route, this is just for debugging
-@app.route('/')
-def hello_world():
-    return "Imagine Assaf's Level Selection Page"
-
-
-# TODO: delete this, it should be only in 1 place (main page or something). this is just for debugging
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -9,7 +9,7 @@
 
     <title>&#9834; Mr.Music &#9834;</title>
 
-    <link rel="stylesheet" type="text/css" href="../static/TranslateGame.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/GameCommon.css"/>
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -34,14 +34,14 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Game Selection</a>
+                <a class="nav-link" href="/game_selection">Game Selection</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">HighScores</a>
+                <a class="nav-link" href="/highscores">HighScores</a>
             </li>
         </ul>
         <div><kbd>My Score: {{current_score}}</kbd></div>
@@ -102,7 +102,13 @@
             </button>
         </div>
     </div>
-
+    </br></br></br>
+    <div class="progress">
+        <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
+             aria-valuemax="100" >
+            {{score}}
+        </div>
+    </div>
     <hr>
 
     <footer>

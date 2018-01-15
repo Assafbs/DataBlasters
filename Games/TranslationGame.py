@@ -59,6 +59,8 @@ def create_game_page():
                                                  option_2=answers[1],
                                                  option_3=answers[2],
                                                  option_4=answers[3],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=game_manager.score,
                                                  current_score=game_manager.score))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
@@ -75,12 +77,6 @@ def calc_answers(connector, popular_words, answer_song_id, answer_song_name, lyr
                                                ('+'+popular_words[0], lyrics_lang, '+'+popular_words[1], lyrics_lang,
                                                 '+'+popular_words[2], lyrics_lang, '+'+popular_words[3], lyrics_lang,
                                                 '+'+popular_words[4], lyrics_lang, answer_song_id, answer_song_name))
-
-    # TODO: delete those print after testing
-    print('translate query: ' + QueryGenerator.get_translated_song_answers_query())
-    print('popular words: +' + popular_words[0] + ' +' + popular_words[1] + ' +' + popular_words[2] +
-          ' +' + popular_words[3] + ' +' + popular_words[4] + '\nlyricsLang: ' + lyrics_lang + ' ,answerSongId: ' +
-          str(answer_song_id) + ' ,answerSongName: ' + answer_song_name)
 
     res = []
     for row in rows:

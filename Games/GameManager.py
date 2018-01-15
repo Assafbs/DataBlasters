@@ -26,6 +26,7 @@ class GameManager:
 
         if self.answer_num == num_questions_per_game:
             # self.update_game_result() #TODO: fix nickname bug here
+            # TODO: Update the cookie with the new user score (call assaf's method get)score
             return redirect('/game_conclusion/' + str(self.score))
         else:
             return None

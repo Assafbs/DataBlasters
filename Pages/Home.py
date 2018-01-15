@@ -8,8 +8,7 @@ from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores
-from Pages.server import log_in
-from Pages.server import sign_up
+from Pages.server import log_in,sign_up,log_out
 
 app = Flask(__name__)
 app.register_blueprint(game_selection)
@@ -25,6 +24,7 @@ app.register_blueprint(rank_by_country_game)
 app.register_blueprint(rank_by_country_game_)
 app.register_blueprint(log_in)
 app.register_blueprint(sign_up)
+app.register_blueprint(log_out)
 
 app.secret_key = os.urandom(12)
 

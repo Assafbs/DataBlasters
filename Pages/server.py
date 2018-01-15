@@ -31,7 +31,7 @@ def login():
             else:
                 score=data[0]
             err = None
-            response= make_response(render_template('home.html'))
+            response = make_response(redirect('/'))
             return update_cookies_logged_in(nick,score,response)
         else:
             err = 'Invalid nickname or password. Please try again!\n If you are new to Mr. Music, please sign up'

@@ -137,7 +137,6 @@ def update_cookies_logged_in(nick,score,response):
     return response
 
 def update_cookies_logged_out(response):
-    response.set_cookie('logged_in','',expires=0)
     response.set_cookie('nickname', '', expires=0)
     response.set_cookie('score', '', expires=0)
     return response

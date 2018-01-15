@@ -1,4 +1,5 @@
 import os
+import Common.common
 from flask import Flask, render_template, make_response,request
 
 from Games.GameManager import game_conclusion
@@ -31,12 +32,10 @@ app.secret_key = os.urandom(12)
 @app.route('/')
 def create_game_selection_page():
     # TODO: replace with real score
-    nickname = ''
-    user_logon=''
-    if 'nickname' in request.cookies:
-        nickname = request.cookies.get('nickname')
-        if nickname != '':
-            user_logon = 'true'
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    user_logon = ''
+    if nickname is not None:
+        user_logon = 'true'
     response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon))
     return response
 

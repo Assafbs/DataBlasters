@@ -20,8 +20,7 @@ class GameManager:
     # if this function returns None, need to call the function for generating new question page
     def calc_mid_game(self, allow_access, points, num_questions_per_game, request):
         if allow_access != 'true':
-            return Response('You are not authorized to refresh in order to change question!', 401,
-                            {'WWWAuthenticate': 'Basic realm="Login Required"'})
+            return render_template('NotAuthorized.html')
         self.score += points
         self.answer_num += 1
 

@@ -2,9 +2,8 @@ import MySQLdb as mdb
 from flask import redirect, render_template, request, Blueprint, make_response
 from passlib.hash import pbkdf2_sha256
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
-# TODO logout button
 # TODO check out html form validation
 
 err = None

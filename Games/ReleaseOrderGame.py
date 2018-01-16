@@ -4,7 +4,7 @@ import GameManager
 import Common.common
 import sys
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
 
 GAME_ID = 6

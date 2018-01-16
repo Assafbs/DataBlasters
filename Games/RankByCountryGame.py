@@ -3,7 +3,7 @@ import random
 import Common.common
 import GameManager
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
 
 GAME_ID = 1

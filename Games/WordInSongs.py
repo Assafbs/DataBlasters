@@ -1,7 +1,7 @@
 from Common.word_scraper import get_dict_word_count
 from Common.db_connector import DbConnector
 from flask import Blueprint, render_template, request, make_response, redirect
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 import Common.common
 import GameManager
 import random

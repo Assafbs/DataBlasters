@@ -2,7 +2,7 @@ import time
 import Common.common
 from flask import redirect, render_template, Blueprint, make_response, request
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
 
 # game manager has an instance per game (for example translate game), and not per the whole application

@@ -1,6 +1,5 @@
-from flask import Flask, render_template, make_response, Blueprint, request, redirect
+from flask import render_template, make_response, Blueprint, request, redirect
 import Common.common
-from query_generator import QueryGenerator
 
 game_selection = Blueprint('game_selection', __name__, template_folder='templates')
 

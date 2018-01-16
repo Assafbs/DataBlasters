@@ -1,7 +1,7 @@
 from flask import render_template, make_response, Blueprint, request, redirect
 import Common.common
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
 
 highscores = Blueprint('highscores', __name__, template_folder='templates')

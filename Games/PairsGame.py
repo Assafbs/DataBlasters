@@ -4,7 +4,7 @@ from flask import render_template, request, make_response, Blueprint, redirect
 import GameManager
 import Common.common
 from Common.db_connector import DbConnector
-from query_generator import QueryGenerator
+from Common.query_generator import QueryGenerator
 
 connector = DbConnector()
 NUM_QUESTIONS_PER_GAME = 5

@@ -127,8 +127,8 @@ def signup():
             connector.execute_query(query, (nick, email, hash_password))
             connector.close()
             err = "You have signed up successfully! Let's Play!"
-            response=make_response(render_template('signup.html', error=err))
-            return update_cookies_logged_in(nick,0,response)
+            response = make_response(redirect('/'))
+            return update_cookies_logged_in(nick, 0, response)
         return render_template('signup.html', error=err) #TODO: maybe better route to homepage instead?
 
 

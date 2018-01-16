@@ -41,16 +41,13 @@ def get_list_of_results(query, n):
 
 def get_n_random_songs_from_artist(n, artist_id):
     lst_of_songs = list()
-    connector.execute_query(QueryGenerator.drop_view_songs_by_artist())
-    connector.execute_query(QueryGenerator.create_view_songs_by_artist(), artist_id)
-    rows = connector.get_all_results_for_query(QueryGenerator.get_n_random_songs_by_artist(), n)
+    rows = connector.get_all_results_for_query(QueryGenerator.get_n_random_songs_by_artist(), (artist_id, n))
     for row in rows:
         lst_of_songs.append((row[0], row[1]))
     return lst_of_songs
 
 
 def get_all_songs():
-    # lst_of_artists = DbConnector.get_n_random_artists(7)
     lst_of_artists = get_list_of_results(QueryGenerator.get_n_random_artists(), 7)
     winner_artist = random.randint(0, 6)
     lst_of_bad_songs = list()
@@ -123,8 +120,6 @@ def create_game_page():
 def generate_covers_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
-
-    connector.execute_query(QueryGenerator.create_view_possible_artists())
     winner_covers, bad_covers = get_all_covers()
     right_answer = winner_covers[0] + "!@" + winner_covers[1]
     wrong_answers = calc_answers_cover_pairs(bad_covers)
@@ -149,8 +144,7 @@ def generate_covers_game():
 def generate_countries_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
-    # DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
-    connector.execute_query(QueryGenerator.create_view_artists_per_country())
+
     winner_artists = translate_artist_id_list_to_artist_name_list(get_winning_artists_from_countries())
     lst_of_bad_artists = translate_artist_id_list_to_artist_name_list(get_bad_artists_from_countries())
     right_answer = winner_artists[0] + "!@" + winner_artists[1]
@@ -176,8 +170,6 @@ def generate_countries_game():
 def generate_songs_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
-    # DbConnector.create_view_songs_per_artists()  # need to drop view when finish game
-    connector.execute_query(QueryGenerator.create_view_songs_per_artists())
     winner_songs, lst_of_bad_songs = get_all_songs()
 
     right_answer = winner_songs[0][0] + "!@" + winner_songs[1][0]

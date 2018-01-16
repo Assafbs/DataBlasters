@@ -18,7 +18,7 @@ class GameManager:
         self.answer_num = 0
 
     # if this function returns None, need to call the function for generating new question page
-    def calc_mid_game(self, allow_access, points, num_questions_per_game):
+    def calc_mid_game(self, allow_access, points, num_questions_per_game, request):
         if allow_access != 'true':
             return Response('You are not authorized to refresh in order to change question!', 401,
                             {'WWWAuthenticate': 'Basic realm="Login Required"'})
@@ -26,7 +26,7 @@ class GameManager:
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
-            # self.update_game_result() #TODO: fix nickname bug here
+            self.update_game_result(request)
             # TODO: Update the cookie with the new user score (call assaf's method get)score
             return redirect('/game_conclusion/' + str(self.score))
         else:
@@ -39,9 +39,8 @@ class GameManager:
 
         return response
 
-    def update_game_result(self):
-        # nickname = Common.common.get_value_from_cookie(request, 'nickname') #TODO: pass request all the way to here
-        nickname = 'David'
+    def update_game_result(self, request):
+        nickname = Common.common.get_value_from_cookie(request, 'nickname')
         connector = DbConnector()
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
         connector.close()

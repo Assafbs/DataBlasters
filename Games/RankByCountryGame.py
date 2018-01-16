@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response, Response, Blueprint
 import MySQLdb as mdb
 import random
+import Common.common
 import sys
 import GameManager
 from db_connector import DbConnector
@@ -53,18 +54,25 @@ def generate_most_popular_song_question():
     answers = list(options)
     random.shuffle(answers)
 
-    response = make_response(render_template('RankByCountryGame.html',
-                                             question="Which of the following songs is ranked the highest in " + COUNTRIES[country_index] +"?",
-                                             option_1=answers[0],
-                                             option_2=answers[1],
-                                             option_3=answers[2],
-                                             option_4=answers[3],
-                                             game=game_manager.answer_num + 1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('RankByCountryGame.html',
+                                                 question="Which of the following songs is ranked the highest in " + COUNTRIES[country_index] +"?",
+                                                 option_1=answers[0],
+                                                 option_2=answers[1],
+                                                 option_3=answers[2],
+                                                 option_4=answers[3],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=user_score,
+                                                 game_score=game_manager.score))
 
-    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        create_game_page()
+
 
 def generate_in_which_country_is_most_popular_question():
     random_countries = random.sample(COUNTRIES, 4)

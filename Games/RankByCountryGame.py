@@ -45,6 +45,10 @@ def create_game_page():
 
 
 def generate_most_popular_song_question():
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     connector = DbConnector()
     country_index = game_manager.answer_num
     result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
@@ -64,6 +68,7 @@ def generate_most_popular_song_question():
                                                  option_4=answers[3],
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
+                                                 nickname=nickname,
                                                  game_score=game_manager.score))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
@@ -71,10 +76,14 @@ def generate_most_popular_song_question():
     except Exception as e:
         print "Error occurred with response"
         print e.message
-        create_game_page()
+        generate_most_popular_song_question()
 
 
 def generate_in_which_country_is_most_popular_question():
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()
     result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
@@ -87,20 +96,32 @@ def generate_in_which_country_is_most_popular_question():
     ranking = result[0][1:]
     right_answer = random_countries[ranking.index(min(ranking))] # The country with highest ranking.
 
-    response = make_response(render_template('RankByCountryGame.html',
-                                             question="In which country the song '" + song_name + "' is ranked the highest?" ,
-                                             option_1=random_countries[0],
-                                             option_2=random_countries[1],
-                                             option_3=random_countries[2],
-                                             option_4=random_countries[3],
-                                             game=game_manager.answer_num+1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('RankByCountryGame.html',
+                                                 question="In which country the song '" + song_name + "' is ranked the highest?" ,
+                                                 option_1=random_countries[0],
+                                                 option_2=random_countries[1],
+                                                 option_3=random_countries[2],
+                                                 option_4=random_countries[3],
+                                                 game=game_manager.answer_num+1,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
 
-    response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+        response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        generate_in_which_country_is_most_popular_question()
+
 
 def generate_in_which_country_is_least_popular_question():
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()
     result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
@@ -113,15 +134,23 @@ def generate_in_which_country_is_least_popular_question():
     ranking = result[0][1:]
     right_answer = random_countries[ranking.index(max(ranking))] # The country with highest ranking.
 
-    response = make_response(render_template('RankByCountryGame.html',
-                                             question="In which country the song '" + song_name + "' is ranked the lowest?" ,
-                                             option_1=random_countries[0],
-                                             option_2=random_countries[1],
-                                             option_3=random_countries[2],
-                                             option_4=random_countries[3],
-                                             game=game_manager.answer_num + 1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('RankByCountryGame.html',
+                                                 question="In which country the song '" + song_name + "' is ranked the lowest?" ,
+                                                 option_1=random_countries[0],
+                                                 option_2=random_countries[1],
+                                                 option_3=random_countries[2],
+                                                 option_4=random_countries[3],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
 
-    response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+        response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        generate_in_which_country_is_least_popular_question()

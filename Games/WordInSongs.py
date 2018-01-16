@@ -6,21 +6,21 @@ import pickle
 import GameManager
 import random
 
-GAME_ID = 5
+GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
+filename='../Games/frqWordCountDict.pickle'
 
 word_in_songs=Blueprint('word_in_songs', __name__, template_folder='templates')
 
-@translate_game.route('/word_in_songs')
-def translate_game_start():
+@word_in_songs.route('/word_in_songs')
+def word_in_songs_game_start():
     game_manager.start_new_game()
-
     return create_game_page()
 
-word_in_songs_mid = Blueprint('word_in_songs_mid', __name__, template_folder='templates')
-@translate_game_.route('/word_in_songs_mid')
-def translate_game_mid():
+word_in_songs_ = Blueprint('word_in_songs_', __name__, template_folder='templates')
+@word_in_songs_.route('/word_in_songs_')
+def word_in_songs_game_mid():
 
     allow_access = request.cookies.get('allowAccess')
     points = int(request.cookies.get('points'))
@@ -37,11 +37,12 @@ def create_game_page():
     #reload(sys)
     #sys.setdefaultencoding('UTF8')
 
-    with open('frqWordCountDict.pickle', 'rb') as fwcd:
+    with open(filename, 'rb') as fwcd:
         word_dict = pickle.load(fwcd)
     correct_answer=random.choice(word_dict.keys())
     connector = DbConnector()
-    songs = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(),(correct_answer,correct_answer))## add args
+    data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(),(correct_answer,correct_answer))
+    songs=[tup[0] for tup in data]
     wrong_answers= get_wrong_answers(connector,correct_answer,songs,word_dict) #TODO, returns 3 wrong answers
     connector.close()
     answers=random.sample(wrong_answers+[correct_answer],4)
@@ -64,7 +65,7 @@ def create_game_page():
         create_game_page()
 
 
-def get_wrong_answer(connector,correct_answer,songs,word_dict):
+def get_wrong_answers(connector,correct_answer,songs,word_dict):
 
     #use query on three words.
     # if there is one song that contains non of the words-ok.
@@ -115,12 +116,12 @@ def build_frq_word_dict():
         frq_word_dict.pop(key,None)
     return
 
-#build_frq_word_dict()
-#newfile='frqWordCountDict.pickle'
-#with open(newfile,'wb') as fwcd:
+# build_frq_word_dict()
+# newfile='frqWordCountDict.pickle'
+# with open(newfile,'wb') as fwcd:
 #    pickle.dump(frq_word_dict,fwcd)
-
-#with open('frqWordCountDict.pickle','rb') as fwcd:
+#
+# with open(newfile,'rb') as fwcd:
 #    dictionary=pickle.load(fwcd)
-#print dictionary==frq_word_dict
+# print dictionary==frq_word_dict
 

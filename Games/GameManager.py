@@ -1,6 +1,6 @@
 import time
 import Common.common
-from flask import redirect, Response, render_template, Blueprint, make_response
+from flask import redirect, Response, render_template, Blueprint, make_response, request
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
@@ -65,7 +65,13 @@ def create_game_conclusion_page(points):
         mood_gif = "https://static.tumblr.com/04027311832137002618110a602e2631/v3arm60/92Hoxigo1/tumblr_static_tumblr_static_crv29h2v35wg444s84g08osks_640.gif"
         label = ""
 
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+    score = Common.common.get_value_from_cookie(request, 'score')
     return render_template('gameConclusion.html',
+                           score=score,
+                           nickname=nickname,
                            label=label,
                            points=points,
                            mood_gif=mood_gif)

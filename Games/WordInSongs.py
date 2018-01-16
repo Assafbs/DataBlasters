@@ -144,7 +144,6 @@ ign_words=['he', 'she', 'her', 'has', 'his', 'hers', 'them', 'not', 'their', 'th
            'into','was','were','wanna','gonna','this','im','have','has'
            'what','let','can','cant','even','more','few','non','none','wanna'
            'use','only','commercial','','lyrics','which','we','our','at','and','dont']
-#TODO on the real db there is not line about commercial use so cand delete use,commercial and lyrics from list
 
 def build_frq_word_dict():
     global frq_word_dict
@@ -168,13 +167,4 @@ def build_frq_word_dict():
     return
 
 # build_frq_word_dict()
-# newfile='frqWordCountDict.pickle'
-# with open(newfile,'wb') as fwcd:
-#    pickle.dump(frq_word_dict,fwcd)
-#
-# with open(newfile,'rb') as fwcd:
-#    dictionary=pickle.load(fwcd)
-# for key in dictionary:
-#     val = dictionary[key]
-#     print "{"+key+":"+str(val)+"}"
 

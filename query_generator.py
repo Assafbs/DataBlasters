@@ -22,6 +22,42 @@ class QueryGenerator:
                LIMIT 1"""
 
     @staticmethod
+    def get_duets_question_query():
+        return """SELECT songs.title, art1.artist_id, art1.artist_name, art2.artist_id, art2.artist_name from performed_by as f_a1,
+          performed_by as f_a2, artists as art1, artists as art2,
+          songs
+            WHERE f_a1.song_id = f_a2.song_id and f_a1.artist_id > f_a2.artist_id
+                  and f_a1.artist_id = art1.artist_id and art2.artist_id = f_a2.artist_id
+                  and  songs.song_id = f_a1.song_id
+            GROUP BY f_a1.artist_id , f_a2.artist_id
+            ORDER BY rand()
+               LIMIT 1;"""
+
+
+
+    @staticmethod
+    def get_duets_answers_query():
+        return """SELECT artist_name from artists
+                  where artist_name not like %s and artist_name not like %s and artist_name not like %s
+                    and artist_name not in (SELECT art1.artist_name from performed_by as f_a1,
+                      performed_by as f_a2, artists as art1, artists as art2, songs
+                        WHERE f_a1.song_id = f_a2.song_id and f_a1.artist_id <> f_a2.artist_id
+                              and f_a1.artist_id = art1.artist_id and f_a2.artist_id = %s
+                              and  songs.song_id = f_a1.song_id
+                        GROUP BY f_a1.artist_id , f_a2.artist_id)
+                          ORDER BY rand()
+                            LIMIT 3;"""
+
+    @staticmethod
+    def get_word_in_song_question_query():
+        return """SELECT songs.song_id, songs.title, lyrics.lyrics
+                   FROM lyrics JOIN songs ON lyrics.song_id = songs.song_id
+                   WHERE songs.rank > 70
+                   ORDER BY rand()
+                   LIMIT 1"""
+
+
+    @staticmethod
     def get_translated_song_answers_query():
         return """SELECT DISTINCT songs.title, (count(*) - 1) AS numWords
                FROM songs JOIN (

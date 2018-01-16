@@ -1,7 +1,7 @@
 import time
 import Common.common
-from flask import redirect, Response, render_template, Blueprint, make_response, request
-from db_connector import DbConnector
+from flask import redirect, render_template, Blueprint, make_response, request
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 

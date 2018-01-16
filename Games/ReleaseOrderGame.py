@@ -3,7 +3,7 @@ import random
 import GameManager
 import Common.common
 import sys
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 

@@ -1,7 +1,6 @@
-from flask import Flask, render_template, make_response, Blueprint, request, redirect
-from Games import GameManager
+from flask import render_template, make_response, Blueprint, request, redirect
 import Common.common
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 

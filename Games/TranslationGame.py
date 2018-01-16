@@ -4,7 +4,7 @@ import random
 import Common.common
 import sys
 import GameManager
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 # TODO: delete after ready: mdb.connect('localhost', 'root', 'Password!1', "mrmusic")

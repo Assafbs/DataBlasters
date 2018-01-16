@@ -3,7 +3,7 @@ import sys
 from flask import render_template, request, make_response, Blueprint, redirect
 import GameManager
 import Common.common
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 connector = DbConnector()

@@ -1,7 +1,7 @@
 import MySQLdb as mdb
-from flask import Flask, redirect, render_template, request, url_for, Blueprint, Response, make_response
+from flask import redirect, render_template, request, Blueprint, make_response
 from passlib.hash import pbkdf2_sha256
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 # TODO logout button

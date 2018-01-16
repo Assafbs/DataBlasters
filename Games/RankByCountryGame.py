@@ -1,10 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, make_response, Response, Blueprint
-import MySQLdb as mdb
+from flask import render_template, redirect, request, make_response, Blueprint
 import random
 import Common.common
-import sys
 import GameManager
-from db_connector import DbConnector
+from Common.db_connector import DbConnector
 from query_generator import QueryGenerator
 
 

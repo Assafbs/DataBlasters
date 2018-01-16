@@ -50,7 +50,6 @@ def create_highscores_page(category, num):
     dummy_user = ("", "")
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user, )
-        print top_users
     response = make_response(render_template('highscores.html',
                                              category=category,
                                              score=user_score,

@@ -27,7 +27,7 @@ release_order_game_ = Blueprint('release_order_game_', __name__, template_folder
 def release_order_game_mid():
     allow_access = request.cookies.get('allowAccess')
     global curr_question_points
-    response = game_manager.calc_mid_game(allow_access, curr_question_points, NUM_QUESTIONS_PER_GAME)
+    response = game_manager.calc_mid_game(allow_access, curr_question_points, NUM_QUESTIONS_PER_GAME, request)
 
     if response is None:
         return handle_route(request)

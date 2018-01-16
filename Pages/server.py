@@ -13,6 +13,7 @@ log_in = Blueprint('log_in', __name__, template_folder='templates')
 sign_up = Blueprint('sign_up', __name__, template_folder='templates')
 log_out = Blueprint('log_out',__name__, template_folder='templates')
 
+
 @log_in.route('/log_in', methods=['POST', 'GET'])
 def login():
     global err
@@ -23,15 +24,15 @@ def login():
         nick = mdb.escape_string(request.form['nickname'])
         password = request.form['pwd']
         if authenticate(nick, password):
-            query=QueryGenerator.get_score()
-            connector=DbConnector()
-            data=connector.get_one_result_for_query(query,(nick,nick))
-            if (data[0]==None):
-                score=0
+            query = QueryGenerator.get_score()
+            connector = DbConnector()
+            data = connector.get_one_result_for_query(query,(nick,nick))
+            if data[0] is None:
+                score = 0
             else:
-                score=data[0]
+                score = data[0]
             err = None
-            response= make_response(render_template('home.html'))
+            response = make_response(redirect('/'))
             return update_cookies_logged_in(nick,score,response)
         else:
             err = 'Invalid nickname or password. Please try again!\n If you are new to Mr. Music, please sign up'
@@ -87,13 +88,25 @@ def id_valid_sign_up_input(nick, email, password):
     if not password.isalnum():
         err = "Password can contain only numbers and letters"
         return False
+    query = "SELECT * FROM users WHERE nickname = %s"
+    connector = DbConnector()
+    data = connector.get_one_result_for_query(query, (nick,))
+    if data is not None:
+        err= "This username is already taken. Please choose a different one"
+        return False
+    query = "SELECT * FROM users WHERE email = %s"
+    data = connector.get_one_result_for_query(query, (email,))
+    if data is not None:
+        err= "This email is already in use"
+        return False
+    connector.close()
     return True
 
 
-@log_out.route('/logout')
+@log_out.route('/log_out')
 def logout():
-   response=make_response(render_template('home.html'))
-   return update_cookies_logged_out()
+    response = make_response(render_template('home.html'))
+    return update_cookies_logged_out(response)
 
 
 @sign_up.route('/sign_up', methods=['POST', 'GET'])
@@ -109,21 +122,23 @@ def signup():
 
         if id_valid_sign_up_input(nick, email, password):
             hash_password = pbkdf2_sha256.hash(password)
-            length = len(hash_password)
             query = "INSERT INTO users VALUES(%s,%s,%s)"
             connector = DbConnector()
             connector.execute_query(query, (nick, email, hash_password))
             connector.close()
             err = "You have signed up successfully! Let's Play!"
             response=make_response(render_template('signup.html', error=err))
-            return update_cookies_logged_in(nick,score,response)
-        return render_template('signup.html', error=err)
+            return update_cookies_logged_in(nick,0,response)
+        return render_template('signup.html', error=err) #TODO: maybe better route to homepage instead?
+
 
 def update_cookies_logged_in(nick,score,response):
-    response.set_cookie('nickname',nick)
-    response.set_cookie('logged_in','true')
-    response.set_cookie('score',str(score))
+    response.set_cookie('nickname', nick)
+    response.set_cookie('score', str(score))
     return response
 
+
 def update_cookies_logged_out(response):
-    response.set_cookie('sessionID','',expires=0)
+    response.set_cookie('nickname', '', expires=0)
+    response.set_cookie('score', '', expires=0)
+    return response

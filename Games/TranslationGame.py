@@ -27,7 +27,7 @@ def translate_game_mid():
 
     allow_access = request.cookies.get('allowAccess')
     points = int(request.cookies.get('points'))
-    response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME)
+    response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME, request)
 
     if response is None:
         return create_game_page()

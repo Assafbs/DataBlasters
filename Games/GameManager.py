@@ -1,7 +1,6 @@
 import time
-from flask import redirect, Response, render_template, Blueprint
-
-#from Pages.server import session
+import Common.common
+from flask import redirect, Response, render_template, Blueprint, make_response
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
@@ -19,7 +18,7 @@ class GameManager:
         self.answer_num = 0
 
     # if this function returns None, need to call the function for generating new question page
-    def calc_mid_game(self, allow_access, points, num_questions_per_game):
+    def calc_mid_game(self, allow_access, points, num_questions_per_game, request):
         if allow_access != 'true':
             return Response('You are not authorized to refresh in order to change question!', 401,
                             {'WWWAuthenticate': 'Basic realm="Login Required"'})
@@ -27,9 +26,11 @@ class GameManager:
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
-            # self.update_game_result() #TODO: fix nickname bug here
-            # TODO: Update the cookie with the new user score (call assaf's method get)score
-            return redirect('/game_conclusion/' + str(self.score))
+            nickname = Common.common.get_value_from_cookie(request, 'nickname')
+            self.update_game_result(nickname)
+            response = make_response(redirect('/game_conclusion/' + str(self.score)))
+            response = self.update_cookie_with_new_score(nickname, response)
+            return response
         else:
             return None
 
@@ -40,12 +41,19 @@ class GameManager:
 
         return response
 
-    def update_game_result(self):
-        # nickname = session['nickname']
-        nickname = 'David'
+    def update_game_result(self, nickname):
         connector = DbConnector()
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
         connector.close()
+
+    def update_cookie_with_new_score(self, nickname, response):
+        connector = DbConnector()
+        new_score_row = connector.get_one_result_for_query(QueryGenerator.get_score(), (nickname, nickname))
+        new_score = str(new_score_row[0])
+        connector.close()
+        response.set_cookie('score', new_score)
+
+        return response
 
 
 game_conclusion = Blueprint('game_conclusion', __name__, template_folder='templates')

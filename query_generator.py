@@ -347,7 +347,7 @@ class QueryGenerator:
                     SELECT song_id,lyrics
                     FROM lyrics
 					WHERE lyrics_language='en'
-                    AND MATCH(lyrics) AGAINST('%s' in natural language mode))lycs 
+                    AND MATCH(lyrics) AGAINST(%s in natural language mode))lycs 
 				ON songs.song_id=lycs.song_id
 		WHERE songs.title NOT LIKE %s
 		ORDER BY rand()

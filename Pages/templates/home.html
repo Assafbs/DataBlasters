@@ -41,12 +41,19 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-right">
-            <li class="nav-item">
-                <a class="nav-link" href="/sign_up">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/log_in">Login</a>
-            </li>
+            {% if user_logon %}
+                <div><kbd>Nickname: {{nickname}}</kbd></div>
+                <li class="nav-item">
+                    <a class="nav-link" href="/log_out">Log out</a>
+                </li>
+            {% else %}
+                <<li class="nav-item">
+                    <a class="nav-link" href="/sign_up">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/log_in">Login</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

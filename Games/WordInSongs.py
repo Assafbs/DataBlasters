@@ -33,9 +33,9 @@ def word_in_songs_game_mid():
         return response
 
 def create_game_page():
-    # if game_manager.answer_num % 2 == 1:
-    #     return create_words_in_song_game_page()
-    # else:
+    if game_manager.answer_num % 2 == 1:
+        return create_words_in_song_game_page()
+    else:
         return create_3_songs_game_page()
 
 def create_3_songs_game_page():

@@ -48,4 +48,4 @@ def create_game_selection_page():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # TODO: delete this, this is just for debugging
+    app.run(host='0.0.0.0')

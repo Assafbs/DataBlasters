@@ -1,7 +1,8 @@
 from word_scraper import get_dict_word_count
 from db_connector import DbConnector
-from flask import Blueprint, render_template, request, make_response
+from flask import Blueprint, render_template, request, make_response, redirect
 from query_generator import QueryGenerator
+import Common.common
 import pickle
 import GameManager
 import random
@@ -96,6 +97,10 @@ def get_wrong_answers(connector,correct_answer,songs,word_dict):
 
 def create_words_in_song_game_page():
 
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     connector = DbConnector()
     song_row = connector.get_one_result_for_query(QueryGenerator.get_word_in_song_question_query())
 
@@ -108,6 +113,7 @@ def create_words_in_song_game_page():
     answers = random.sample(wrong_answers + [right_answer], 4)
 
     try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('WordInSongGame.html',
                                                  question=song_row[1],
                                                  option_1=answers[0],
@@ -115,15 +121,16 @@ def create_words_in_song_game_page():
                                                  option_3=answers[2],
                                                  option_4=answers[3],
                                                  game=game_manager.answer_num + 1,
-                                                 score=game_manager.score,
-                                                 current_score=game_manager.score))
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
     except Exception as e:
         print "Error occurred with response"
         print e.message
-        create_game_page()
+        create_words_in_song_game_page()
 
 ############################
 

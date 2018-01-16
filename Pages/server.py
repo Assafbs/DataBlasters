@@ -129,7 +129,7 @@ def signup():
             err = "You have signed up successfully! Let's Play!"
             response = make_response(redirect('/'))
             return update_cookies_logged_in(nick, 0, response)
-        return render_template('signup.html', error=err) #TODO: maybe better route to homepage instead?
+        return render_template('signup.html', error=err)
 
 
 def update_cookies_logged_in(nick,score,response):

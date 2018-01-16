@@ -6,6 +6,7 @@ from Games.PairsGame import pairs_game, pairs_game_
 from Games.RankByCountryGame import rank_by_country_game, rank_by_country_game_
 from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
+from Games.DuetsGame import duets_game, duets_game_
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores
 from Pages.server import log_in
@@ -19,6 +20,8 @@ app.register_blueprint(release_order_game)
 app.register_blueprint(release_order_game_)
 app.register_blueprint(translate_game)
 app.register_blueprint(translate_game_)
+app.register_blueprint(duets_game)
+app.register_blueprint(duets_game_)
 app.register_blueprint(pairs_game)
 app.register_blueprint(pairs_game_)
 app.register_blueprint(rank_by_country_game)

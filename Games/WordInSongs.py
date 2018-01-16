@@ -46,18 +46,19 @@ def create_3_songs_game_page():
 
     with open(filename, 'rb') as fwcd:
         word_dict = pickle.load(fwcd)
-    correct_answer=random.choice(word_dict.keys())
+    correct_answer = random.choice(word_dict.keys())
     connector = DbConnector()
-    data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(),(correct_answer,correct_answer))
-    songs=[tup[0] for tup in data]
-    wrong_answers= get_wrong_answers(connector,correct_answer,songs,word_dict) #TODO, returns 3 wrong answers
+    data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(), (correct_answer, correct_answer))
+    songs = [tup[0] for tup in data]
+    wrong_answers = get_wrong_answers(connector, correct_answer, songs, word_dict) #TODO, returns 3 wrong answers
     connector.close()
-    answers=random.sample(wrong_answers+[correct_answer],4)
+    answers = random.sample(wrong_answers+[correct_answer], 4)
+    question_kind = "Which one of the words appear in all the following songs:"
+    question = ", ".join(songs[0:3])
     try:
-        response = make_response(render_template('WordInSongs.html',
-                                                 songName1=songs[0],
-                                                 songName2=songs[1],
-                                                 songName3=songs[2],
+        response = make_response(render_template('WordInSongGame.html',
+                                                 question=question,
+                                                 question_kind=question_kind,
                                                  option_1=answers[0],
                                                  option_2=answers[1],
                                                  option_3=answers[2],
@@ -111,11 +112,13 @@ def create_words_in_song_game_page():
 
     connector.close()
     answers = random.sample(wrong_answers + [right_answer], 4)
+    question_kind = "Which of the following words appears the most in the song? "
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('WordInSongGame.html',
                                                  question=song_row[1],
+                                                 question_kind=question_kind,
                                                  option_1=answers[0],
                                                  option_2=answers[1],
                                                  option_3=answers[2],

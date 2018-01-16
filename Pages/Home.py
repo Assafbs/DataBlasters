@@ -42,7 +42,8 @@ def create_game_selection_page():
     user_logon = ''
     if nickname is not None:
         user_logon = 'true'
-    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon))
+    user_score = Common.common.get_value_from_cookie(request, 'score')
+    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=user_score))
     return response
 
 

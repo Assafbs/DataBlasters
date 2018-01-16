@@ -3,7 +3,6 @@ from db_connector import DbConnector
 from flask import Blueprint, render_template, request, make_response, redirect
 from query_generator import QueryGenerator
 import Common.common
-import pickle
 import GameManager
 import random
 from word_scraper import get_5_popular_words
@@ -11,7 +10,6 @@ from word_scraper import get_5_popular_words
 GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
-filename='../Games/frqWordCountDict.pickle'
 
 word_in_songs=Blueprint('word_in_songs', __name__, template_folder='templates')
 
@@ -45,13 +43,16 @@ def create_3_songs_game_page():
     if nickname is None:
         return redirect('/')
 
-    with open(filename, 'rb') as fwcd:
-        word_dict = pickle.load(fwcd)
-    correct_answer = random.choice(word_dict.keys())
     connector = DbConnector()
+    query="SELECT word FROM frequent_words ORDER BY RAND() LIMIT 1"
+    correct_answer = connector.get_one_result_for_query(query)[0]
     data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(), (correct_answer, correct_answer))
+    while (len(data)<3):
+        correct_answer = connector.get_one_result_for_query(query)[0]
+        data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(),
+                                                   (correct_answer, correct_answer))
     songs = [tup[0] for tup in data]
-    wrong_answers = get_wrong_answers(connector, correct_answer, songs, word_dict) #TODO, returns 3 wrong answers
+    wrong_answers = get_wrong_answers(connector, correct_answer, songs,query) #TODO, returns 3 wrong answers
     connector.close()
     answers = random.sample(wrong_answers+[correct_answer], 4)
     question_kind = "Which one of the words appear in all the following songs:"
@@ -78,19 +79,16 @@ def create_3_songs_game_page():
         create_game_page()
 
 
-def get_wrong_answers(connector,correct_answer,songs,word_dict):
+def get_wrong_answers(connector,correct_answer,songs,query):
 
-    #use query on three words.
-    # if there is one song that contains non of the words-ok.
-    #else keep randomizign -- think of a better way to do that..
     res = []
     while (len(res)<3):
-        answer=random.choice(word_dict.keys())
-        while(answer==correct_answer):
-            answer = random.choice(word_dict.keys())
+        answer=connector.get_one_result_for_query(query)[0]
+        while answer==correct_answer or answer in res:
+            answer = connector.get_one_result_for_query(query)
         for song in songs: #every answer should have at least one song it does not appear in
             data=connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_not_contain(),
-                                                     (answer,answer,song)) #might need to add '' to args
+                                                     (answer,answer,song))
             if len(data)>0: #if we get back the name of the song, answer is not in it
                 res.append(answer)
                 break
@@ -110,7 +108,7 @@ def create_words_in_song_game_page():
 
     lyrics = song_row[2]
     popular_words = get_5_popular_words(lyrics)
-    right_answer = popular_words[0];
+    right_answer = popular_words[0]
     wrong_answers = popular_words[1:4]
 
     connector.close()
@@ -163,7 +161,7 @@ def build_frq_word_dict():
                     frq_word_dict.update({word:frq_word_dict[word]+1})
     del_lst=[]
     for key in frq_word_dict:
-        if frq_word_dict[key]<20:
+        if frq_word_dict[key]<20 or len(key)<2:
             del_lst.append(key)
     for key in del_lst:
         frq_word_dict.pop(key,None)
@@ -176,5 +174,7 @@ def build_frq_word_dict():
 #
 # with open(newfile,'rb') as fwcd:
 #    dictionary=pickle.load(fwcd)
-# print dictionary==frq_word_dict
+# for key in dictionary:
+#     val = dictionary[key]
+#     print "{"+key+":"+str(val)+"}"
 

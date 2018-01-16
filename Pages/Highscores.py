@@ -1,5 +1,6 @@
-from flask import Flask, render_template, make_response, Blueprint
+from flask import Flask, render_template, make_response, Blueprint, request
 from Games import GameManager
+import Common.common
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
@@ -16,8 +17,9 @@ def create_game_selection_page():
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user, )
         print top_users
+    user_score = Common.common.get_value_from_cookie(request, 'score')
     response = make_response(render_template('highscores.html',
-                                             current_score=game_manager.score,
+                                             current_score=user_score,
                                              user_1=top_users[0][0],
                                              score_user_1=top_users[0][1],
                                              user_2=top_users[1][0],

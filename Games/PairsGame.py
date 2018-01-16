@@ -124,7 +124,7 @@ def generate_covers_game():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     winner_covers, bad_covers = get_all_covers()
     right_answer = winner_covers[0] + "!@" + winner_covers[1]
@@ -160,7 +160,7 @@ def generate_countries_game():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     winner_artists = translate_artist_id_list_to_artist_name_list(get_winning_artists_from_countries())
     lst_of_bad_artists = translate_artist_id_list_to_artist_name_list(get_bad_artists_from_countries())
@@ -198,7 +198,7 @@ def generate_songs_game():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     winner_songs, lst_of_bad_songs = get_all_songs()
     right_answer = winner_songs[0][0] + "!@" + winner_songs[1][0]

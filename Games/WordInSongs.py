@@ -41,7 +41,7 @@ def create_3_songs_game_page():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     query="SELECT word FROM frequent_words ORDER BY RAND() LIMIT 1"
@@ -101,7 +101,7 @@ def create_words_in_song_game_page():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     song_row = connector.get_one_result_for_query(QueryGenerator.get_word_in_song_question_query())

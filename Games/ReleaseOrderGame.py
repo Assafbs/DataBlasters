@@ -42,7 +42,7 @@ def handle_route(request):
     elif request.method == 'POST':
         nickname = Common.common.get_value_from_cookie(request, 'nickname')
         if nickname is None:
-            return redirect('/')
+            return redirect('/log_in')
 
         global ordered_answers
         user_ordered_answers = [request.form['song1'], request.form['song2'],
@@ -72,7 +72,7 @@ def create_game_page():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     rand_song_row = connector.get_one_result_for_query(QueryGenerator.get_release_order_question_query())

@@ -42,7 +42,7 @@ def create_highscores_page():
 def create_highscores_page(category, num):
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
     user_score = Common.common.get_value_from_cookie(request, 'score')
     connector = DbConnector()
     top_users = get_relevant_result(connector, num)

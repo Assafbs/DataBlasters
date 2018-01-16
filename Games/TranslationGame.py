@@ -43,7 +43,7 @@ def create_game_page():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     connector.execute_query(QueryGenerator.setting_for_read_hebrew_from_db_query())

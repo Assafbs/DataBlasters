@@ -8,7 +8,7 @@ game_selection = Blueprint('game_selection', __name__, template_folder='template
 def create_game_selection_page():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
     score = Common.common.get_value_from_cookie(request, 'score')
     response = make_response(render_template('game_selection.html', score=score, nickname=nickname))
     return response

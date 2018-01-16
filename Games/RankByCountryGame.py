@@ -45,7 +45,7 @@ def create_game_page():
 def generate_most_popular_song_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     country_index = game_manager.answer_num
@@ -80,7 +80,7 @@ def generate_most_popular_song_question():
 def generate_in_which_country_is_most_popular_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()
@@ -118,7 +118,7 @@ def generate_in_which_country_is_most_popular_question():
 def generate_in_which_country_is_least_popular_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()

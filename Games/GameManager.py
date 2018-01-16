@@ -66,7 +66,7 @@ def create_game_conclusion_page(points):
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
     score = Common.common.get_value_from_cookie(request, 'score')
     return render_template('gameConclusion.html',
                            score=score,

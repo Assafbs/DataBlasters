@@ -38,7 +38,7 @@ def create_game_page():
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
-        return redirect('/')
+        return redirect('/log_in')
 
     connector = DbConnector()
     answer_row = connector.get_one_result_for_query(QueryGenerator.get_duets_question_query())

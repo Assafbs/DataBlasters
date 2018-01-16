@@ -1,15 +1,15 @@
 import MySQLdb as mdb
 
 ADDRESS = 'localhost'
-USERNAME = 'root'
-PASSWORD = 'root'   #'Armageddon1'
-SCHEMA = 'dbmysql09'           #'mr_music2'
+USERNAME = 'DbMysql09'  # 'root'
+PASSWORD = 'DbMysql09'  # 'root'   #'Armageddon1'
+SCHEMA = 'DbMysql09'  # 'dbmysql09'           #'mr_music2'
 
 
 class DbConnector:
 
     def __init__(self):
-        self.con = mdb.connect(ADDRESS, USERNAME, PASSWORD, SCHEMA)
+        self.con = mdb.connect(ADDRESS, USERNAME, PASSWORD, SCHEMA, port=3305)
         self.cur = self.con.cursor()
 
     def close(self):
@@ -36,4 +36,3 @@ class DbConnector:
         else:
             self.cur.execute(query, arguments)
         return self.cur.fetchall()
-

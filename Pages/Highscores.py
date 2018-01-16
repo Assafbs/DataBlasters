@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, Blueprint, request
+from flask import Flask, render_template, make_response, Blueprint, request, redirect
 from Games import GameManager
 import Common.common
 from db_connector import DbConnector
@@ -10,6 +10,10 @@ game_manager = GameManager.GameManager(3)
 highscores = Blueprint('highscores', __name__, template_folder='templates')
 @highscores.route('/highscores')
 def create_game_selection_page():
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+    user_score = Common.common.get_value_from_cookie(request, 'score')
     connector = DbConnector()
     top_users = connector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
     connector.close()
@@ -17,9 +21,9 @@ def create_game_selection_page():
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user, )
         print top_users
-    user_score = Common.common.get_value_from_cookie(request, 'score')
     response = make_response(render_template('highscores.html',
-                                             current_score=user_score,
+                                             score=user_score,
+                                             nickname=nickname,
                                              user_1=top_users[0][0],
                                              score_user_1=top_users[0][1],
                                              user_2=top_users[1][0],

@@ -39,10 +39,11 @@ app.secret_key = os.urandom(12)
 def create_game_selection_page():
     # TODO: replace with real score
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    score = Common.common.get_value_from_cookie(request, 'score')
     user_logon = ''
     if nickname is not None:
         user_logon = 'true'
-    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon))
+    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=score))
     return response
 
 

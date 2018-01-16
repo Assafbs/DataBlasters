@@ -42,7 +42,8 @@
         </ul>
         <ul class="navbar-nav navbar-right">
             {% if user_logon %}
-                <div><kbd>Nickname: {{nickname}}</kbd></div>
+                <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
+                <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
                 <li class="nav-item">
                     <a class="nav-link" href="/log_out">Log out</a>
                 </li>

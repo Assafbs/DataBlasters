@@ -1,6 +1,7 @@
-from flask import render_template, request, make_response, Blueprint
+from flask import render_template, request, make_response, Blueprint, redirect
 import random
 import GameManager
+import Common.common
 import sys
 from db_connector import DbConnector
 from query_generator import QueryGenerator
@@ -39,6 +40,10 @@ def handle_route(request):
     if request.method == 'GET':
         return create_game_page()
     elif request.method == 'POST':
+        nickname = Common.common.get_value_from_cookie(request, 'nickname')
+        if nickname is None:
+            return redirect('/')
+
         global ordered_answers
         user_ordered_answers = [request.form['song1'], request.form['song2'],
                                 request.form['song3'], request.form['song4']]
@@ -51,8 +56,10 @@ def handle_route(request):
         next_button_content = 'Next Question'
         if (game_manager.answer_num + 1) == NUM_QUESTIONS_PER_GAME:
             next_button_content = 'Finish Game'
+        user_score = Common.common.get_value_from_cookie(request, 'score')
         return render_template('ReleaseOrderGameScore.html',
-                               current_score=game_manager.score,
+                               score=user_score,
+                               nickname=nickname,
                                num_correct=num_correct_songs,
                                points=curr_question_points,
                                next_content=next_button_content)
@@ -62,6 +69,10 @@ def create_game_page():
     # Avoiding UnicodeDecodeError
     reload(sys)
     sys.setdefaultencoding('UTF8')
+
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
 
     connector = DbConnector()
     rand_song_row = connector.get_one_result_for_query(QueryGenerator.get_release_order_question_query())
@@ -90,10 +101,12 @@ def create_game_page():
     rand_order_answers = random.sample(ordered_answers, 4)
 
     try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('ReleaseOrderGame.html',
                                                  game=game_manager.answer_num + 1,
-                                                 score=game_manager.score,
-                                                 current_score=game_manager.score,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score,
                                                  question='"' + '",  "'.join(rand_order_answers) + '"',
                                                  option_1=rand_order_answers[0],
                                                  option_2=rand_order_answers[1],

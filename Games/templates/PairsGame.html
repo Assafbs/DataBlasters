@@ -60,7 +60,7 @@
     <div class="row">
         <div class="col-md-4">
             <p>
-                <button id="button1" class="btn btn-secondary" style="text-align:left; cursor:pointer"
+                <button id="button1" class="btn btn-secondary" style="text-align:left; cursor:pointer; margin-left:20px"
                         onclick="onAnswer(1)">
                     1. {{option_1_1.decode('latin-1')}}<br>2. {{option_1_2.decode('latin-1')}}
                 </button>
@@ -68,7 +68,8 @@
         </div>
         <div class="col-md-4">
             <p>
-                <button id="button2" class="btn btn-secondary" style="text-align:left; cursor:pointer"
+                <button id="button2" class="btn btn-secondary"
+                        style="text-align:left; cursor:pointer; margin-right:20px"
                         onclick="onAnswer(2)">
                     1. {{option_2_1.decode('latin-1')}}<br>2. {{option_2_2.decode('latin-1')}}
                 </button>
@@ -78,7 +79,7 @@
     <div class="row">
         <div class="col-md-4">
             <p>
-                <button id="button3" class="btn btn-secondary" style="text-align:left; cursor:pointer"
+                <button id="button3" class="btn btn-secondary" style="text-align:left; cursor:pointer; margin-left:20px"
                         onclick="onAnswer(3)">
                     1. {{option_3_1.decode('latin-1')}}<br>2. {{option_3_2.decode('latin-1')}}
                 </button>
@@ -86,7 +87,8 @@
         </div>
         <div class="col-md-4">
             <p>
-                <button id="button4" class="btn btn-secondary" style="text-align:left; cursor:pointer"
+                <button id="button4" class="btn btn-secondary"
+                        style="text-align:left; cursor:pointer; margin-right:20px"
                         onclick="onAnswer(4)">
                     1. {{option_4_1.decode('latin-1')}}<br>2. {{option_4_2.decode('latin-1')}}
                 </button>
@@ -109,7 +111,7 @@
     </br></br></br>
     <div class="progress">
         <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
-             aria-valuemax="100" >
+             aria-valuemax="100">
             {{score}}
         </div>
     </div>

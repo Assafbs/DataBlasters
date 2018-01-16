@@ -117,9 +117,37 @@ class QueryGenerator:
                   ORDER BY final_score DESC"""
 
     @staticmethod
+    def get_user_scores_for_game():
+        return """"""
+
+    @staticmethod
+    def get_user_scores_for_game():
+        return """SELECT ROUND(max_score + 10 *LOG2(total),2) AS final_score, total AS total_points
+                  FROM (SELECT SUM(score) AS total
+                          FROM scores
+                          WHERE game_id = %s AND nickname = %s) AS total_for_user,
+                          (SELECT MAX(score) AS max_score
+                          FROM scores
+                          WHERE game_id = %s AND nickname = %s) AS max_for_user"""
+
+    @staticmethod
     def get_score():
         return """SELECT ROUND(SUM(total_per_game.final_score_per_game),2) AS final_score
                   FROM (SELECT total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game
+                        FROM (SELECT nickname, game_id, SUM(score) AS total
+                              FROM scores
+                              WHERE nickname = %s
+                              GROUP BY game_id) AS total_per_game,
+                              (SELECT nickname, game_id, MAX(score) AS max_score
+                              FROM scores
+                              WHERE nickname = %s
+                              GROUP BY game_id) AS max_per_game
+                        WHERE total_per_game.game_id = max_per_game.game_id) AS total_per_game"""
+
+    @staticmethod
+    def get_score_and_total_points():
+        return """SELECT ROUND(SUM(total_per_game.final_score_per_game),2) AS final_score, SUM(total_points_per_game) AS total_points
+                 FROM (SELECT total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game, total AS total_points_per_game
                         FROM (SELECT nickname, game_id, SUM(score) AS total
                               FROM scores
                               WHERE nickname = %s

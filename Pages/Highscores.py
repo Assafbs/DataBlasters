@@ -46,6 +46,7 @@ def create_highscores_page(category, num):
     user_score = Common.common.get_value_from_cookie(request, 'score')
     connector = DbConnector()
     top_users = get_relevant_result(connector, num)
+    users_scores = get_relevant_user_scores(connector, num, nickname)
     connector.close()
     dummy_user = ("", "")
     while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
@@ -54,6 +55,8 @@ def create_highscores_page(category, num):
                                              category=category,
                                              score=user_score,
                                              nickname=nickname,
+                                             user_score=users_scores[0][0],
+                                             user_total_points=users_scores[0][1],
                                              tab1=get_tab_class(1, num),
                                              tab2=get_tab_class(2, num),
                                              tab3=get_tab_class(3, num),
@@ -95,6 +98,15 @@ def get_relevant_result(connector, num):
             return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
         else:
             return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query_for_game(),(num-1,num-1))
+
+def get_relevant_user_scores(connector, num, nickname):
+    if num == 1:
+        users_scores = connector.get_all_results_for_query(QueryGenerator.get_score_and_total_points(), (nickname, nickname))
+    else:
+        users_scores = connector.get_all_results_for_query(QueryGenerator.get_user_scores_for_game(), (num - 1, nickname, num - 1, nickname))
+    if len(users_scores) == 0 or users_scores[0][0] is None:
+        users_scores = [(0, 0)]
+    return users_scores
 
 def clean(arg):
     if arg is None:

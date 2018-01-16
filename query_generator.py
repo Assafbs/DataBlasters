@@ -23,27 +23,25 @@ class QueryGenerator:
 
     @staticmethod
     def get_duets_question_query():
-        return """SELECT songs.title, art1.artist_id, art1.artist_name, art2.artist_id, art2.artist_name from performed_by as f_a1,
-          performed_by as f_a2, artists as art1, artists as art2,
+        return """SELECT songs.title, art1.artist_id, art1.artist_name, art2.artist_id, art2.artist_name FROM performed_by AS f_a1,
+          performed_by AS f_a2, artists AS art1, artists AS art2,
           songs
-            WHERE f_a1.song_id = f_a2.song_id and f_a1.artist_id > f_a2.artist_id
-                  and f_a1.artist_id = art1.artist_id and art2.artist_id = f_a2.artist_id
-                  and  songs.song_id = f_a1.song_id
+            WHERE f_a1.song_id = f_a2.song_id AND f_a1.artist_id > f_a2.artist_id
+                  AND f_a1.artist_id = art1.artist_id AND art2.artist_id = f_a2.artist_id
+                  AND  songs.song_id = f_a1.song_id
             GROUP BY f_a1.artist_id , f_a2.artist_id
             ORDER BY rand()
                LIMIT 1;"""
 
-
-
     @staticmethod
     def get_duets_answers_query():
-        return """SELECT artist_name from artists
-                  where artist_name not like %s and artist_name not like %s and artist_name not like %s
-                    and artist_name not in (SELECT art1.artist_name from performed_by as f_a1,
-                      performed_by as f_a2, artists as art1, artists as art2, songs
-                        WHERE f_a1.song_id = f_a2.song_id and f_a1.artist_id <> f_a2.artist_id
-                              and f_a1.artist_id = art1.artist_id and f_a2.artist_id = %s
-                              and  songs.song_id = f_a1.song_id
+        return """SELECT artist_name FROM artists
+                  WHERE artist_name NOT LIKE %s AND artist_name NOT LIKE %s AND artist_name NOT LIKE %s
+                    AND artist_name NOT IN (SELECT art1.artist_name FROM performed_by AS f_a1,
+                      performed_by AS f_a2, artists AS art1, artists AS art2, songs
+                        WHERE f_a1.song_id = f_a2.song_id AND f_a1.artist_id <> f_a2.artist_id
+                              AND f_a1.artist_id = art1.artist_id AND f_a2.artist_id = %s
+                              AND  songs.song_id = f_a1.song_id
                         GROUP BY f_a1.artist_id , f_a2.artist_id)
                           ORDER BY rand()
                             LIMIT 3;"""
@@ -55,7 +53,6 @@ class QueryGenerator:
                    WHERE songs.rank > 70
                    ORDER BY rand()
                    LIMIT 1"""
-
 
     @staticmethod
     def get_translated_song_answers_query():
@@ -150,43 +147,6 @@ class QueryGenerator:
                     LIMIT 3 ) AS closestReleased
                ORDER BY closestReleased.monthDif"""
 
-    # @staticmethod
-    # def create_view_songs_by_artist():
-    #     return """CREATE OR REPLACE VIEW songs_by_artist AS
-    #       (SELECT
-    #         title,
-    #         songs.song_id,
-    #         artist_id
-    #       FROM songs, performed_by
-    #       WHERE performed_by.artist_id = %s AND songs.song_id = performed_by.song_id)"""
-
-    # @staticmethod
-    # def drop_view_songs_by_artist():
-    #     return """DROP VIEW IF EXISTS songs_by_artist"""
-
-    # @staticmethod
-    # def create_view_songs_per_artists():
-    #     return """CREATE OR REPLACE VIEW songs_per_artists AS
-    #                   SELECT artist_id
-    #                   FROM
-    #                     (SELECT
-    #                        artist_id,
-    #                        count(*) AS songs_per_artist
-    #                      FROM
-    #                        (SELECT
-    #                           title,
-    #                           songs.song_id,
-    #                           artist_id
-    #                         FROM songs
-    #                           JOIN performed_by AS pb ON songs.song_id = pb.song_id
-    #                           GROUP BY title) AS T
-    #                      GROUP BY artist_id) AS T2
-    #                   WHERE songs_per_artist > 1"""
-
-    # @staticmethod
-    # def drop_view_songs_per_artists():
-    #     return """DROP VIEW IF EXISTS songs_per_artists"""
-
     @staticmethod
     def get_n_random_artists():
         return """SELECT artist_id
@@ -226,28 +186,6 @@ class QueryGenerator:
     def get_artist_name_by_id():
         return """SELECT artist_name FROM artists WHERE artist_id = %s"""
 
-    # @staticmethod
-    # def create_view_artists_per_country():
-    #     return """CREATE OR REPLACE VIEW artists_per_country AS
-    #                 SELECT
-    #                   country_name,
-    #                   artists_per_country
-    #                 FROM
-    #                   (SELECT
-    #                      artists.country_name,
-    #                      COUNT(*) AS artists_per_country
-    #                    FROM artists,
-    #                      (SELECT DISTINCT country_name
-    #                       FROM artists
-    #                       WHERE country_name != '') AS countries
-    #                    WHERE artists.country_name = countries.country_name
-    #                    GROUP BY artists.country_name) AS T
-    #                 WHERE artists_per_country > 1"""
-
-    # @staticmethod
-    # def drop_view_artists_per_country():
-    #     return """DROP VIEW IF EXISTS songs_per_artists"""
-
     @staticmethod
     def get_n_random_countries():
         return """SELECT country_name
@@ -275,30 +213,6 @@ class QueryGenerator:
                   WHERE country_name = %s
                   ORDER BY RAND()
                   LIMIT %s"""
-
-    # @staticmethod
-    # def create_view_albums_per_artist():
-    #     return """CREATE OR REPLACE VIEW albums_per_artist AS
-    #                 SELECT  artist_id,
-    #                         COUNT(*) AS num_of_albums
-    #                 FROM albums
-    #                 WHERE albums_cover IS NOT NULL AND albums_cover NOT LIKE '%%nocover%%'
-    #                 GROUP BY artist_id"""
-
-    # @staticmethod
-    # def drop_view_albums_per_artist():
-    #     return """DROP VIEW IF EXISTS albums_per_artist"""
-
-    # @staticmethod
-    # def create_view_possible_artists():
-    #     return """CREATE OR REPLACE VIEW possible_artists AS
-    #                 SELECT artist_id
-    #                 FROM  albums_per_artist
-    #                 WHERE num_of_albums > 1"""
-
-    # @staticmethod
-    # def drop_view_possible_views():
-    #     return """DROP VIEW IF EXISTS possible_artists"""
 
     @staticmethod
     def get_n_random_artists_from_possible_artists():

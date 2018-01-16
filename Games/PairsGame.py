@@ -1,7 +1,8 @@
 import random
 import sys
-from flask import render_template, request, make_response, Blueprint
+from flask import render_template, request, make_response, Blueprint, redirect
 import GameManager
+import Common.common
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
@@ -120,76 +121,111 @@ def create_game_page():
 def generate_covers_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
+
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     winner_covers, bad_covers = get_all_covers()
     right_answer = winner_covers[0] + "!@" + winner_covers[1]
     wrong_answers = calc_answers_cover_pairs(bad_covers)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    response = make_response(render_template('PairsGameCovers.html',
-                                             question=" Which of these pairs of album covers are by the same artist?",
-                                             option_1_1=answers[0].split('!@')[0],
-                                             option_1_2=answers[0].split('!@')[1],
-                                             option_2_1=answers[1].split('!@')[0],
-                                             option_2_2=answers[1].split('!@')[1],
-                                             option_3_1=answers[2].split('!@')[0],
-                                             option_3_2=answers[2].split('!@')[1],
-                                             option_4_1=answers[3].split('!@')[0],
-                                             option_4_2=answers[3].split('!@')[1],
-                                             game=game_manager.answer_num + 1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
-    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('PairsGameCovers.html',
+                                                 question=" Which of these pairs of album covers are by the same artist?",
+                                                 option_1_1=answers[0].split('!@')[0],
+                                                 option_1_2=answers[0].split('!@')[1],
+                                                 option_2_1=answers[1].split('!@')[0],
+                                                 option_2_2=answers[1].split('!@')[1],
+                                                 option_3_1=answers[2].split('!@')[0],
+                                                 option_3_2=answers[2].split('!@')[1],
+                                                 option_4_1=answers[3].split('!@')[0],
+                                                 option_4_2=answers[3].split('!@')[1],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        generate_covers_game()
 
 
 def generate_countries_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
 
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
     winner_artists = translate_artist_id_list_to_artist_name_list(get_winning_artists_from_countries())
     lst_of_bad_artists = translate_artist_id_list_to_artist_name_list(get_bad_artists_from_countries())
     right_answer = winner_artists[0] + "!@" + winner_artists[1]
     wrong_answers = calc_answers_artist_pairs(lst_of_bad_artists)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    response = make_response(render_template('PairsGame.html',
-                                             question=" Which of these pairs of artists come from the same country?",
-                                             option_1_1=answers[0].split('!@')[0],
-                                             option_1_2=answers[0].split('!@')[1],
-                                             option_2_1=answers[1].split('!@')[0],
-                                             option_2_2=answers[1].split('!@')[1],
-                                             option_3_1=answers[2].split('!@')[0],
-                                             option_3_2=answers[2].split('!@')[1],
-                                             option_4_1=answers[3].split('!@')[0],
-                                             option_4_2=answers[3].split('!@')[1],
-                                             game=game_manager.answer_num + 1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
-    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('PairsGame.html',
+                                                 question=" Which of these pairs of artists come from the same country?",
+                                                 option_1_1=answers[0].split('!@')[0],
+                                                 option_1_2=answers[0].split('!@')[1],
+                                                 option_2_1=answers[1].split('!@')[0],
+                                                 option_2_2=answers[1].split('!@')[1],
+                                                 option_3_1=answers[2].split('!@')[0],
+                                                 option_3_2=answers[2].split('!@')[1],
+                                                 option_4_1=answers[3].split('!@')[0],
+                                                 option_4_2=answers[3].split('!@')[1],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        generate_countries_game()
 
 
 def generate_songs_game():
     reload(sys)
     sys.setdefaultencoding('UTF8')
-    winner_songs, lst_of_bad_songs = get_all_songs()
 
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
+
+    winner_songs, lst_of_bad_songs = get_all_songs()
     right_answer = winner_songs[0][0] + "!@" + winner_songs[1][0]
     wrong_answers = calc_answers_song_pairs(lst_of_bad_songs)
     answers = random.sample(wrong_answers + [right_answer], 4)
-    response = make_response(render_template('PairsGame.html',
-                                             question=" Which of these pairs of songs were released by the same artist?",
-                                             option_1_1=answers[0].split('!@')[0],
-                                             option_1_2=answers[0].split('!@')[1],
-                                             option_2_1=answers[1].split('!@')[0],
-                                             option_2_2=answers[1].split('!@')[1],
-                                             option_3_1=answers[2].split('!@')[0],
-                                             option_3_2=answers[2].split('!@')[1],
-                                             option_4_1=answers[3].split('!@')[0],
-                                             option_4_2=answers[3].split('!@')[1],
-                                             game=game_manager.answer_num + 1,
-                                             score=game_manager.score,
-                                             current_score=game_manager.score))
-    response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
-    return game_manager.update_cookies_for_new_question(response)
+    try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
+        response = make_response(render_template('PairsGame.html',
+                                                 question=" Which of these pairs of songs were released by the same artist?",
+                                                 option_1_1=answers[0].split('!@')[0],
+                                                 option_1_2=answers[0].split('!@')[1],
+                                                 option_2_1=answers[1].split('!@')[0],
+                                                 option_2_2=answers[1].split('!@')[1],
+                                                 option_3_1=answers[2].split('!@')[0],
+                                                 option_3_2=answers[2].split('!@')[1],
+                                                 option_4_1=answers[3].split('!@')[0],
+                                                 option_4_2=answers[3].split('!@')[1],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        generate_songs_game()
 
 
 def calc_answers_song_pairs(bad_songs):

@@ -2,16 +2,16 @@ CREATE SCHEMA `DbMysql09` ;
 
 CREATE  TABLE `DbMysql09`.`artists` (
   `artist_id` INT NOT NULL ,
-  `name` VARCHAR(100) NOT NULL ,
+  `artist_name` VARCHAR(100) NOT NULL ,
   `country_name` VARCHAR(50) NULL ,
   PRIMARY KEY (`artist_id`));
 
 
 CREATE  TABLE `DbMysql09`.`albums` (
   `album_id` INT NOT NULL ,
-  `name` VARCHAR(100) NOT NULL ,
+  `album_name` VARCHAR(100) NOT NULL ,
   `artist_id` INT NULL ,
-  `albums_cover` VARCHAR(200) NULL ,
+  `albums_cover` VARCHAR(1024) NULL ,
   `release_year` YEAR NULL ,
   `release_month` TINYINT NULL ,
   `type` ENUM('album','single','remix','EP','compilation','live','soundtrack') NULL ,
@@ -107,7 +107,7 @@ CREATE  TABLE `DbMysql09`.`performed_by` (
   PRIMARY KEY (`song_id`) ,
   INDEX `artists_fk_idx` (`artist_id` ASC) ,
   CONSTRAINT `songs_fk`
-    FOREIGN KEY (`song_id` )
+    FOREIGN KEY (`song_id`, `artist_id` )
     REFERENCES `DbMysql09`.`songs` (`song_id` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT,
@@ -117,24 +117,34 @@ CREATE  TABLE `DbMysql09`.`performed_by` (
     ON DELETE RESTRICT
     ON UPDATE RESTRICT);
 
-CREATE  TABLE `DbMysql09`.`lyrics` (
-  `song_id` INT NOT NULL ,
-  `lyrics` VARCHAR(2048) NOT NULL ,
-  `lyrics_language` VARCHAR(10) NULL ,
-  `hebrew_translation` VARCHAR(2048) NULL ,
-  PRIMARY KEY (`song_id`) ,
-  FULLTEXT INDEX `fulltext` (`lyrics` ASC) ,
-  CONSTRAINT `songs_lyrics_fk`
-    FOREIGN KEY (`song_id` )
-    REFERENCES `DbMysql09`.`songs` (`song_id` )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT);
+# CREATE  TABLE `DbMysql09`.`lyrics` (
+#   `song_id` INT NOT NULL ,
+#   `lyrics` VARCHAR(2048) NOT NULL ,
+#   `lyrics_language` VARCHAR(10) NULL ,
+#   `hebrew_translation` VARCHAR(2048) NULL ,
+#   PRIMARY KEY (`song_id`) ,
+#   FULLTEXT INDEX `fulltext` (`lyrics` ASC) ,
+#   CONSTRAINT `songs_lyrics_fk`
+#     FOREIGN KEY (`song_id` )
+#     REFERENCES `DbMysql09`.`songs` (`song_id` )
+#     ON DELETE RESTRICT
+#     ON UPDATE RESTRICT);
+
+CREATE TABLE `DbMysql09`.`lyrics` (
+  `song_id` INT NOT NULL,
+  `lyrics` VARCHAR(2048) NOT NULL,
+  `lyrics_language` VARCHAR(10) NULL,
+  `hebrew_translation` VARCHAR(2048) NULL,
+  PRIMARY KEY (`song_id`),
+  FULLTEXT INDEX `lyrics_fulltext` (`lyrics` ASC))
+ENGINE = MyISAM;
+
 
 
 CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
   `country_name` VARCHAR(20) NOT NULL ,
   `song_id` INT NOT NULL ,
-  `play_count` INT NOT NULL ,
+  `rank` INT NOT NULL ,
   PRIMARY KEY (`country_name`, `rank`) ,
   INDEX `popular_songs_countries_idx` (`song_id` ASC) ,
   CONSTRAINT `popular_songs_countries_fk`
@@ -147,7 +157,7 @@ CREATE  TABLE `DbMysql09`.`popular_songs_by_country` (
 CREATE  TABLE `DbMysql09`.`users` (
   `nickname` VARCHAR(20) NOT NULL ,
   `email` VARCHAR(50) NOT NULL ,
-  `hash_passwords` VARCHAR(20) NOT NULL ,
+  `hash_password` VARCHAR(100) NOT NULL ,
   PRIMARY KEY (`nickname`) );
 
 CREATE  TABLE `DbMysql09`.`scores` (

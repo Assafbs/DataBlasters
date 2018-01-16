@@ -1,14 +1,13 @@
 from flask import render_template, request, make_response, Blueprint
-from word_scraper import get_5_popular_words
+from Common.word_scraper import get_5_popular_words
 import random
-import sys
 import GameManager
 from db_connector import DbConnector
 from query_generator import QueryGenerator
 
 # TODO: delete after ready: mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
 
-GAME_ID = 7
+GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
 

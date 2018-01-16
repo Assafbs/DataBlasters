@@ -1,4 +1,4 @@
-from flask import render_template, make_response, Blueprint, request, redirect
+from flask import render_template, make_response, Blueprint, request, redirect, Markup
 import Common.common
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
@@ -62,25 +62,25 @@ def create_highscores_page(category, num):
                                              tab5=get_tab_class(5, num),
                                              tab6=get_tab_class(6, num),
                                              tab7=get_tab_class(7, num),
-                                             user_1=top_users[0][0],
+                                             user_1=mark_if_user(top_users[0][0], nickname),
                                              score_user_1=clean(top_users[0][1]),
-                                             user_2=top_users[1][0],
+                                             user_2=mark_if_user(top_users[1][0], nickname),
                                              score_user_2=clean(top_users[1][1]),
-                                             user_3=top_users[2][0],
+                                             user_3=mark_if_user(top_users[2][0], nickname),
                                              score_user_3=clean(top_users[2][1]),
-                                             user_4=top_users[3][0],
+                                             user_4=mark_if_user(top_users[3][0], nickname),
                                              score_user_4=clean(top_users[3][1]),
-                                             user_5=top_users[4][0],
+                                             user_5=mark_if_user(top_users[4][0], nickname),
                                              score_user_5=clean(top_users[4][1]),
-                                             user_6=top_users[5][0],
+                                             user_6=mark_if_user(top_users[5][0], nickname),
                                              score_user_6=clean(top_users[5][1]),
-                                             user_7=top_users[6][0],
+                                             user_7=mark_if_user(top_users[6][0], nickname),
                                              score_user_7=clean(top_users[6][1]),
-                                             user_8=top_users[7][0],
+                                             user_8=mark_if_user(top_users[7][0], nickname),
                                              score_user_8=clean(top_users[7][1]),
-                                             user_9=top_users[8][0],
+                                             user_9=mark_if_user(top_users[8][0], nickname),
                                              score_user_9=clean(top_users[8][1]),
-                                             user_10=top_users[9][0],
+                                             user_10=mark_if_user(top_users[9][0], nickname),
                                              score_user_10=clean(top_users[9][1]),
                                              ))
     return response
@@ -101,3 +101,9 @@ def clean(arg):
     if arg is None:
         return 0
     return arg
+
+def mark_if_user(arg, nickname):
+    if arg == nickname:
+        return Markup("<b>"+arg+"</b>")
+    else:
+        return arg

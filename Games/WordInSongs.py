@@ -5,6 +5,7 @@ from query_generator import QueryGenerator
 import pickle
 import GameManager
 import random
+from word_scraper import get_5_popular_words
 
 GAME_ID = 4
 NUM_QUESTIONS_PER_GAME = 5
@@ -31,8 +32,13 @@ def word_in_songs_game_mid():
     else:
         return response
 
-
 def create_game_page():
+    # if game_manager.answer_num % 2 == 1:
+    #     return create_words_in_song_game_page()
+    # else:
+        return create_3_songs_game_page()
+
+def create_3_songs_game_page():
     # Avoiding UnicodeDecodeError
     #reload(sys)
     #sys.setdefaultencoding('UTF8')
@@ -84,6 +90,38 @@ def get_wrong_answers(connector,correct_answer,songs,word_dict):
             else:
                 continue
     return res
+
+
+def create_words_in_song_game_page():
+
+    connector = DbConnector()
+    song_row = connector.get_one_result_for_query(QueryGenerator.get_word_in_song_question_query())
+
+    lyrics = song_row[2]
+    popular_words = get_5_popular_words(lyrics)
+    right_answer = popular_words[0];
+    wrong_answers = popular_words[1:4]
+
+    connector.close()
+    answers = random.sample(wrong_answers + [right_answer], 4)
+
+    try:
+        response = make_response(render_template('WordInSongGame.html',
+                                                 question=song_row[1],
+                                                 option_1=answers[0],
+                                                 option_2=answers[1],
+                                                 option_3=answers[2],
+                                                 option_4=answers[3],
+                                                 game=game_manager.answer_num + 1,
+                                                 score=game_manager.score,
+                                                 current_score=game_manager.score))
+
+        response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
+        return game_manager.update_cookies_for_new_question(response)
+    except Exception as e:
+        print "Error occurred with response"
+        print e.message
+        create_game_page()
 
 ############################
 

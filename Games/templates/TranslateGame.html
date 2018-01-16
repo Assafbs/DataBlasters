@@ -41,7 +41,7 @@
                 <a class="nav-link" href="/highscores">HighScores</a>
             </li>
         </ul>
-          <div><kbd>My Score: {{current_score}}</kbd></div>
+          <div><kbd>My Score: {{score}}</kbd></div>
       </div>
     </nav>
 
@@ -86,7 +86,7 @@
     <div class="progress">
         <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
              aria-valuemax="100" >
-            {{score}}
+            {{game_score}}
         </div>
     </div>
       <hr>

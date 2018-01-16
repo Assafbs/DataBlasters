@@ -102,6 +102,21 @@ class QueryGenerator:
                LIMIT 10"""
 
     @staticmethod
+    def get_top_ten_query_for_game():
+        return """SELECT max_per_user.nickname AS nickname, ROUND(max_score + 10 *LOG2(total),2) AS final_score
+                  FROM (SELECT nickname, SUM(score) AS total
+                          FROM scores
+                          WHERE game_id = %s
+                          GROUP BY nickname) AS total_per_user,
+                          (SELECT nickname, MAX(score) AS max_score
+                          FROM scores
+                          WHERE game_id = %s
+                          GROUP BY nickname) AS max_per_user
+                  WHERE total_per_user.nickname = max_per_user.nickname
+                  GROUP BY nickname
+                  ORDER BY final_score DESC"""
+
+    @staticmethod
     def get_score():
         return """SELECT ROUND(SUM(total_per_game.final_score_per_game),2) AS final_score
                   FROM (SELECT total_per_game.game_id, (max_score + 10 *LOG2(total)) AS final_score_per_game

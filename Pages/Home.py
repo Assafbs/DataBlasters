@@ -10,7 +10,7 @@ from Games.TranslationGame import translate_game, translate_game_
 from Games.DuetsGame import duets_game, duets_game_
 from Games.WordInSongs import word_in_songs,word_in_songs_
 from Pages.GameSelection import game_selection
-from Pages.Highscores import highscores
+from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, highscores_release_order
 from Pages.Authentication import log_in, sign_up, log_out
 
 
@@ -18,6 +18,12 @@ app = Flask(__name__)
 app.register_blueprint(game_selection)
 app.register_blueprint(game_conclusion)
 app.register_blueprint(highscores)
+app.register_blueprint(highscores_ranking_by_country)
+app.register_blueprint(highscores_who_sang_with_who)
+app.register_blueprint(highscores_pairs_matching)
+app.register_blueprint(highscores_word_in_commom)
+app.register_blueprint(highscores_translation)
+app.register_blueprint(highscores_release_order)
 app.register_blueprint(release_order_game)
 app.register_blueprint(release_order_game_)
 app.register_blueprint(translate_game)

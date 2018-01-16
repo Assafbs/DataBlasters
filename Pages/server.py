@@ -105,7 +105,7 @@ def id_valid_sign_up_input(nick, email, password):
 
 @log_out.route('/log_out')
 def logout():
-    response = make_response(render_template('home.html'))
+    response = make_response(redirect('/'))
     return update_cookies_logged_out(response)
 
 

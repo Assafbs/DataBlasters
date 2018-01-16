@@ -11,7 +11,7 @@ from Games.DuetsGame import duets_game, duets_game_
 from Games.WordInSongs import word_in_songs,word_in_songs_
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores
-from Pages.server import log_in,sign_up,log_out
+from Pages.Authentication import log_in, sign_up, log_out
 
 
 app = Flask(__name__)

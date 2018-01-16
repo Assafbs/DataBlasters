@@ -40,9 +40,10 @@ def create_game_page():
         return create_3_songs_game_page()
 
 def create_3_songs_game_page():
-    # Avoiding UnicodeDecodeError
-    #reload(sys)
-    #sys.setdefaultencoding('UTF8')
+
+    nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    if nickname is None:
+        return redirect('/')
 
     with open(filename, 'rb') as fwcd:
         word_dict = pickle.load(fwcd)
@@ -56,6 +57,7 @@ def create_3_songs_game_page():
     question_kind = "Which one of the words appear in all the following songs:"
     question = ", ".join(songs[0:3])
     try:
+        user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('WordInSongGame.html',
                                                  question=question,
                                                  question_kind=question_kind,
@@ -64,8 +66,9 @@ def create_3_songs_game_page():
                                                  option_3=answers[2],
                                                  option_4=answers[3],
                                                  game=game_manager.answer_num + 1,
-                                                 score=game_manager.score,
-                                                 current_score=game_manager.score))
+                                                 score=user_score,
+                                                 nickname=nickname,
+                                                 game_score=game_manager.score))
 
         response.set_cookie('correctAnswerNum', str(answers.index(correct_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)

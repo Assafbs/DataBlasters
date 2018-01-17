@@ -5,12 +5,10 @@ import GameManager
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 
-
 GAME_ID = 1
 game_manager = GameManager.GameManager(GAME_ID)
 NUM_QUESTIONS_PER_GAME = 5
 COUNTRIES = ["Argentina", "France", "Israel", "Spain", "United Kingdom", "United States"]
-game_manager = GameManager.GameManager(GAME_ID)
 rank_by_country_game = Blueprint('rank_by_country_game', __name__, template_folder='templates')
 rank_by_country_game_ = Blueprint('rank_by_country_game_', __name__, template_folder='templates')
 
@@ -38,7 +36,7 @@ def create_game_page():
         return generate_most_popular_song_question()
     elif game_manager.answer_num == 1:
         return generate_in_which_country_is_most_popular_question()
-    else: # game_manager.answer_num == 3
+    else:  # game_manager.answer_num == 3
         return generate_in_which_country_is_least_popular_question()
 
 
@@ -49,10 +47,12 @@ def generate_most_popular_song_question():
 
     connector = DbConnector()
     country_index = game_manager.answer_num
-    result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
+    result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(),
+                                                 (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
     while len(result) == 0:  # Just for safety, shouldn't happen unless DB is corrupted.
         country_index = (country_index + 1) % len(COUNTRIES)
-        result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
+        result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(),
+                                                     (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
     connector.close()
     options = result[0]
     right_answer = options[0]
@@ -62,7 +62,7 @@ def generate_most_popular_song_question():
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('RankByCountryGame.html',
-                                                 question="Which of the following songs is ranked the highest in " + COUNTRIES[country_index] +"?",
+                                                 question="Which of the following songs is ranked the highest in " + COUNTRIES[country_index] + "?",
                                                  option_1=answers[0],
                                                  option_2=answers[1],
                                                  option_3=answers[2],
@@ -91,21 +91,21 @@ def generate_in_which_country_is_most_popular_question():
     while len(result) == 0:
         random_countries = random.sample(COUNTRIES, 4)
         result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
-        random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
+            random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
     connector.close()
     song_name = result[0][0]
     ranking = result[0][1:]
-    right_answer = random_countries[ranking.index(min(ranking))] # The country with highest ranking.
+    right_answer = random_countries[ranking.index(min(ranking))]  # The country with highest ranking.
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('RankByCountryGame.html',
-                                                 question="In which country the song '" + song_name + "' is ranked the highest?" ,
+                                                 question="In which country the song '" + song_name + "' is ranked the highest?",
                                                  option_1=random_countries[0],
                                                  option_2=random_countries[1],
                                                  option_3=random_countries[2],
                                                  option_4=random_countries[3],
-                                                 game=game_manager.answer_num+1,
+                                                 game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
                                                  game_score=game_manager.score))
@@ -129,16 +129,16 @@ def generate_in_which_country_is_least_popular_question():
     while len(result) == 0:
         random_countries = random.sample(COUNTRIES, 4)
         result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
-        random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
+            random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
     connector.close()
     song_name = result[0][0]
     ranking = result[0][1:]
-    right_answer = random_countries[ranking.index(max(ranking))] # The country with highest ranking.
+    right_answer = random_countries[ranking.index(max(ranking))]  # The country with highest ranking.
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('RankByCountryGame.html',
-                                                 question="In which country the song '" + song_name + "' is ranked the lowest?" ,
+                                                 question="In which country the song '" + song_name + "' is ranked the lowest?",
                                                  option_1=random_countries[0],
                                                  option_2=random_countries[1],
                                                  option_3=random_countries[2],

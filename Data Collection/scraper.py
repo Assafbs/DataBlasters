@@ -1,7 +1,9 @@
-#import wikipedia
+# import wikipedia
 import MySQLdb as mdb
 import string
-#import spotipy
+
+
+# import spotipy
 
 def scrape_page(title, con):
     page = wikipedia.page(title)
@@ -13,7 +15,7 @@ def scrape_page(title, con):
 
     with con:
         cur = con.cursor()
-        cur.execute("insert into entries (title, genre, id) VALUES(%s, %s, %s)",
+        cur.execute("INSERT INTO entries (title, genre, id) VALUES(%s, %s, %s)",
                     (page.title, 'example', page.pageid))
         print "row count: " + str(cur.rowcount)
 
@@ -29,6 +31,7 @@ def build_prefix_suffix_dict():
         i += 1
 
     con.close()
+
 
 if __name__ == '__main__':
     build_prefix_suffix_dict()

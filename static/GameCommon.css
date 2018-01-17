@@ -18,16 +18,16 @@ div#game5 {
     width: 100% !important;
 }
 
-#pointsForAns{
+#pointsForAns {
     visibility: hidden;
 }
 
-#next{
+#next {
     visibility: hidden;
     border: 2px solid #292b2c;
 }
 
-#translation{
+#translation {
     direction: rtl;
     white-space: pre-line;
 }

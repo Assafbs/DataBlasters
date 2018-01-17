@@ -2,13 +2,14 @@ import string
 import re
 from difflib import SequenceMatcher
 
+
 class RedundancyHandler:
 
     def __init__(self):
         pass
 
     @staticmethod
-    def areSimilar(word1, word2, minimal_similarity):
+    def are_similar(word1, word2, minimal_similarity):
         # Make them lower case.
         word1 = word1.lower()
         word2 = word2.lower()
@@ -34,15 +35,15 @@ class RedundancyHandler:
 
 if __name__ == '__main__':
     # Example Usage:
-    if RedundancyHandler.areSimilar("Oh Baby", "O  baby! ;", 0.9):
+    if RedundancyHandler.are_similar("Oh Baby", "O  baby! ;", 0.9):
         print "Similar"
     else:
         print "Not similar"
-    if RedundancyHandler.areSimilar("Oh Baby", "Oh Mama", 0.9):
+    if RedundancyHandler.are_similar("Oh Baby", "Oh Mama", 0.9):
         print "Similar"
     else:
         print "Not similar"
-    if RedundancyHandler.areSimilar("You Are Not Alone", "You Are Not Alone (Live At The Greek)", 0.9):
+    if RedundancyHandler.are_similar("You Are Not Alone", "You Are Not Alone (Live At The Greek)", 0.9):
         print "Similar"
     else:
         print "Not similar"

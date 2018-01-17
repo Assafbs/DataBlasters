@@ -1,45 +1,66 @@
 from flask import render_template, make_response, Blueprint, request, redirect, Markup
+
 import Common.common
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 
-
 highscores = Blueprint('highscores', __name__, template_folder='templates')
+
+
 @highscores.route('/highscores')
 def create_highscores_page():
-    return create_highscores_page("All Games", 1)
+    return create_main_highscores_page("All Games", 1)
+
 
 highscores_ranking_by_country = Blueprint('highscores_ranking_by_country', __name__, template_folder='templates')
+
+
 @highscores_ranking_by_country.route('/highscores_ranking_by_country')
 def create_highscores_page():
-    return create_highscores_page("Ranking By Country", 2)
+    return create_main_highscores_page("Ranking By Country", 2)
+
 
 highscores_who_sang_with_who = Blueprint('highscores_who_sang_with_who', __name__, template_folder='templates')
+
+
 @highscores_who_sang_with_who.route('/highscores_who_sang_with_who')
 def create_highscores_page():
-    return create_highscores_page("Who Sang With Who", 3)
+    return create_main_highscores_page("Who Sang With Who", 3)
+
 
 highscores_pairs_matching = Blueprint('highscores_pairs_matching', __name__, template_folder='templates')
+
+
 @highscores_pairs_matching.route('/highscores_pairs_matching')
 def create_highscores_page():
-    return create_highscores_page("Pairs Matching", 4)
+    return create_main_highscores_page("Pairs Matching", 4)
+
 
 highscores_word_in_commom = Blueprint('highscores_word_in_commom', __name__, template_folder='templates')
+
+
 @highscores_word_in_commom.route('/highscores_word_in_commom')
 def create_highscores_page():
-    return create_highscores_page("Word In Common", 5)
+    return create_main_highscores_page("Word In Common", 5)
+
 
 highscores_translation = Blueprint('highscores_translation', __name__, template_folder='templates')
+
+
 @highscores_translation.route('/highscores_translation')
 def create_highscores_page():
-    return create_highscores_page("Translations", 6)
+    return create_main_highscores_page("Translations", 6)
+
 
 highscores_release_order = Blueprint('highscores_release_order', __name__, template_folder='templates')
+
+
 @highscores_release_order.route('/highscores_release_order')
 def create_highscores_page():
-    return create_highscores_page("Release Order", 7)
+    return create_main_highscores_page("Release Order", 7)
 
-def create_highscores_page(category, num):
+
+def create_main_highscores_page(category, num):
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
         return redirect('/log_in')
@@ -49,8 +70,8 @@ def create_highscores_page(category, num):
     users_scores = get_relevant_user_scores(connector, num, nickname)
     connector.close()
     dummy_user = ("", "")
-    while len(top_users) < 10: # In case we have less than 10 users, fill with dummy ones.
-        top_users = top_users + (dummy_user, )
+    while len(top_users) < 10:  # In case we have less than 10 users, fill with dummy ones.
+        top_users = top_users + (dummy_user,)
     response = make_response(render_template('highscores.html',
                                              category=category,
                                              score=user_score,
@@ -87,17 +108,20 @@ def create_highscores_page(category, num):
                                              ))
     return response
 
+
 def get_tab_class(tab_num, num):
     if tab_num == num:
         return "active"
     else:
         return ""
 
+
 def get_relevant_result(connector, num):
-        if num == 1:
-            return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
-        else:
-            return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query_for_game(),(num-1,num-1))
+    if num == 1:
+        return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query())
+    else:
+        return connector.get_all_results_for_query(QueryGenerator.get_top_ten_query_for_game(), (num - 1, num - 1))
+
 
 def get_relevant_user_scores(connector, num, nickname):
     if num == 1:
@@ -108,13 +132,15 @@ def get_relevant_user_scores(connector, num, nickname):
         users_scores = [(0, 0)]
     return users_scores
 
+
 def clean(arg):
     if arg is None:
         return 0
     return arg
 
+
 def mark_if_user(arg, nickname):
     if arg == nickname:
-        return Markup("<b>"+arg+"</b>")
+        return Markup("<b>" + arg + "</b>")
     else:
         return arg

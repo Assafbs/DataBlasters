@@ -1,9 +1,10 @@
 import MySQLdb as mdb
 
-ADDRESS = 'localhost'
+# ADDRESS = 'mysqlsrv.cs.tau.ac.il'  # '127.0.0.1'
+ADDRESS = 'localhost'  # 'mysqlsrv.cs.tau.ac.il'  # 'localhost'
 USERNAME = 'DbMysql09'  # 'root'
-PASSWORD = 'DbMysql09'  # 'root'   #'Armageddon1'
-SCHEMA = 'DbMysql09'  # 'dbmysql09'           #'mr_music2'
+PASSWORD = 'DbMysql09'  # 'root'
+SCHEMA = 'DbMysql09'  # 'dbmysql09'
 
 
 class DbConnector:

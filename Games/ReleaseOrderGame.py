@@ -6,7 +6,6 @@ import sys
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 
-
 GAME_ID = 6
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
@@ -14,9 +13,10 @@ game_manager = GameManager.GameManager(GAME_ID)
 ordered_answers = []
 curr_question_points = 0
 
-
 release_order_game = Blueprint('release_order_game', __name__, template_folder='templates')
-@release_order_game.route('/release_order_game',  methods=['POST','GET'])
+
+
+@release_order_game.route('/release_order_game', methods=['POST', 'GET'])
 def release_order_game_start():
     if request.method == 'GET':
         game_manager.start_new_game()
@@ -24,7 +24,9 @@ def release_order_game_start():
 
 
 release_order_game_ = Blueprint('release_order_game_', __name__, template_folder='templates')
-@release_order_game_.route('/release_order_game_',  methods=['POST','GET'])
+
+
+@release_order_game_.route('/release_order_game_', methods=['POST', 'GET'])
 def release_order_game_mid():
     allow_access = request.cookies.get('allowAccess')
     global curr_question_points
@@ -36,27 +38,27 @@ def release_order_game_mid():
         return response
 
 
-def handle_route(request):
-    if request.method == 'GET':
+def handle_route(my_request):
+    if my_request.method == 'GET':
         return create_game_page()
-    elif request.method == 'POST':
-        nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    elif my_request.method == 'POST':
+        nickname = Common.common.get_value_from_cookie(my_request, 'nickname')
         if nickname is None:
             return redirect('/log_in')
 
         global ordered_answers
-        user_ordered_answers = [request.form['song1'], request.form['song2'],
-                                request.form['song3'], request.form['song4']]
+        user_ordered_answers = [my_request.form['song1'], my_request.form['song2'],
+                                my_request.form['song3'], my_request.form['song4']]
         num_correct_songs = 0
         for i in range(4):
             if user_ordered_answers[i] == ordered_answers[i]:
                 num_correct_songs += 1
         global curr_question_points
-        curr_question_points = num_correct_songs*5
+        curr_question_points = num_correct_songs * 5
         next_button_content = 'Next Question'
         if (game_manager.answer_num + 1) == NUM_QUESTIONS_PER_GAME:
             next_button_content = 'Finish Game'
-        user_score = Common.common.get_value_from_cookie(request, 'score')
+        user_score = Common.common.get_value_from_cookie(my_request, 'score')
         return render_template('ReleaseOrderGameScore.html',
                                score=user_score,
                                nickname=nickname,
@@ -118,6 +120,3 @@ def create_game_page():
         print "Error occurred with response"
         print e.message
         create_game_page()
-
-
-

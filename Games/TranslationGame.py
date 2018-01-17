@@ -13,8 +13,9 @@ GAME_ID = 5
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
 
-
 translate_game = Blueprint('translate_game', __name__, template_folder='templates')
+
+
 @translate_game.route('/translate_game')
 def translate_game_start():
     game_manager.start_new_game()
@@ -23,9 +24,10 @@ def translate_game_start():
 
 
 translate_game_ = Blueprint('translate_game_', __name__, template_folder='templates')
+
+
 @translate_game_.route('/translate_game_')
 def translate_game_mid():
-
     allow_access = request.cookies.get('allowAccess')
     points = int(request.cookies.get('points'))
     response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME, request)
@@ -79,16 +81,12 @@ def create_game_page():
 
 
 def calc_answers(connector, popular_words, answer_song_id, answer_song_name, lyrics_lang):
-
     rows = connector.get_all_results_for_query(QueryGenerator.get_translated_song_answers_query(),
-                                               ('+'+popular_words[0], lyrics_lang, '+'+popular_words[1], lyrics_lang,
-                                                '+'+popular_words[2], lyrics_lang, '+'+popular_words[3], lyrics_lang,
-                                                '+'+popular_words[4], lyrics_lang, answer_song_id, answer_song_name))
+                                               ('+' + popular_words[0], lyrics_lang, '+' + popular_words[1], lyrics_lang,
+                                                '+' + popular_words[2], lyrics_lang, '+' + popular_words[3], lyrics_lang,
+                                                '+' + popular_words[4], lyrics_lang, answer_song_id, answer_song_name))
 
     res = []
     for row in rows:
         res.append(row[0])
     return res
-
-
-

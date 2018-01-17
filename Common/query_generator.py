@@ -118,10 +118,6 @@ class QueryGenerator:
 
     @staticmethod
     def get_user_scores_for_game():
-        return """"""
-
-    @staticmethod
-    def get_user_scores_for_game():
         return """SELECT ROUND(max_score + 10 *LOG2(total),2) AS final_score, total AS total_points
                   FROM (SELECT SUM(score) AS total
                           FROM scores
@@ -366,25 +362,32 @@ class QueryGenerator:
     @staticmethod
     def get_songs_lyrics_contain():
         return """SELECT DISTINCT songs.title
-        FROM songs INNER JOIN(
-                    SELECT song_id,lyrics
-                    FROM lyrics
-					WHERE lyrics_language='en'
-                    AND MATCH(lyrics) AGAINST(%s IN NATURAL LANGUAGE MODE))lycs 
-				ON songs.song_id=lycs.song_id
-		WHERE songs.title NOT LIKE %s
-		ORDER BY rand()
-        LIMIT 3"""
+                  FROM songs
+                    INNER JOIN (
+                                 SELECT
+                                   song_id,
+                                   lyrics
+                                 FROM lyrics
+                                 WHERE lyrics_language = 'en'
+                                       AND MATCH(lyrics) AGAINST(%s IN NATURAL LANGUAGE MODE)) lycs
+                      ON songs.song_id = lycs.song_id
+                  WHERE songs.title NOT LIKE %s
+                  ORDER BY rand()
+                  LIMIT 3"""
 
     @staticmethod
     def get_songs_lyrics_not_contain():
         return """SELECT songs.title
-        FROM songs INNER JOIN(
-	        SELECT DISTINCT songs.title AS songname
-	        FROM songs INNER JOIN(SELECT song_id,lyrics
-									    FROM lyrics
-									    WHERE lyrics_language='en'
-									    AND NOT Match(lyrics) AGAINST(%s IN NATURAL LANGUAGE MODE))lycs 
-						        ON songs.song_id=lycs.song_id
-	        WHERE songs.title NOT LIKE %s)temp ON temp.songname=songs.title
-        WHERE songs.title=%s"""
+                  FROM songs
+                    INNER JOIN (
+                                 SELECT DISTINCT songs.title AS songname
+                                 FROM songs
+                                   INNER JOIN (SELECT
+                                                 song_id,
+                                                 lyrics
+                                               FROM lyrics
+                                               WHERE lyrics_language = 'en'
+                                                     AND NOT Match(lyrics) AGAINST(%s IN NATURAL LANGUAGE MODE)) lycs
+                                     ON songs.song_id = lycs.song_id
+                                 WHERE songs.title NOT LIKE %s) temp ON temp.songname = songs.title
+                  WHERE songs.title = %s"""

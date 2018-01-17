@@ -2,6 +2,7 @@ import operator
 import string
 import re
 
+
 def has_numbers(input_string):
     return any(char.isdigit() for char in input_string)
 
@@ -33,10 +34,10 @@ def get_dict_word_count(text):
     wordsToIgnore = ['a', 'although', 'an', 'are', 'as', 'because', 'before', 'el', 'for', 'her', 'i', 'if',
                      'in', 'is', 'it', 'la', 'me', 'mi', 'my', 'on', 'once', 'only', 'of', 'so', 'te', 'the',
                      'these', 'than', 'that', 'though', 'till', 'to', 'unless', 'when', 'whenever', 'where',
-                     'wherever', 'while', 'with', 'you','use','lyrics','commercial','',' ']
-    #TODO can remove use,lyrics,commercial from list when working with clean lyrics
+                     'wherever', 'while', 'with', 'you', 'use', 'lyrics', 'commercial', '', ' ']
+    # TODO can remove use,lyrics,commercial from list when working with clean lyrics
     dict_of_words = dict()
-    for word in text.split(): #changd from split(' ') to split()
+    for word in text.split():  # changd from split(' ') to split()
         word = word.lower()
         word = replace_punctuations(word)
         word = replace_slashn(word)
@@ -72,6 +73,7 @@ def get_5_popular_words(text):
         result.append(lst[i][0])
     return result
 
+
 if __name__ == '__main__':
     text = 'Old friends, old friends Sat on their park bench like bookends A newspaper blown through the grass Falls on the round toes Of the high shoes of the old friends'
 
@@ -81,4 +83,3 @@ if __name__ == '__main__':
     print lst
     temp = get_5_popular_words(text)
     print temp
-

@@ -1,18 +1,17 @@
 import os
+from flask import Flask, render_template, make_response, request
 import Common.common
-from flask import Flask, render_template, make_response,request
-
+from Games.DuetsGame import duets_game, duets_game_
 from Games.GameManager import game_conclusion
 from Games.PairsGame import pairs_game, pairs_game_
 from Games.RankByCountryGame import rank_by_country_game, rank_by_country_game_
 from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
-from Games.DuetsGame import duets_game, duets_game_
-from Games.WordInSongs import word_in_songs,word_in_songs_
-from Pages.GameSelection import game_selection
-from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, highscores_release_order
+from Games.WordInSongs import word_in_songs, word_in_songs_
 from Pages.Authentication import log_in, sign_up, log_out
-
+from Pages.GameSelection import game_selection
+from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, \
+    highscores_release_order
 
 app = Flask(__name__)
 app.register_blueprint(game_selection)
@@ -41,6 +40,7 @@ app.register_blueprint(word_in_songs)
 app.register_blueprint(word_in_songs_)
 app.secret_key = os.urandom(12)
 
+
 @app.route('/')
 def create_game_selection_page():
     # TODO: replace with real score
@@ -54,5 +54,5 @@ def create_game_selection_page():
 
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0')
+    # app.run(port=40555, host='0.0.0.0')
     app.run(debug=True)

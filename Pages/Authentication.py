@@ -10,7 +10,7 @@ err = None
 
 log_in = Blueprint('log_in', __name__, template_folder='templates')
 sign_up = Blueprint('sign_up', __name__, template_folder='templates')
-log_out = Blueprint('log_out',__name__, template_folder='templates')
+log_out = Blueprint('log_out', __name__, template_folder='templates')
 
 
 @log_in.route('/log_in', methods=['POST', 'GET'])
@@ -25,14 +25,14 @@ def login():
         if authenticate(nick, password):
             query = QueryGenerator.get_score()
             connector = DbConnector()
-            data = connector.get_one_result_for_query(query,(nick,nick))
+            data = connector.get_one_result_for_query(query, (nick, nick))
             if data[0] is None:
                 score = 0
             else:
                 score = data[0]
             err = None
             response = make_response(redirect('/'))
-            return update_cookies_logged_in(nick,score,response)
+            return update_cookies_logged_in(nick, score, response)
         else:
             err = 'Invalid nickname or password. Please try again!\n If you are new to Mr. Music, please sign up'
             return render_template('login.html', error=err)
@@ -41,8 +41,8 @@ def login():
 def authenticate(nick, password):
     if not (is_valid_login_input(nick, password)):
         return False
-    query="SELECT * FROM users WHERE nickname = %s"
-    connector=DbConnector()
+    query = "SELECT * FROM users WHERE nickname = %s"
+    connector = DbConnector()
     data = connector.get_one_result_for_query(query, (nick,))
     connector.close()
     if data is None:
@@ -91,12 +91,12 @@ def id_valid_sign_up_input(nick, email, password):
     connector = DbConnector()
     data = connector.get_one_result_for_query(query, (nick,))
     if data is not None:
-        err= "This username is already taken. Please choose a different one"
+        err = "This username is already taken. Please choose a different one"
         return False
     query = "SELECT * FROM users WHERE email = %s"
     data = connector.get_one_result_for_query(query, (email,))
     if data is not None:
-        err= "This email is already in use"
+        err = "This email is already in use"
         return False
     connector.close()
     return True
@@ -131,7 +131,7 @@ def signup():
         return render_template('signup.html', error=err)
 
 
-def update_cookies_logged_in(nick,score,response):
+def update_cookies_logged_in(nick, score, response):
     response.set_cookie('nickname', nick)
     response.set_cookie('score', str(score))
     return response

@@ -18,14 +18,14 @@ class GameManager:
         self.answer_num = 0
 
     # if this function returns None, need to call the function for generating new question page
-    def calc_mid_game(self, allow_access, points, num_questions_per_game, request):
+    def calc_mid_game(self, allow_access, points, num_questions_per_game, my_request):
         if allow_access != 'true':
             return render_template('NotAuthorized.html')
         self.score += points
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
-            nickname = Common.common.get_value_from_cookie(request, 'nickname')
+            nickname = Common.common.get_value_from_cookie(my_request, 'nickname')
             self.update_game_result(nickname)
             response = make_response(redirect('/game_conclusion/' + str(self.score)))
             response = self.update_cookie_with_new_score(nickname, response)
@@ -56,6 +56,8 @@ class GameManager:
 
 
 game_conclusion = Blueprint('game_conclusion', __name__, template_folder='templates')
+
+
 @game_conclusion.route('/game_conclusion/<int:points>')
 def create_game_conclusion_page(points):
     mood_gif = "https://s-media-cache-ak0.pinimg.com/originals/35/84/79/35847900475295ef1ae9b2bff189a9a6.gif"
@@ -74,4 +76,3 @@ def create_game_conclusion_page(points):
                            label=label,
                            points=points,
                            mood_gif=mood_gif)
-

@@ -19,14 +19,17 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <span class="icon-bar"><img src="https://image.ibb.co/n68GS6/logo.png" alt="logo" border="0" width="31.5" height="54" hspace="10"></span>
-      <a class="navbar-brand" href="#">Mr. Music</a>
+    </button>
+    <span class="icon-bar"><img src="https://image.ibb.co/n68GS6/logo.png" alt="logo" border="0" width="31.5"
+                                height="54" hspace="10"></span>
+    <a class="navbar-brand" href="#">Mr. Music</a>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/">Home</a>
@@ -38,34 +41,36 @@
                 <a class="nav-link" href="/highscores">HighScores</a>
             </li>
         </ul>
-          <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
-          <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
-      </div>
-    </nav>
+        <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
+        <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
+    </div>
+</nav>
 
-    <div class="jumbotron bg-info">
-        <div class="row">
-            <div class="col-md-12" align="left">
-                <br><h2>You Won {{points}} points for that question!</h2><br>
-                <h4>{{num_correct}} of 4 songs were ordered correctly</h4>
-            </div>
+<div class="jumbotron bg-info">
+    <div class="row">
+        <div class="col-md-12" align="left">
+            <br>
+            <h2>You Won {{points}} points for that question!</h2><br>
+            <h4>{{num_correct}} of 4 songs were ordered correctly</h4>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="col-md-12 text-right">
-            <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../release_order_game_')" style="cursor:pointer">
-              {{next_content}}
-            </button>
-        </div><br><br>
-
-        <hr>
-
-        <footer>
-            <p>&copy; DataBlasters 2018</p>
-        </footer>
+<div class="container">
+    <div class="col-md-12 text-right">
+        <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../release_order_game_')"
+                style="cursor:pointer">
+            {{next_content}}
+        </button>
     </div>
+    <br><br>
 
+    <hr>
+
+    <footer>
+        <p>&copy; DataBlasters 2018</p>
+    </footer>
+</div>
 
 
 </body>

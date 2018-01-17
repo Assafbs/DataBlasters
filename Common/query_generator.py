@@ -177,7 +177,7 @@ class QueryGenerator:
                                               -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,
                                           songs.title
                                 FROM albums JOIN songs ON albums.album_id = songs.album_id
-                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND rank >= 70
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND songs.title <> %s AND rank >= 70
                                 GROUP BY songs.title
                                 ORDER BY rand()) AS dateDist ) AS  dateDistWithNums
                     GROUP BY dateDistWithNums.monthDif 

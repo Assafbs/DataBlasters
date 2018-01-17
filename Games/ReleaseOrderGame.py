@@ -86,7 +86,8 @@ def create_game_page():
 
     answers_rows = connector.get_all_results_for_query(
         QueryGenerator.get_release_order_answers_query(),
-        (release_year, release_month, release_year, release_month, release_year, release_month, release_year, album_id))
+        (release_year, release_month, release_year, release_month, release_year,
+         release_month, release_year, album_id, rand_song_name))
     connector.close()
 
     global ordered_answers

@@ -54,5 +54,5 @@ def create_game_selection_page():
 
 
 if __name__ == '__main__':
-    # app.run(port=40555, host='0.0.0.0')
+    # app.run(port=40556, host='0.0.0.0')
     app.run(debug=True)

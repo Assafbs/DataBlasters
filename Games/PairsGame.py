@@ -34,7 +34,7 @@ def pairs_game_mid():
 
 def get_list_of_results(query, n):
     lst_of_artists = list()
-    rows = connector.get_all_results_for_query(query, n)
+    rows = connector.get_all_results_for_query(query, (n,))
     for row in rows:
         lst_of_artists.append((row[0]))
     return lst_of_artists
@@ -64,13 +64,13 @@ def get_all_songs():
 def translate_artist_id_list_to_artist_name_list(ids):
     lst_of_names = list()
     for artist_id in ids:
-        lst_of_names.append(connector.get_one_result_for_query(QueryGenerator.get_artist_name_by_id(), artist_id)[0])
+        lst_of_names.append(connector.get_one_result_for_query(QueryGenerator.get_artist_name_by_id(), (artist_id,))[0])
     return lst_of_names
 
 
 def get_winning_artists_from_countries():
     lst_of_artists = list()
-    country = connector.get_all_results_for_query(QueryGenerator.get_n_random_countries(), 1)[0][0]
+    country = connector.get_all_results_for_query(QueryGenerator.get_n_random_countries(), (1,))[0][0]
     rows = connector.get_all_results_for_query(QueryGenerator.get_n_artists_from_country(), (country, 2))
     for row in rows:
         lst_of_artists.append((row[0]))
@@ -81,7 +81,7 @@ def get_winning_artists_from_countries():
 def get_bad_artists_from_countries():
     lst_of_artists = list()
     for i in range(3):
-        countries = connector.get_all_results_for_query(QueryGenerator.get_n_random_countries(), 2)
+        countries = connector.get_all_results_for_query(QueryGenerator.get_n_random_countries(), (2,))
         for country in countries:
             country = country[0]
             lst_of_artists.append(connector.get_all_results_for_query(QueryGenerator.get_n_artists_from_country(), (country, 1))[0])

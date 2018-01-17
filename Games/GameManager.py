@@ -45,7 +45,8 @@ class GameManager:
         connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
         connector.close()
 
-    def update_cookie_with_new_score(self, nickname, response):
+    @staticmethod
+    def update_cookie_with_new_score(nickname, response):
         connector = DbConnector()
         new_score_row = connector.get_one_result_for_query(QueryGenerator.get_score(), (nickname, nickname))
         new_score = str(new_score_row[0])

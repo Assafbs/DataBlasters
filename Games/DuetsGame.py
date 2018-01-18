@@ -44,15 +44,15 @@ def create_game_page():
     connector = DbConnector()
     answer_row = connector.get_one_result_for_query(QueryGenerator.get_duets_question_query())
 
-    right_answer = answer_row[4]  # seconed artist name
-    wrong_answers = calc_answers(connector, answer_row[1])  # first artist id
+    right_answer = answer_row[2]  # seconed artist name
+    wrong_answers = calc_answers(connector, answer_row[0])  # first artist id
     connector.close()
     answers = random.sample(wrong_answers + [right_answer], 4)
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('DuetsGame.html',
-                                                 question=answer_row[2],  # first artist name
+                                                 question=answer_row[1],  # first artist name
                                                  option_1=answers[0],
                                                  option_2=answers[1],
                                                  option_3=answers[2],
@@ -73,7 +73,8 @@ def create_game_page():
 def calc_answers(connector, answer_artist_id):
     # find 3 artist that didn't sing with answer_artist_id
 
-    rows = connector.get_all_results_for_query(QueryGenerator.get_duets_answers_query(), ('% & %', '% feat%', '% and %', answer_artist_id))
+    rows = connector.get_all_results_for_query(QueryGenerator.get_duets_answers_query(),
+                                               ('% & %', '% feat%', '% and %', answer_artist_id, answer_artist_id))
 
     res = []
     for row in rows:

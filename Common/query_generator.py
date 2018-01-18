@@ -23,28 +23,29 @@ class QueryGenerator:
 
     @staticmethod
     def get_duets_question_query():
-        return """SELECT songs.title, art1.artist_id, art1.artist_name, art2.artist_id, art2.artist_name FROM performed_by AS f_a1,
-          performed_by AS f_a2, artists AS art1, artists AS art2,
-          songs
-            WHERE f_a1.song_id = f_a2.song_id AND f_a1.artist_id > f_a2.artist_id
-                  AND f_a1.artist_id = art1.artist_id AND art2.artist_id = f_a2.artist_id
-                  AND  songs.song_id = f_a1.song_id
-            GROUP BY f_a1.artist_id , f_a2.artist_id
-            ORDER BY rand()
-               LIMIT 1;"""
+        return """SELECT art1.artist_id, art1.artist_name, art2.artist_name 
+                    FROM performed_by AS f_a1 JOIN performed_by AS f_a2 ON f_a1.song_id = f_a2.song_id
+                          JOIN artists AS art1 ON f_a1.artist_id = art1.artist_id 
+                          JOIN artists AS art2 ON art2.artist_id = f_a2.artist_id
+                    WHERE f_a1.artist_id > f_a2.artist_id
+                    GROUP BY f_a1.artist_id , f_a2.artist_id
+                    ORDER BY rand()
+                    LIMIT 1;"""
 
     @staticmethod
     def get_duets_answers_query():
-        return """SELECT artist_name FROM artists
-                  WHERE artist_name NOT LIKE %s AND artist_name NOT LIKE %s AND artist_name NOT LIKE %s
-                    AND artist_name NOT IN (SELECT art1.artist_name FROM performed_by AS f_a1,
-                      performed_by AS f_a2, artists AS art1, artists AS art2, songs
-                        WHERE f_a1.song_id = f_a2.song_id AND f_a1.artist_id <> f_a2.artist_id
-                              AND f_a1.artist_id = art1.artist_id AND f_a2.artist_id = %s
-                              AND  songs.song_id = f_a1.song_id
-                        GROUP BY f_a1.artist_id , f_a2.artist_id)
-                          ORDER BY rand()
-                            LIMIT 3;"""
+        return """SELECT DISTINCT artist_name 
+                    FROM artists
+                    WHERE artist_name NOT LIKE %s AND artist_name NOT LIKE %s
+                        AND artist_name NOT LIKE %s
+                        AND artist_name NOT IN 
+                                        (SELECT DISTINCT art.artist_name FROM 
+                                            (SELECT song_id FROM performed_by where artist_id = %s ) AS f_a1 
+                                            JOIN performed_by AS f_a2 on f_a1.song_id = f_a2.song_id 
+                                            JOIN artists AS art ON f_a2.artist_id = art.artist_id
+                                            WHERE f_a2.artist_id <> %s ) 
+                                            ORDER BY rand()
+                    LIMIT 3;"""
 
     @staticmethod
     def get_word_in_song_question_query():

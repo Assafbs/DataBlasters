@@ -5,7 +5,7 @@ class QueryGenerator:
 
     @staticmethod
     def update_password():
-        return """UPDATE dbmysql09.users SET hash_password=%s WHERE nickname=%s"""
+        return """UPDATE users SET hash_password=%s WHERE nickname=%s"""
 
     @staticmethod
     def create_score_update_query():

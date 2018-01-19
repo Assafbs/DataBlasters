@@ -362,7 +362,8 @@ class QueryGenerator:
                         AND top_for_country2.song_rank != top_for_country3.song_rank
                         AND top_for_country2.song_rank != top_for_country4.song_rank
                         AND top_for_country3.song_rank != top_for_country4.song_rank
-                  ORDER BY RAND()"""
+                  ORDER BY RAND()
+                  LIMIT 1"""
 
     @staticmethod
     def get_songs_lyrics_contain():

@@ -19,6 +19,7 @@ release_order_game = Blueprint('release_order_game', __name__, template_folder='
 @release_order_game.route('/release_order_game', methods=['POST', 'GET'])
 def release_order_game_start():
     if request.method == 'GET':
+        # we want to start new game only in case of get, and not in case of post (since it is mid game)
         game_manager.start_new_game()
     return handle_route(request)
 
@@ -29,10 +30,12 @@ release_order_game_ = Blueprint('release_order_game_', __name__, template_folder
 @release_order_game_.route('/release_order_game_', methods=['POST', 'GET'])
 def release_order_game_mid():
     allow_access = request.cookies.get('allowAccess')
+    # the curr_question_points is updated when handling post of previous question
     global curr_question_points
     response = game_manager.calc_mid_game(allow_access, curr_question_points, NUM_QUESTIONS_PER_GAME, request)
 
     if response is None:
+        # we are in the middle of a game
         return handle_route(request)
     else:
         return response
@@ -42,10 +45,15 @@ def handle_route(my_request):
     if my_request.method == 'GET':
         return create_game_page()
     elif my_request.method == 'POST':
+        # the user sent his answer to the question
+
         nickname = Common.common.get_value_from_cookie(my_request, 'nickname')
+        # Make sure the user is logon before accessing this page
         if nickname is None:
             return redirect('/log_in')
 
+        # the ordered_answers is updated when handling the get request
+        #   (when rendering the page and generate the question)
         global ordered_answers
         user_ordered_answers = [my_request.form['song1'], my_request.form['song2'],
                                 my_request.form['song3'], my_request.form['song4']]
@@ -53,11 +61,13 @@ def handle_route(my_request):
         for i in range(4):
             if user_ordered_answers[i] == ordered_answers[i]:
                 num_correct_songs += 1
+
         global curr_question_points
         curr_question_points = num_correct_songs * 5
         next_button_content = 'Next Question'
         if (game_manager.answer_num + 1) == NUM_QUESTIONS_PER_GAME:
             next_button_content = 'Finish Game'
+
         user_score = Common.common.get_value_from_cookie(my_request, 'score')
         return render_template('ReleaseOrderGameScore.html',
                                score=user_score,
@@ -73,6 +83,7 @@ def create_game_page():
     sys.setdefaultencoding('UTF8')
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure the user is logon before accessing this page
     if nickname is None:
         return redirect('/log_in')
 
@@ -90,6 +101,7 @@ def create_game_page():
          release_month, release_year, album_id, rand_song_name))
     connector.close()
 
+    # order the 4 songs by the release date (merge rand_song_name with answers_rows)
     global ordered_answers
     ordered_answers = []
     inserted_rand_song_row = False
@@ -118,6 +130,7 @@ def create_game_page():
 
         return game_manager.update_cookies_for_new_question(response)
     except Exception as e:
-        print "Error occurred with response"
+        # in case there was a problem with rendering question page, we will try again
+        print "Error occurred with response - release order game"
         print e.message
         create_game_page()

@@ -7,8 +7,6 @@ import GameManager
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 
-# TODO: delete after ready: mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
-
 GAME_ID = 5
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)
@@ -33,6 +31,7 @@ def translate_game_mid():
     response = game_manager.calc_mid_game(allow_access, points, NUM_QUESTIONS_PER_GAME, request)
 
     if response is None:
+        # we are in the middle of a game
         return create_game_page()
     else:
         return response
@@ -44,6 +43,7 @@ def create_game_page():
     sys.setdefaultencoding('UTF8')
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure the user is logon before accessing this page
     if nickname is None:
         return redirect('/log_in')
 
@@ -75,7 +75,8 @@ def create_game_page():
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
     except Exception as e:
-        print "Error occurred with response"
+        # in case there was a problem with rendering question page, we will try again
+        print "Error occurred with response - translation game"
         print e.message
         create_game_page()
 

@@ -43,7 +43,7 @@ app.secret_key = os.urandom(12)
 
 
 @app.route('/')
-def create_game_selection_page():
+def create_home_page():
     # TODO: replace with real score
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     user_logon = ''

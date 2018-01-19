@@ -17,7 +17,7 @@ class GameManager:
         self.score = 0
         self.answer_num = 0
 
-    # if this function returns None, need to call the function for generating new question page
+    # if this function returns None, the game hasn't finished yet, and you need to generate new question page
     def calc_mid_game(self, allow_access, points, num_questions_per_game, my_request):
         if allow_access != 'true':
             return render_template('NotAuthorized.html')
@@ -25,12 +25,14 @@ class GameManager:
         self.answer_num += 1
 
         if self.answer_num == num_questions_per_game:
+            # The game has finished
             nickname = Common.common.get_value_from_cookie(my_request, 'nickname')
             self.update_game_result(nickname)
             response = make_response(redirect('/game_conclusion/' + str(self.score)))
             response = self.update_cookie_with_new_score(nickname, response)
             return response
         else:
+            # The game hasn't finished yet
             return None
 
     def update_cookies_for_new_question(self, response):
@@ -42,7 +44,8 @@ class GameManager:
 
     def update_game_result(self, nickname):
         connector = DbConnector()
-        connector.execute_query(QueryGenerator.create_score_update_query(), (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
+        connector.execute_query(QueryGenerator.create_score_update_query(),
+                                (nickname, time.strftime('%Y-%m-%d %H:%M:%S'), self.game_id, self.score))
         connector.close()
 
     @staticmethod
@@ -68,8 +71,10 @@ def create_game_conclusion_page(points):
         label = ""
 
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure the user is logon before accessing this page
     if nickname is None:
         return redirect('/log_in')
+
     score = Common.common.get_value_from_cookie(request, 'score')
     return render_template('GameConclusion.html',
                            score=score,

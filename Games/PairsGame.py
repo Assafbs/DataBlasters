@@ -122,11 +122,11 @@ def get_all_covers():
 
 # generate a different question every turn
 def create_game_page():
-    if game_manager.answer_num % 2 == 0:
+    if game_manager.answer_num == 0 or game_manager.answer_num == 3:
         return generate_covers_game()
-    elif game_manager.answer_num == 1:
+    elif game_manager.answer_num == 1 or game_manager.answer_num == 4:
         return generate_countries_game()
-    else:  # game_manager.answer_num == 3
+    else:  # game_manager.answer_num == 2
         return generate_songs_game()
 
 

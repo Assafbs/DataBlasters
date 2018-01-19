@@ -5,8 +5,6 @@ import GameManager
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 
-# TODO: delete after ready: mdb.connect('localhost', 'root', 'Password!1', "mrmusic")
-
 GAME_ID = 2
 NUM_QUESTIONS_PER_GAME = 5
 game_manager = GameManager.GameManager(GAME_ID)

@@ -44,7 +44,6 @@ app.secret_key = os.urandom(12)
 
 @app.route('/')
 def create_home_page():
-    # TODO: replace with real score
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     user_logon = ''
     if nickname is not None:
@@ -53,7 +52,7 @@ def create_home_page():
     response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=user_score))
     return response
 
-
+# Show a custom page in case of a 404 error.
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

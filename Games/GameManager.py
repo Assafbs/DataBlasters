@@ -62,7 +62,7 @@ game_conclusion = Blueprint('game_conclusion', __name__, template_folder='templa
 @game_conclusion.route('/game_conclusion/<int:points>')
 def create_game_conclusion_page(points):
     mood_gif = "https://s-media-cache-ak0.pinimg.com/originals/35/84/79/35847900475295ef1ae9b2bff189a9a6.gif"
-    label = "Congratulation"
+    label = "Congratulations!"
     if points == 0:
         mood_gif = "https://static.tumblr.com/04027311832137002618110a602e2631/v3arm60/92Hoxigo1/tumblr_static_tumblr_static_crv29h2v35wg444s84g08osks_640.gif"
         label = ""

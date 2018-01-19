@@ -72,13 +72,15 @@
         <div class="form-group">
             <label class="control-label col-md-4" align="left" for="oldPwd">Old Password:</label>
             <div class="col-md-4">
-                <input type="password" class="form-control" id="oldPwd" placeholder="Enter old password" name="oldPwd" required>
+                <input type="password" class="form-control" id="oldPwd" placeholder="Enter old password" name="oldPwd"
+                       pattern=".{4,20}" required title="4 characters minimum, 20 characters maximum">
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-4" for="newPwd" align="left">New Password:</label>
             <div class="col-md-4">
-                <input type="password" class="form-control" id="newPwd" placeholder="Enter password" name="newPwd" required>
+                <input type="password" class="form-control" id="newPwd" placeholder="Enter password" name="newPwd"
+                       pattern=".{4,20}" required title="4 characters minimum, 20 characters maximum">
             </div>
         </div>
         <div class="form-group">

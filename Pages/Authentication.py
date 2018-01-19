@@ -91,9 +91,6 @@ def authenticate(nick, password):
 
 def is_valid_login_input(nick, password):
     global err
-    if len(nick) == 0 or len(password) == 0:
-        err = "Please, fill all fields"
-        return False
     res = nick.isalnum()
     if not res:
         err = "Nickname can contain only numbers and letters"
@@ -106,17 +103,7 @@ def is_valid_login_input(nick, password):
 
 
 def id_valid_sign_up_input(nick, email, password):
-    # validate nick
     global err
-    if len(nick) > 20:
-        err = "Nickname is too long"
-        return False
-    if len(nick) == 0 or len(email) == 0 or len(password) == 0:
-        err = "Please, fill all fields"
-        return False
-    if len(password) > 20:
-        err = "Password is too long"
-        return False
     if not nick.isalnum():
         err = "Nickname can contain only numbers and letters"
         return False

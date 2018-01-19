@@ -1,16 +1,7 @@
 import operator
 import string
-import re
 
-
-def has_numbers(input_string):
-    return any(char.isdigit() for char in input_string)
-
-
-def has_letters(word):
-    if not re.search('[a-zA-Z]', word):
-        print word
-
+#we use this module to parse lyrics
 
 def has_only_letters(word):
     for ch in word:
@@ -52,16 +43,6 @@ def get_dict_word_count(text):
                 dict_of_words.update({word: dict_of_words[word] + 1})
     return dict_of_words
 
-
-def print_dict(dictionary):
-    for key in dictionary.keys():
-        if len(dictionary[key]) > 3:
-            print "key: " + key
-            for word in dictionary[key]:
-                print word
-            print "\n"
-
-
 def sort_dict_by_value(dict_of_words):
     sorted_list = sorted(dict_of_words.items(), key=operator.itemgetter(1))
     return sorted_list
@@ -75,14 +56,3 @@ def get_5_popular_words(text):
     for i in range(0, 5):
         result.append(lst[i][0])
     return result
-
-
-if __name__ == '__main__':
-    text = 'Old friends, old friends Sat on their park bench like bookends A newspaper blown through the grass Falls on the round toes Of the high shoes of the old friends'
-
-    my_dict = get_dict_word_count(text)
-    lst = sort_dict_by_value(my_dict)
-    lst.reverse()
-    print lst
-    temp = get_5_popular_words(text)
-    print temp

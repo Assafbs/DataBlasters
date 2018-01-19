@@ -13,15 +13,13 @@ game_manager = GameManager.GameManager(GAME_ID)
 
 word_in_songs = Blueprint('word_in_songs', __name__, template_folder='templates')
 
-
+#initialize game
 @word_in_songs.route('/word_in_songs')
 def word_in_songs_game_start():
     game_manager.start_new_game()
     return create_game_page()
 
-
 word_in_songs_ = Blueprint('word_in_songs_', __name__, template_folder='templates')
-
 
 @word_in_songs_.route('/word_in_songs_')
 def word_in_songs_game_mid():
@@ -37,28 +35,30 @@ def word_in_songs_game_mid():
 
 def create_game_page():
     if game_manager.answer_num % 2 == 1:
-        return create_words_in_song_game_page()
+        return create_words_in_song_game_page() #generate that kind of question when question number is odd
     else:
-        return create_3_songs_game_page()
+        return create_3_songs_game_page() ##generate that kind of questions when question number is even
 
-
+#creates question page for "Which one of the words appear in all the following songs:"
 def create_3_songs_game_page():
+    #validate user logged in. if not- send to login page
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
     if nickname is None:
         return redirect('/log_in')
 
     connector = DbConnector()
     query = "SELECT word FROM frequent_words ORDER BY RAND() LIMIT 1"
-    correct_answer = connector.get_one_result_for_query(query)[0]
+    correct_answer = connector.get_one_result_for_query(query)[0] #get a frequent word randomly
+    #get 3 song(titles) containging the word
     data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(), (correct_answer, correct_answer))
-    while len(data) < 3:
-        correct_answer = connector.get_one_result_for_query(query)[0]
+    while len(data) < 3: #if returned less than 3 titles
+        correct_answer = connector.get_one_result_for_query(query)[0] #change word
         data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_contain(),
-                                                   (correct_answer, correct_answer))
+                                                   (correct_answer, correct_answer)) #get 3 songs for new word
     songs = [tup[0] for tup in data]
-    wrong_answers = get_wrong_answers(connector, correct_answer, songs, query)  # TODO, returns 3 wrong answers
+    wrong_answers = get_wrong_answers(connector, correct_answer, songs, query) # get 3 words that do not appear in all 3 songs
     connector.close()
-    answers = random.sample(wrong_answers + [correct_answer], 4)
+    answers = random.sample(wrong_answers + [correct_answer], 4) #randomize the order of the 4 options
     question_kind = "Which one of the words appear in all the following songs:"
     question = ", ".join(songs[0:3])
     try:
@@ -74,7 +74,7 @@ def create_3_songs_game_page():
                                                  score=user_score,
                                                  nickname=nickname,
                                                  game_score=game_manager.score))
-
+        #store correct answer in cookie for further use
         response.set_cookie('correctAnswerNum', str(answers.index(correct_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
     except Exception as e:
@@ -82,13 +82,13 @@ def create_3_songs_game_page():
         print e.message
         create_game_page()
 
-
+#returns 3 words, each one of them do not appear in at least one song in "songs"
 def get_wrong_answers(connector, correct_answer, songs, query):
-    res = []
+    res = [] #keep the words here
     while len(res) < 3:
-        answer = connector.get_one_result_for_query(query)[0]
-        while answer == correct_answer or answer in res:
-            answer = connector.get_one_result_for_query(query)
+        answer = connector.get_one_result_for_query(query)[0] #pick a word randomly from frequent_words table
+        while answer == correct_answer or answer in res: #in case we've randomly picked the word in all songs we've found before
+            answer = connector.get_one_result_for_query(query)[0]
         for song in songs:  # every answer should have at least one song it does not appear in
             data = connector.get_all_results_for_query(QueryGenerator.get_songs_lyrics_not_contain(),
                                                        (answer, answer, song))
@@ -141,14 +141,13 @@ def create_words_in_song_game_page():
 
 ############################
 
+#The following code was used to build data for frequent_words table
+
 frq_word_dict = dict()
 ign_words = ['he', 'she', 'her', 'has', 'his', 'hers', 'them', 'not', 'their', 'theirs'
-                                                                               'they', 'him', 'shes', 'hes', 'your', 'youre', 'be', 'by', 'thats', 'in'
-                                                                                                                                                   'into', 'was', 'were', 'wanna', 'gonna', 'this',
-             'im', 'have', 'has'
-                           'what', 'let', 'can', 'cant', 'even', 'more', 'few', 'non', 'none', 'wanna'
-                                                                                               'use', 'only', 'commercial', '', 'lyrics', 'which', 'we', 'our', 'at', 'and', 'dont']
-
+            'they', 'him', 'shes', 'hes', 'your', 'youre', 'be', 'by', 'thats', 'in',                                                                                                                                       'into', 'was', 'were', 'wanna', 'gonna', 'this',
+             'im', 'have', 'has','what', 'let', 'can', 'cant', 'even', 'more', 'few', 'non', 'none', 'wanna',
+            'use', 'only', 'commercial', '', 'lyrics', 'which', 'we', 'our', 'at', 'and', 'dont']
 
 def build_frq_word_dict():
     global frq_word_dict

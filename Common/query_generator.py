@@ -44,8 +44,8 @@ class QueryGenerator:
                         AND artist_name NOT LIKE %s
                         AND artist_name NOT IN 
                                         (SELECT DISTINCT art.artist_name FROM 
-                                            (SELECT song_id FROM performed_by where artist_id = %s ) AS f_a1 
-                                            JOIN performed_by AS f_a2 on f_a1.song_id = f_a2.song_id 
+                                            (SELECT song_id FROM performed_by WHERE artist_id = %s ) AS f_a1 
+                                            JOIN performed_by AS f_a2 ON f_a1.song_id = f_a2.song_id 
                                             JOIN artists AS art ON f_a2.artist_id = art.artist_id
                                             WHERE f_a2.artist_id <> %s ) 
                                             ORDER BY rand()
@@ -362,7 +362,8 @@ class QueryGenerator:
                         AND top_for_country2.song_rank != top_for_country3.song_rank
                         AND top_for_country2.song_rank != top_for_country4.song_rank
                         AND top_for_country3.song_rank != top_for_country4.song_rank
-                  ORDER BY RAND()"""
+                  ORDER BY RAND()
+                  LIMIT 1"""
 
     @staticmethod
     def get_songs_lyrics_contain():

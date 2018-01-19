@@ -42,17 +42,16 @@ def create_game_page():
 
 def generate_most_popular_song_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure user is logged in, otherwise redirect to log in page.
     if nickname is None:
         return redirect('/log_in')
 
     connector = DbConnector()
     country_index = game_manager.answer_num
-    result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(),
-                                                 (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
+    result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
     while len(result) == 0:  # Just for safety, shouldn't happen unless DB is corrupted.
         country_index = (country_index + 1) % len(COUNTRIES)
-        result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(),
-                                                     (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
+        result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
     connector.close()
     options = result[0]
     right_answer = options[0]
@@ -62,7 +61,8 @@ def generate_most_popular_song_question():
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
         response = make_response(render_template('RankByCountryGame.html',
-                                                 question="Which of the following songs is ranked the highest in " + COUNTRIES[country_index] + "?",
+                                                 question="Which of the following songs is ranked the highest in " +
+                                                          COUNTRIES[country_index] + "?",
                                                  option_1=answers[0],
                                                  option_2=answers[1],
                                                  option_3=answers[2],
@@ -74,20 +74,25 @@ def generate_most_popular_song_question():
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
+
+    # In case there was a problem rendering the template, we will try replacing the question.
+    # This is just for safety, and should not happen.
     except Exception as e:
-        print "Error occurred with response"
+        print "Error occurred with response - rank by country game - most popular song."
         print e.message
         generate_most_popular_song_question()
 
 
 def generate_in_which_country_is_most_popular_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure user is logged in, otherwise redirect to log in page.
     if nickname is None:
         return redirect('/log_in')
 
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()
-    result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
+    result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
+    random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
     while len(result) == 0:
         random_countries = random.sample(COUNTRIES, 4)
         result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
@@ -112,20 +117,25 @@ def generate_in_which_country_is_most_popular_question():
 
         response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
+
+    # In case there was a problem rendering the template, we will try replacing the question.
+    # This is just for safety, and should not happen.
     except Exception as e:
-        print "Error occurred with response"
+        print "Error occurred with response - rank by country game - most popular."
         print e.message
         generate_in_which_country_is_most_popular_question()
 
 
 def generate_in_which_country_is_least_popular_question():
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
+    # Make sure user is logged in, otherwise redirect to log in page.
     if nickname is None:
         return redirect('/log_in')
 
     random_countries = random.sample(COUNTRIES, 4)
     connector = DbConnector()
-    result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
+    result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
+    random_countries[0], random_countries[1], random_countries[2], random_countries[3]))
     while len(result) == 0:
         random_countries = random.sample(COUNTRIES, 4)
         result = connector.get_all_results_for_query(QueryGenerator.get_song_ranking_in_four_countries(), (
@@ -151,7 +161,9 @@ def generate_in_which_country_is_least_popular_question():
         response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
 
+    # In case there was a problem rendering the template, we will try replacing the question.
+    # This is just for safety, and should not happen.
     except Exception as e:
-        print "Error occurred with response"
+        print "Error occurred with response - rank by country game - least popular."
         print e.message
         generate_in_which_country_is_least_popular_question()

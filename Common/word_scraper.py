@@ -34,8 +34,11 @@ def get_dict_word_count(text):
     wordsToIgnore = ['a', 'although', 'an', 'are', 'as', 'because', 'before', 'el', 'for', 'her', 'i', 'if',
                      'in', 'is', 'it', 'la', 'me', 'mi', 'my', 'on', 'once', 'only', 'of', 'so', 'te', 'the',
                      'these', 'than', 'that', 'though', 'till', 'to', 'unless', 'when', 'whenever', 'where',
-                     'wherever', 'while', 'with', 'you', 'was', '', ' ','were','be','he','she','im','your','and',]
-    # TODO can remove use,lyrics,commercial from list when working with clean lyrics
+                     'wherever', 'while', 'with', 'you', 'was', '', ' ','were','be','he','she','im','your','and',
+                     'has', 'his','hers', 'them', 'not', 'their', 'theirs','wanna','into', 'they','him','your',
+                     'youre','by', 'thats','gonna', 'this','have', 'has', 'what', 'let', 'can', 'cant', 'even',
+                     'more', 'few', 'non', 'none','which', 'we', 'our', 'at', 'and', 'dont']
+
     dict_of_words = dict()
     for word in text.split():  # changd from split(' ') to split()
         word = word.lower()

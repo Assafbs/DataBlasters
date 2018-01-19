@@ -44,8 +44,8 @@ class QueryGenerator:
                         AND artist_name NOT LIKE %s
                         AND artist_name NOT IN 
                                         (SELECT DISTINCT art.artist_name FROM 
-                                            (SELECT song_id FROM performed_by where artist_id = %s ) AS f_a1 
-                                            JOIN performed_by AS f_a2 on f_a1.song_id = f_a2.song_id 
+                                            (SELECT song_id FROM performed_by WHERE artist_id = %s ) AS f_a1 
+                                            JOIN performed_by AS f_a2 ON f_a1.song_id = f_a2.song_id 
                                             JOIN artists AS art ON f_a2.artist_id = art.artist_id
                                             WHERE f_a2.artist_id <> %s ) 
                                             ORDER BY rand()

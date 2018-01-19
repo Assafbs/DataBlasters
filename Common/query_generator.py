@@ -4,6 +4,10 @@ class QueryGenerator:
         pass
 
     @staticmethod
+    def update_password():
+        return """UPDATE dbmysql09.users SET hash_password=%s WHERE nickname=%s"""
+
+    @staticmethod
     def create_score_update_query():
         return """INSERT INTO scores (nickname, date, game_id, score) VALUES (%s, %s, %s, %s)"""
 

@@ -8,7 +8,7 @@ from Games.RankByCountryGame import rank_by_country_game, rank_by_country_game_
 from Games.ReleaseOrderGame import release_order_game, release_order_game_
 from Games.TranslationGame import translate_game, translate_game_
 from Games.WordInSongs import word_in_songs, word_in_songs_
-from Pages.Authentication import log_in, sign_up, log_out
+from Pages.Authentication import log_in, sign_up, log_out, new_pass
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, \
     highscores_release_order
@@ -36,6 +36,7 @@ app.register_blueprint(rank_by_country_game_)
 app.register_blueprint(log_in)
 app.register_blueprint(sign_up)
 app.register_blueprint(log_out)
+app.register_blueprint(new_pass)
 app.register_blueprint(word_in_songs)
 app.register_blueprint(word_in_songs_)
 app.secret_key = os.urandom(12)

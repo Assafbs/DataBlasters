@@ -1,19 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../static/images/favicon.png">
-    <title>Welcome To Mr. Music!</title>
+    <link rel="icon" href="../../static/images/favicon.png">
+    <title>Log In</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="https://v4-alpha.getbootstrap.com/examples/jumbotron/jumbotron.css" rel="stylesheet">
-    <link href="../static/home.css" rel="stylesheet">
 </head>
 
 <body>
@@ -30,8 +30,8 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/game_selection">Game Selection</a>
@@ -41,24 +41,11 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-right">
-            {% if user_logon %}
             <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
             <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
             <li class="nav-item">
                 <a class="nav-link" href="/log_out">Log out</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/new_pass">Change Password</a>
-            </li>
-            {% else %}
-            <
-            <li class="nav-item">
-                <a class="nav-link" href="/sign_up">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/log_in">Login</a>
-            </li>
-            {% endif %}
         </ul>
     </div>
 </nav>
@@ -66,47 +53,47 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron bg-info">
     <div class="row">
-        <div class="col-md-12" align="center">
-            <h1>
-                <div class="stage">
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                    <div class="layer"></div>
-                </div>
-            </h1>
-            <br><br><br><br><br>
+        <div class="col-md-4" align="right">
+            <h1><p>
+                <p>Change Password</h1>
         </div>
     </div>
-    <div class="col-md-12" align="center">
-        <img src="../static/gifs/home_dj.gif"/>
-
-    </div>
-
 </div>
 
+<div class="container" align="center">
+    <form class="form-horizontal" action="/new_pass" method="post">
+        <div class="form-group">
+            <label class="control-label col-md-4" align="left" for="nickname">Nickname:</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="nickname" placeholder="Enter nickname" name="nickname"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" align="left" for="oldPwd">Old Password:</label>
+            <div class="col-md-4">
+                <input type="password" class="form-control" id="oldPwd" placeholder="Enter old password" name="oldPwd" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="newPwd" align="left">New Password:</label>
+            <div class="col-md-4">
+                <input type="password" class="form-control" id="newPwd" placeholder="Enter password" name="newPwd" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                <button type="submit" class="btn btn-default">Change Password</button>
+            </div>
+        </div>
+    </form>
+    <p>{{ error }}</p>
 
-<hr>
+    <hr>
 
-<footer>
-    <p>&copy; DataBlasters 2018</p>
-</footer>
+    <footer>
+        <p>&copy; DataBlasters 2018</p>
+    </footer>
 </div> <!-- /container -->
 
 

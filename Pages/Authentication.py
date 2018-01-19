@@ -3,6 +3,7 @@ from flask import redirect, render_template, request, Blueprint, make_response
 from passlib.hash import pbkdf2_sha256
 from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
+import Common.common
 
 # TODO check out html form validation
 
@@ -11,7 +12,36 @@ err = None
 log_in = Blueprint('log_in', __name__, template_folder='templates')
 sign_up = Blueprint('sign_up', __name__, template_folder='templates')
 log_out = Blueprint('log_out', __name__, template_folder='templates')
+new_pass=Blueprint('new_pass',__name__,template_folder='templates')
 
+@new_pass.route('/new_pass',methods=['POST','GET'])
+def new_password():
+    global err
+    err=''
+    nick_cookie = Common.common.get_value_from_cookie(request, 'nickname')
+    if request.method == 'GET':
+        return render_template('new_pass.html')
+    elif request.method == 'POST':
+        nick=mdb.escape_string(request.form['nickname'])
+        if (nick_cookie!=nick):
+            err="You can only change your own password"
+            return render_template('new_pass.html', error=err)
+        oldPwd=mdb.escape_string(request.form['oldPwd'])
+        newPwd = mdb.escape_string(request.form['newPwd'])
+        if(oldPwd==newPwd):
+            err="Your new password is identical to your old one."
+            return render_template('new_pass.html', error=err)
+        con = DbConnector()
+        if (authenticate(nick,oldPwd)):
+            hased_new=pbkdf2_sha256.hash(newPwd)
+            #query=QueryGenerator.update_password()
+            con.execute_query(QueryGenerator.update_password(),(hased_new, nick))
+            con.close()
+            err="Congrats! You have a new password!"
+            return render_template('new_pass.html', error=err)
+        else:
+            err="Nickname or password are invalid. Please try again"
+            return render_template('new_pass.html', error=err)
 
 @log_in.route('/log_in', methods=['POST', 'GET'])
 def login():

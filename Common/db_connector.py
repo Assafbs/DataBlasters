@@ -1,7 +1,7 @@
 import MySQLdb as mdb
 
 # ADDRESS = 'mysqlsrv.cs.tau.ac.il'  # '127.0.0.1'
-ADDRESS = 'localhost' #'mysqlsrv.cs.tau.ac.il'  # 'localhost'
+ADDRESS = 'mysqlsrv.cs.tau.ac.il'  # 'localhost'
 USERNAME = 'DbMysql09'  # 'root'
 PASSWORD = 'DbMysql09'  # 'root'
 SCHEMA = 'DbMysql09'  # 'dbmysql09'
@@ -10,7 +10,7 @@ SCHEMA = 'DbMysql09'  # 'dbmysql09'
 class DbConnector:
 
     def __init__(self):
-        self.con = mdb.connect(ADDRESS, USERNAME, PASSWORD, SCHEMA, port=3305)
+        self.con = mdb.connect(ADDRESS, USERNAME, PASSWORD, SCHEMA, port=3306)
         self.cur = self.con.cursor()
 
     def close(self):

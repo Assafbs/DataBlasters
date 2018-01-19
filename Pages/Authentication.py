@@ -5,21 +5,22 @@ from Common.db_connector import DbConnector
 from Common.query_generator import QueryGenerator
 import Common.common
 
-err = None #global error variable
+err = None  # global error variable
 
 log_in = Blueprint('log_in', __name__, template_folder='templates')
 sign_up = Blueprint('sign_up', __name__, template_folder='templates')
 log_out = Blueprint('log_out', __name__, template_folder='templates')
-new_pass=Blueprint('new_pass',__name__,template_folder='templates')
+new_pass = Blueprint('new_pass', __name__, template_folder='templates')
 
-#change password
+
+# Change password.
 @new_pass.route('/new_pass', methods=['POST', 'GET'])
 def new_password():
-    #validation- user is logged in
+    # Validation - user is logged in.
     nickname = Common.common.get_value_from_cookie(request, 'nickname')
-    if nickname is None: #if not logged in- send to home page
+    if nickname is None:  # if not logged in - send to home page.
         return redirect('/log_in')
-    user_score = Common.common.get_value_from_cookie(request, 'score') #to show the user's score
+    user_score = Common.common.get_value_from_cookie(request, 'score')  # To show the user's score.
 
     global err
     err = ''
@@ -28,18 +29,18 @@ def new_password():
         return render_template('new_pass.html', score=user_score, nickname=nickname)
     elif request.method == 'POST':
         nick = mdb.escape_string(request.form['nickname'])
-        if nick_cookie != nick: #avoid user from changing another user's password
+        if nick_cookie != nick:  # Avoid user from changing another user's password.
             err = "You can only change your own password"
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname) #display error
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)  # Display error.
         oldPwd = mdb.escape_string(request.form['oldPwd'])
         newPwd = mdb.escape_string(request.form['newPwd'])
-        if oldPwd == newPwd: #check that user is actually changing password
+        if oldPwd == newPwd:  # Check that user is actually changing password.
             err = "Your new password is identical to your old one."
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname) #display error
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)  # Display error.
         con = DbConnector()
-        if authenticate(nick, oldPwd): #check user gave his current password
-            hased_new = pbkdf2_sha256.hash(newPwd)  #hash new password
-            con.execute_query(QueryGenerator.update_password(), (hased_new, nick)) #update password
+        if authenticate(nick, oldPwd):  # Check user gave his current password.
+            hased_new = pbkdf2_sha256.hash(newPwd)  # Hash new password.
+            con.execute_query(QueryGenerator.update_password(), (hased_new, nick))  # Update password.
             con.close()
             err = "Congrats! You have a new password!"
             return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)
@@ -47,7 +48,8 @@ def new_password():
             err = "Nickname or password are invalid. Please try again"
             return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)
 
-#log into Mr Music
+
+# Log into Mr.Music.
 @log_in.route('/log_in', methods=['POST', 'GET'])
 def login():
     global err
@@ -55,14 +57,14 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        # get user input:
+        # Get user input:
         nick = mdb.escape_string(request.form['nickname'])
         password = request.form['pwd']
-        if authenticate(nick, password): #verify the address for nickname
+        if authenticate(nick, password):  # Verify the address for nickname.
             query = QueryGenerator.get_score()
             connector = DbConnector()
-            data = connector.get_one_result_for_query(query, (nick, nick)) #get user's score
-            if data[0] is None: #user has not played any game yet
+            data = connector.get_one_result_for_query(query, (nick, nick))  # Get user's score.
+            if data[0] is None:  # User has not played any game yet.
                 score = 0
             else:
                 score = data[0]
@@ -73,7 +75,8 @@ def login():
             err = 'Invalid nickname or password. Please try again!\n If you are new to Mr. Music, please sign up'
             return render_template('login.html', error=err)
 
-#verify user's password
+
+# Verify user's password.
 def authenticate(nick, password):
     if not (is_valid_login_input(nick, password)):
         return False
@@ -84,11 +87,12 @@ def authenticate(nick, password):
     if data is None:
         return False
     else:
-        if pbkdf2_sha256.verify(password, data[2]): #compares to the hash stored in the users table
+        if pbkdf2_sha256.verify(password, data[2]):  # Compares to the hash stored in the users table.
             return True
         return False
 
-#validation checks for login
+
+# Validation checks for login.
 def is_valid_login_input(nick, password):
     global err
     res = nick.isalnum()
@@ -101,7 +105,8 @@ def is_valid_login_input(nick, password):
         return False
     return True
 
-#validate user input in sign up form
+
+# Validate user input in sign up form.
 def is_valid_sign_up_input(nick, email, password):
     global err
     if not nick.isalnum():
@@ -124,13 +129,15 @@ def is_valid_sign_up_input(nick, email, password):
     connector.close()
     return True
 
-#logout
+
+# Logout.
 @log_out.route('/log_out')
 def logout():
     response = make_response(redirect('/'))
     return update_cookies_logged_out(response)
 
-#sign up to Mr Music
+
+# Sign up to Mr Music.
 @sign_up.route('/sign_up', methods=['POST', 'GET'])
 def signup():
     global err
@@ -138,29 +145,31 @@ def signup():
     if request.method == 'GET':
         return render_template('signup.html', error=err)
     elif request.method == 'POST':
-        #get user input:
+        # Get user input:
         nick = mdb.escape_string(request.form['nickname'])
-        password = request.form['pwd']  # no need to sanitize. going through hash
+        password = request.form['pwd']  # No need to sanitize - going through hash.
         email = mdb.escape_string(str(request.form['email']))
 
-        if is_valid_sign_up_input(nick, email, password): #validate input
-            hash_password = pbkdf2_sha256.hash(password)  #hash the password
+        if is_valid_sign_up_input(nick, email, password):  # Validate input,
+            hash_password = pbkdf2_sha256.hash(password)  # Hash the password,
             query = "INSERT INTO users VALUES(%s,%s,%s)"
             connector = DbConnector()
-            connector.execute_query(query, (nick, email, hash_password)) #insert new user to users table
+            connector.execute_query(query, (nick, email, hash_password))  # Insert new user to users table.
             connector.close()
             err = "You have signed up successfully! Let's Play!"
             response = make_response(redirect('/'))
             return update_cookies_logged_in(nick, 0, response)
         return render_template('signup.html', error=err)
 
-#store user data (nickname and total score) on cookies
+
+# Store user data (nickname and total score) on cookies.
 def update_cookies_logged_in(nick, score, response):
     response.set_cookie('nickname', nick)
     response.set_cookie('score', str(score))
     return response
 
-#clear cookie from user data
+
+# Clear cookie from user data.
 def update_cookies_logged_out(response):
     response.set_cookie('nickname', '', expires=0)
     response.set_cookie('score', '', expires=0)

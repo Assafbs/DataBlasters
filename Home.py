@@ -1,5 +1,7 @@
 import os
+
 from flask import Flask, render_template, make_response, request
+
 import Common.common
 from Games.DuetsGame import duets_game, duets_game_
 from Games.GameManager import game_conclusion
@@ -51,6 +53,7 @@ def create_home_page():
     user_score = Common.common.get_value_from_cookie(request, 'score')
     response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=user_score))
     return response
+
 
 # Show a custom page in case of a 404 error.
 @app.errorhandler(404)

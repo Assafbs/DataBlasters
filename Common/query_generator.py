@@ -4,6 +4,18 @@ class QueryGenerator:
         pass
 
     @staticmethod
+    def sign_in_user():
+        return """INSERT INTO users VALUES(%s,%s,%s)"""
+
+    @staticmethod
+    def get_user_data():
+        return """SELECT * FROM users WHERE nickname = %s"""
+
+    @staticmethod
+    def get_email():
+        return """SELECT * FROM users WHERE email = %s"""
+
+    @staticmethod
     def update_password():
         return """UPDATE users SET hash_password=%s WHERE nickname=%s"""
 

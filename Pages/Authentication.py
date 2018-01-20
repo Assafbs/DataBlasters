@@ -85,9 +85,8 @@ def login():
 def authenticate(nick, password):
     if not (is_valid_login_input(nick, password)):
         return False
-    query = "SELECT * FROM users WHERE nickname = %s"
     connector = DbConnector()
-    data = connector.get_one_result_for_query(query, (nick,))
+    data = connector.get_one_result_for_query(QueryGenerator.get_user_data(), (nick,))
     connector.close()
     if data is None:
         return False
@@ -120,14 +119,12 @@ def is_valid_sign_up_input(nick, email, password):
     if not password.isalnum():
         err = "Password can contain only numbers and letters"
         return False
-    query = "SELECT * FROM users WHERE nickname = %s"
     connector = DbConnector()
-    data = connector.get_one_result_for_query(query, (nick,))
+    data = connector.get_one_result_for_query(QueryGenerator.get_user_data(), (nick,))
     if data is not None:
         err = "This nickname is already taken. Please choose a different one"
         return False
-    query = "SELECT * FROM users WHERE email = %s"
-    data = connector.get_one_result_for_query(query, (email,))
+    data = connector.get_one_result_for_query(QueryGenerator.get_email(), (email,))
     if data is not None:
         err = "This email is already in use"
         return False
@@ -157,9 +154,8 @@ def signup():
 
         if is_valid_sign_up_input(nick, email, password):  # Validate input,
             hash_password = pbkdf2_sha256.hash(password)  # Hash the password,
-            query = "INSERT INTO users VALUES(%s,%s,%s)"
             connector = DbConnector()
-            connector.execute_query(query, (nick, email, hash_password))  # Insert new user to users table.
+            connector.execute_query(QueryGenerator.sign_in_user(), (nick, email, hash_password))  # Insert new user to users table.
             connector.close()
             err = "You have signed up successfully! Let's Play!"
             response = make_response(redirect('/'))

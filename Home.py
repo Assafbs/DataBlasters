@@ -14,6 +14,7 @@ from Pages.Authentication import log_in, sign_up, log_out, new_pass
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, \
     highscores_release_order
+# from gevent.wsgi import WSGIServer
 
 app = Flask(__name__)
 app.register_blueprint(game_selection)
@@ -62,5 +63,8 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(port=40557, host='0.0.0.0')
+    # http_server = WSGIServer(('0.0.0.0', 40557), app)
+    # http_server = WSGIServer(('localhost', 5000), app)
+    # http_server.serve_forever()
+    app.run(port=40557, host='0.0.0.0', debug=True)
     # app.run(debug=True)

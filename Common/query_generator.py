@@ -182,26 +182,28 @@ class QueryGenerator:
     @staticmethod
     def get_release_order_answers_query():
         return """SELECT monthDif, title
-               FROM (
+                FROM (
                     SELECT min(rowNum),  monthDif, title
                     FROM (
                         SELECT @n := @n + 1 rowNum, dateDist.*
-                         FROM (SELECT @n:=0) initvars,
-                              (SELECT IF(release_year = %s,
-                                          %s - release_month,
-                                          IF (release_year > %s,
-                                              release_month + (12 - %s) + 12*(release_year-(%s+1)),
-                                              -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,
-                                          songs.title
-                                FROM albums JOIN songs ON albums.album_id = songs.album_id
-                                WHERE release_month IS NOT NULL AND albums.album_id <> %s AND songs.title <> %s AND rank >= 70
-                                GROUP BY songs.title
-                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums
-                    GROUP BY dateDistWithNums.monthDif 
-                    HAVING dateDistWithNums.monthDif <> 0
-                    ORDER BY abs(dateDistWithNums.monthDif)
-                    LIMIT 3 ) AS closestReleased
-               ORDER BY closestReleased.monthDif"""
+                        FROM (SELECT @n:=0) initvars, 
+                             (SELECT IF(release_year = %s, 
+                                        %s - release_month, 
+                                        IF (release_year > %s,
+                                            release_month + (12 - %s) + 12*(release_year-(%s+1)),
+                                            -(%s + (12 - release_month) + 12*(%s-(release_year+1)) )) ) AS monthDif,
+                                        popularSongs.title
+                                FROM albums 
+                                    JOIN (SELECT album_id, title FROM songs WHERE rank >= 70 AND title <> %s) AS popularSongs
+                                    ON albums.album_id = popularSongs.album_id
+                                WHERE release_month IS NOT NULL AND albums.album_id <> %s 
+                                GROUP BY popularSongs.title
+                                ORDER BY rand()) AS dateDist ) AS  dateDistWithNums 
+                     GROUP BY dateDistWithNums.monthDif 
+                     HAVING dateDistWithNums.monthDif <> 0
+                     ORDER BY abs(dateDistWithNums.monthDif)
+                     LIMIT 3 ) AS closestReleased
+                 ORDER BY closestReleased.monthDif"""
 
     @staticmethod
     def get_n_random_artists():

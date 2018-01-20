@@ -104,7 +104,7 @@ def create_game_page():
     answers_rows = connector.get_all_results_for_query(
         QueryGenerator.get_release_order_answers_query(),
         (release_year, release_month, release_year, release_month, release_year,
-         release_month, release_year, album_id, rand_song_name))
+         release_month, release_year, rand_song_name, album_id))
     connector.close()
 
     # order the 4 songs by the release date (merge rand_song_name with answers_rows)

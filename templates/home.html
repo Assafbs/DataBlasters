@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/images/favicon.png">
+    <title>Welcome To Mr. Music!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/jumbotron.css" rel="stylesheet">
+    <link href="../static/home.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <span class="icon-bar"><img src="../static/images/logo.png" alt="logo" border="0" width="31.5"
+                                height="54" hspace="10"></span>
+    <a class="navbar-brand" href="#">Mr. Music</a>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/game_selection">Game Selection</a></li>
+            <li class="nav-item"><a class="nav-link" href="/highscores">HighScores</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bonus">Bonus</a></li>
+        </ul>
+        <ul class="navbar-nav navbar-right">
+            {% if user_logon %}
+            <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
+            <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
+            <li class="nav-item">
+                <a class="nav-link" href="/log_out">Log out</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/new_pass">Change Password</a>
+            </li>
+            {% else %}
+            <
+            <li class="nav-item">
+                <a class="nav-link" href="/sign_up">Sign Up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/log_in">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron bg-info">
+    <div class="row">
+        <div class="col-md-12" align="center">
+            <h1>
+                <div class="stage">
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                    <div class="layer"></div>
+                </div>
+            </h1>
+            <br><br><br><br><br>
+        </div>
+    </div>
+    <div class="col-md-12" align="center">
+        <img src="../static/gifs/home_dj.gif"/>
+
+    </div>
+
+</div>
+
+
+<hr>
+
+<footer>
+    <p>&copy; DataBlasters 2018</p>
+</footer>
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://v4-alpha.getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://v4-alpha.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

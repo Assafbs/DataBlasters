@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../static/images/favicon.png">
+    <title>HighScores Table</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="../../static/highscores.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/jumbotron.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <span class="icon-bar"><img src="../static/images/logo.png" alt="logo" border="0" width="31.5"
+                                height="54" hspace="10"></span>
+    <a class="navbar-brand" href="#">Mr. Music</a>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/game_selection">Game Selection</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/highscores">HighScores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/bonus">Bonus</a>
+            </li>
+        </ul>
+        <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
+        <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
+    </div>
+</nav>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron bg-info">
+    <div class="row">
+        <div class="col-md-8" align="center">
+            <h1><p>
+                <p>Top Players - {{category}}</h1>
+        </div>
+        <div class="col-md-3" align="right">
+            <img src="https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Trophy-and-Medals-PNG/Golden_Cup_Trophy_PNG_Clipart.png?m=1434276589"
+                 height="250"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8" align="center">
+            <h6>
+                <p>My Score (In {{category}}): {{user_score}}</p>
+                <p>My Total Points (In {{category}}): {{user_total_points}}</p>
+            </h6>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <ul class="nav nav-tabs">
+                <li class="{{tab1}}"><a href="/highscores">All Games</a></li>
+                <li class="{{tab2}}"><a href="/highscores_ranking_by_country">Ranking By Country</a></li>
+                <li class="{{tab3}}"><a href="/highscores_who_sang_with_who">Who Sang With Who</a></li>
+                <li class="{{tab4}}"><a href="/highscores_pairs_matching">Pairs Matching</a></li>
+                <li class="{{tab5}}"><a href="/highscores_word_in_commom">Word In Common</a></li>
+                <li class="{{tab6}}"><a href="/highscores_translation">Translations</a></li>
+                <li class="{{tab7}}"><a href="/highscores_release_order">Release Order</a></li>
+            </ul>
+            <thead class="bg-info">
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>
+                    <div class="help-tip">
+                        <p>User's Score is calculated in the follwoing way:</br></br>
+                            For every game, the score is M+10*log<sub>2</sub>(T),</br>
+                            Where M is the max score achieved,</br>
+                            and T is the total score.</br></br>
+                            User's score is the sum of the game scores, for all games.</p>
+                    </div>
+                    Score
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/gold.svg"
+                                            width="30"/></td>
+                <td>{{user_1}}</td>
+                <td>{{score_user_1}}</td>
+            </tr>
+            <tr>
+                <td>2&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/silver.svg"
+                                            width="30"/></td>
+                <td>{{user_2}}</td>
+                <td>{{score_user_2}}</td>
+            </tr>
+            <tr>
+                <td>3&nbsp;&nbsp;&nbsp;<img src="https://statics.sportskeeda.com/skm/assets/olympics/bronze.svg"
+                                            width="30"/></td>
+                <td>{{user_3}}</td>
+                <td>{{score_user_3}}</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>{{user_4}}</td>
+                <td>{{score_user_4}}</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>{{user_5}}</td>
+                <td>{{score_user_5}}</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>{{user_6}}</td>
+                <td>{{score_user_6}}</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>{{user_7}}</td>
+                <td>{{score_user_7}}</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>{{user_8}}</td>
+                <td>{{score_user_8}}</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>{{user_9}}</td>
+                <td>{{score_user_9}}</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>{{user_10}}</td>
+                <td>{{score_user_10}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr>
+
+<footer>
+    <p>&copy; DataBlasters 2018</p>
+</footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://v4-alpha.getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://v4-alpha.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

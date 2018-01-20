@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../static/images/favicon.png">
+
+    <title>&#9834; Mr.Music &#9834;</title>
+
+    <link rel="stylesheet" type="text/css" href="../static/GameCommon.css"/>
+    <!-- Bootstrap core CSS -->
+    <link href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/jumbotron.css" rel="stylesheet">
+
+    <script src="../static/GameCommon.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <span class="icon-bar"><img src="../static/images/logo.png" alt="logo" border="0" width="31.5"
+                                height="54" hspace="10"></span>
+    <a class="navbar-brand" href="#">Mr. Music</a>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/game_selection">Game Selection</a></li>
+            <li class="nav-item"><a class="nav-link" href="/highscores">HighScores</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bonus">Bonus</a></li>
+        </ul>
+        <div class="nav-link"><kbd>Hello {{nickname}}!</kbd></div>
+        <div class="nav-link"><kbd>Score: {{score}}</kbd></div>
+    </div>
+</nav>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron bg-info">
+    <div class="container">
+        <h2>{{question_kind}}</h2>
+        <p id="word_in_song_game" align="left">{{question}}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <button id="button1" class="btn btn-secondary" onclick="onAnswer(1)">{{option_1.decode('latin-1')}}
+                </button>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <button id="button2" class="btn btn-secondary" onclick="onAnswer(2)">{{option_2.decode('latin-1')}}
+                </button>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <button id="button3" class="btn btn-secondary" onclick="onAnswer(3)">{{option_3.decode('latin-1')}}
+                </button>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <button id="button4" class="btn btn-secondary" onclick="onAnswer(4)">{{option_4.decode('latin-1')}}
+                </button>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <p id="pointsForAns">
+
+            </p>
+        </div>
+        <div class="col-md-12 text-right">
+            <button id="next" class="btn btn-secondary .navbar-right" onclick="Redirect('../word_in_songs_')"
+                    style="cursor:pointer">
+                Next Question
+            </button>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="progress">
+        <div class="progress-bar bg-info progress-bar-striped" id="game{{game}}" role="progressbar" aria-valuemin="0"
+             aria-valuemax="100">
+            {{game_score}}
+        </div>
+    </div>
+    <hr>
+
+    <footer>
+        <p>&copy; DataBlasters 2018</p>
+    </footer>
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://v4-alpha.getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://v4-alpha.getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

@@ -69,12 +69,18 @@ def handle_route(my_request):
             next_button_content = 'Finish Game'
 
         user_score = Common.common.get_value_from_cookie(my_request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         return render_template('ReleaseOrderGameScore.html',
                                score=user_score,
                                nickname=nickname,
                                num_correct=num_correct_songs,
                                points=curr_question_points,
-                               next_content=next_button_content)
+                               next_content=next_button_content,
+                               bonus=get_bonus)
 
 
 def create_game_page():
@@ -117,6 +123,11 @@ def create_game_page():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('ReleaseOrderGame.html',
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
@@ -126,7 +137,8 @@ def create_game_page():
                                                  option_1=rand_order_answers[0],
                                                  option_2=rand_order_answers[1],
                                                  option_3=rand_order_answers[2],
-                                                 option_4=rand_order_answers[3]))
+                                                 option_4=rand_order_answers[3],
+                                                 bonus=get_bonus))
 
         return game_manager.update_cookies_for_new_question(response)
     except Exception as e:

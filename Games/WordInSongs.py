@@ -68,6 +68,11 @@ def create_3_songs_game_page():
     question = ", ".join(songs[0:3])
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('WordInSongGame.html',
                                                  question=question,
                                                  question_kind=question_kind,
@@ -78,7 +83,8 @@ def create_3_songs_game_page():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
         # store correct answer in cookie for further use
         response.set_cookie('correctAnswerNum', str(answers.index(correct_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
@@ -125,6 +131,11 @@ def create_words_in_song_game_page():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('WordInSongGame.html',
                                                  question=song_row[1],
                                                  question_kind=question_kind,
@@ -135,7 +146,8 @@ def create_words_in_song_game_page():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)

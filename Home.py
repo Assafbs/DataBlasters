@@ -14,9 +14,12 @@ from Pages.Authentication import log_in, sign_up, log_out, new_pass
 from Pages.GameSelection import game_selection
 from Pages.Highscores import highscores, highscores_ranking_by_country, highscores_who_sang_with_who, highscores_pairs_matching, highscores_word_in_commom, highscores_translation, \
     highscores_release_order
+from Pages.Bonus import bonus
+
 # from gevent.wsgi import WSGIServer
 
 app = Flask(__name__)
+app.register_blueprint(bonus)
 app.register_blueprint(game_selection)
 app.register_blueprint(game_conclusion)
 app.register_blueprint(highscores)
@@ -52,7 +55,14 @@ def create_home_page():
     if nickname is not None:
         user_logon = 'true'
     user_score = Common.common.get_value_from_cookie(request, 'score')
-    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=user_score))
+
+    if user_score is None:
+        user_score = 0
+    if float(user_score) > 500 and nickname is not None:
+        get_bonus = 'true'
+    else:
+        get_bonus = ''
+    response = make_response(render_template('home.html', nickname=nickname, user_logon=user_logon, score=user_score, bonus=get_bonus))
     return response
 
 

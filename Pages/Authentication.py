@@ -25,28 +25,33 @@ def new_password():
     global err
     err = ''
     nick_cookie = Common.common.get_value_from_cookie(request, 'nickname')
+    user_score = Common.common.get_value_from_cookie(request, 'score')
+    if float(user_score) > 500 and nickname is not None:
+        get_bonus = 'true'
+    else:
+        get_bonus = ''
     if request.method == 'GET':
-        return render_template('new_pass.html', score=user_score, nickname=nickname)
+        return render_template('new_pass.html', score=user_score, nickname=nickname, bonus=get_bonus)
     elif request.method == 'POST':
         nick = mdb.escape_string(request.form['nickname'])
         if nick_cookie != nick:  # Avoid user from changing another user's password.
             err = "You can only change your own password"
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)  # Display error.
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)  # Display error.
         oldPwd = mdb.escape_string(request.form['oldPwd'])
         newPwd = mdb.escape_string(request.form['newPwd'])
         if oldPwd == newPwd:  # Check that user is actually changing password.
             err = "Your new password is identical to your old one."
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)  # Display error.
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)  # Display error.
         con = DbConnector()
         if authenticate(nick, oldPwd):  # Check user gave his current password.
             hased_new = pbkdf2_sha256.hash(newPwd)  # Hash new password.
             con.execute_query(QueryGenerator.update_password(), (hased_new, nick))  # Update password.
             con.close()
             err = "Congrats! You have a new password!"
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)
         else:
             err = "Nickname or password are invalid. Please try again"
-            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname)
+            return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)
 
 
 # Log into Mr.Music.

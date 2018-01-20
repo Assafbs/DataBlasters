@@ -60,6 +60,11 @@ def generate_most_popular_song_question():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('RankByCountryGame.html',
                                                  question="Which of the following songs is ranked the highest in " +
                                                           COUNTRIES[country_index] + "?",
@@ -70,7 +75,8 @@ def generate_most_popular_song_question():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
 
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
@@ -104,6 +110,11 @@ def generate_in_which_country_is_most_popular_question():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('RankByCountryGame.html',
                                                  question="In which country the song '" + song_name + "' is ranked the highest?",
                                                  option_1=random_countries[0],
@@ -113,7 +124,8 @@ def generate_in_which_country_is_most_popular_question():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
 
         response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)
@@ -147,6 +159,11 @@ def generate_in_which_country_is_least_popular_question():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('RankByCountryGame.html',
                                                  question="In which country the song '" + song_name + "' is ranked the lowest?",
                                                  option_1=random_countries[0],
@@ -156,7 +173,8 @@ def generate_in_which_country_is_least_popular_question():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
 
         response.set_cookie('correctAnswerNum', str(random_countries.index(right_answer) + 1))
         return game_manager.update_cookies_for_new_question(response)

@@ -144,6 +144,11 @@ def generate_covers_game():
     answers = random.sample(wrong_answers + [right_answer], 4)  # mix the anwswers
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('PairsGameCovers.html',
                                                  question=" Which of these pairs of album covers are by the same artist?",
                                                  option_1_1=answers[0].split('!@')[0],
@@ -157,7 +162,8 @@ def generate_covers_game():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))  # update num of right answer
         return game_manager.update_cookies_for_new_question(response)  # prepare next question
     except Exception as e:
@@ -182,6 +188,11 @@ def generate_countries_game():
 
     try:
         user_score = Common.common.get_value_from_cookie(request, 'score')
+
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('PairsGame.html',
                                                  question=" Which of these pairs of artists come from the same country?",
                                                  option_1_1=answers[0].split('!@')[0],
@@ -195,7 +206,8 @@ def generate_countries_game():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))  # update num of right answer
         return game_manager.update_cookies_for_new_question(response)  # prepare next question
     except Exception as e:
@@ -217,7 +229,12 @@ def generate_songs_game():
     wrong_answers = calc_answers_song_pairs(lst_of_bad_songs)
     answers = random.sample(wrong_answers + [right_answer], 4)  # mix answers
     try:
+
         user_score = Common.common.get_value_from_cookie(request, 'score')
+        if float(user_score) > 500 and nickname is not None:
+            get_bonus = 'true'
+        else:
+            get_bonus = ''
         response = make_response(render_template('PairsGame.html',
                                                  question=" Which of these pairs of songs were released by the same artist?",
                                                  option_1_1=answers[0].split('!@')[0],
@@ -231,7 +248,8 @@ def generate_songs_game():
                                                  game=game_manager.answer_num + 1,
                                                  score=user_score,
                                                  nickname=nickname,
-                                                 game_score=game_manager.score))
+                                                 game_score=game_manager.score,
+                                                 bonus=get_bonus))
         response.set_cookie('correctAnswerNum', str(answers.index(right_answer) + 1))  # update num of right answer
         return game_manager.update_cookies_for_new_question(response)  # prepare next question
     except Exception as e:

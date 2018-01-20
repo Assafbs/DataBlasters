@@ -33,12 +33,13 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/game_selection">Game Selection</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/highscores">HighScores</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="/game_selection">Game Selection</a></li>
+            <li class="nav-item"><a class="nav-link" href="/highscores">HighScores</a></li>
+
+            {% if bonus %}
+            <li class="nav-item"><a class="nav-link" href="/bonus">Bonus</a></li>
+            {% endif %}
+
         </ul>
         <ul class="navbar-nav navbar-right">
             {% if user_logon %}

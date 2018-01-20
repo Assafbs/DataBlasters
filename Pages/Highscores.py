@@ -61,6 +61,11 @@ def create_main_highscores_page(category, num):
     dummy_user = ("", "")
     while len(top_users) < 10:  # In case we have less than 10 users, fill with dummy ones.
         top_users = top_users + (dummy_user,)
+
+    if float(user_score) > 500 and nickname is not None:
+        get_bonus = 'true'
+    else:
+        get_bonus = ''
     response = make_response(render_template('highscores.html',
                                              category=category,
                                              score=user_score,
@@ -94,6 +99,7 @@ def create_main_highscores_page(category, num):
                                              score_user_9=clean(top_users[8][1]),
                                              user_10=mark_if_user(top_users[9][0], nickname),
                                              score_user_10=clean(top_users[9][1]),
+                                             bonus=get_bonus,
                                              ))
     return response
 

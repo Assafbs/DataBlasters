@@ -1,6 +1,7 @@
 import MySQLdb as mdb
 
 ADDRESS = 'mysqlsrv.cs.tau.ac.il'
+# ADDRESS = 'localhost'
 USERNAME = 'DbMysql09'
 PASSWORD = 'DbMysql09'
 SCHEMA = 'DbMysql09'

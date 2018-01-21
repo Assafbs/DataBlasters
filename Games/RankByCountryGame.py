@@ -47,7 +47,7 @@ def generate_most_popular_song_question():
         return redirect('/log_in')
 
     connector = DbConnector()
-    country_index = game_manager.answer_num
+    country_index = game_manager.answer_num % len(COUNTRIES)
     result = connector.get_all_results_for_query(QueryGenerator.get_four_ranked_songs_in_country(), (COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index], COUNTRIES[country_index]))
     while len(result) == 0:  # Just for safety, shouldn't happen unless DB is corrupted.
         country_index = (country_index + 1) % len(COUNTRIES)

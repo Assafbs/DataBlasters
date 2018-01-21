@@ -50,6 +50,7 @@ def new_password():
             err = "Congrats! You have a new password!"
             return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)
         else:
+            con.close()
             err = "Nickname or password are invalid. Please try again"
             return render_template('new_pass.html', error=err, score=user_score, nickname=nickname, bonus=get_bonus)
 
@@ -69,6 +70,7 @@ def login():
             query = QueryGenerator.get_score()
             connector = DbConnector()
             data = connector.get_one_result_for_query(query, (nick, nick))  # Get user's score.
+            connector.close()
             if data[0] is None:  # User has not played any game yet.
                 score = 0
             else:

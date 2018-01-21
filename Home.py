@@ -16,7 +16,7 @@ from Pages.Highscores import highscores, highscores_ranking_by_country, highscor
     highscores_release_order
 from Pages.Bonus import bonus
 
-# from gevent.wsgi import WSGIServer
+from gevent.wsgi import WSGIServer
 
 app = Flask(__name__)
 app.register_blueprint(bonus)
@@ -73,8 +73,6 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    # http_server = WSGIServer(('0.0.0.0', 40557), app)
-    # http_server = WSGIServer(('localhost', 5000), app)
-    # http_server.serve_forever()
-    app.run(port=40557, host='0.0.0.0', debug=True)
-    # app.run(debug=True)
+    http_server = WSGIServer(('0.0.0.0', 40557), app)
+    http_server.serve_forever()
+

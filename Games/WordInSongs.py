@@ -174,6 +174,7 @@ def build_frq_word_dict():
     query = "SELECT lyrics FROM lyrics WHERE lyrics_language=%s"
     con = DbConnector()
     data = con.get_all_results_for_query(query, ('en',))
+    con.close()
     for lyc in data:
         words_count = get_dict_word_count(lyc[0])
         for word in words_count:

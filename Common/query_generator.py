@@ -39,12 +39,11 @@ class QueryGenerator:
 
     @staticmethod
     def get_duets_question_query():
-        return """SELECT art1.artist_id, art1.artist_name, art2.artist_name 
+        return """SELECT DISTINCT art1.artist_id, art1.artist_name, art2.artist_name 
                     FROM performed_by AS f_a1 JOIN performed_by AS f_a2 ON f_a1.song_id = f_a2.song_id
                           JOIN artists AS art1 ON f_a1.artist_id = art1.artist_id 
                           JOIN artists AS art2 ON art2.artist_id = f_a2.artist_id
                     WHERE f_a1.artist_id > f_a2.artist_id
-                    GROUP BY f_a1.artist_id , f_a2.artist_id
                     ORDER BY rand()
                     LIMIT 1;"""
 

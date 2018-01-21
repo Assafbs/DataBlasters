@@ -40,6 +40,7 @@ def create_game_page():
         return redirect('/log_in')
 
     connector = DbConnector()
+    # find two artist that sang together
     answer_row = connector.get_one_result_for_query(QueryGenerator.get_duets_question_query())
 
     right_answer = answer_row[2]  # seconed artist name
